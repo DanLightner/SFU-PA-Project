@@ -34,6 +34,7 @@ public class HelloFXApplication extends Application {
     @Override
     public void stop() {
         // Close the Spring application context when the JavaFX application stops
+        //test
         springContext.close();
     }
 
