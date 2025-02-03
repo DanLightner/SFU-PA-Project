@@ -21,7 +21,7 @@ public class HelloFXApplication extends Application {
     @Override
     public void start(Stage stage) {
         // Create the JavaFX scene
-        Label helloLabel = new Label("Hello World, tyhis is a simple application made from JavaFX & Spring Boot!");
+        Label helloLabel = new Label("Hello World, this is a simple application made from JavaFX & Spring Boot!");
         StackPane root = new StackPane(helloLabel);
         Scene scene = new Scene(root, 400, 200);
 
