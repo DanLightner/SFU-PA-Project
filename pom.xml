@@ -39,26 +39,27 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- JavaFX dependencies -->
+
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>17</version> <!-- Updated to 17 for better compatibility -->
+			<version>21.0.6</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>17</version> <!-- Updated to 17 -->
+			<version>21.0.6</version> <!-- Updated to 17 -->
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>17</version> <!-- Updated to 17 -->
+			<version>21.0.6</version> <!-- Updated to 17 -->
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
-			<version>17</version> <!-- Updated to 17 -->
+			<version>21.0.6</version> <!-- Updated to 17 -->
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -81,10 +82,11 @@
 
 
 			<!-- JavaFX Maven Plugin -->
+
 			<plugin>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-maven-plugin</artifactId>
-				<version>0.0.4</version>
+				<version>0.0.8</version>
 				<configuration>
 					<mainClass>edu.francis.my.sfupa.HelloFXApplication</mainClass>
 				</configuration>
@@ -96,14 +98,16 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- Maven Compiler Plugin for Java 21 -->
+
+
+			<!-- Maven Compiler Plugin for Java 17 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.10.1</version> <!-- Ensure the plugin supports Java 21 -->
+				<version>3.10.1</version> <!-- Ensure the plugin supports Java 17 -->
 				<configuration>
-					<source>21</source>
-					<target>21</target>
+					<source>17</source>
+					<target>17</target>
 				</configuration>
 			</plugin>
 		</plugins>
