@@ -1,12 +1,16 @@
 package edu.francis.my.sfupa;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+
+import java.io.IOException;
 
 public class HelloFXApplication extends Application {
 
@@ -19,13 +23,18 @@ public class HelloFXApplication extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
-        // Create the JavaFX scene
-        Label helloLabel = new Label("Hello World, this is a simple application made from JavaFX & Spring Boot!");
-        StackPane root = new StackPane(helloLabel);
-        Scene scene = new Scene(root, 400, 200);
+    public void start(Stage stage) throws IOException {
+        // Load FXML file
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/main-view.fxml"));
 
-        // Set the scene on the stage and show it
+
+
+        // Ensure dependency injection works with Spring
+        fxmlLoader.setControllerFactory(springContext::getBean);
+
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root, 600, 400);
+
         stage.setScene(scene);
         stage.setTitle("Spring Boot + JavaFX");
         stage.show();
