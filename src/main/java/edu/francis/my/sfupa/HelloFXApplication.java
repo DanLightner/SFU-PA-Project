@@ -55,6 +55,10 @@ public class HelloFXApplication extends Application {
         // Close the Spring application context when the JavaFX application stops
         //test
         springContext.close();
+        if (database != null) {
+            System.out.println("Database connection closed successfully!");
+            database.closeConnection();  // Ensure the connection is properly closed
+        }
     }
 
     public static void main(String[] args) {
