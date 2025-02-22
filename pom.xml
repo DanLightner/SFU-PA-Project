@@ -34,6 +34,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -44,12 +45,17 @@
 			<artifactId>hibernate-community-dialects</artifactId>
 			<version>6.4.1.Final</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
 			<version>21.0.6</version>
 		</dependency>
-
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
@@ -104,6 +110,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 
 
 			<!-- Maven Compiler Plugin for Java 17 -->

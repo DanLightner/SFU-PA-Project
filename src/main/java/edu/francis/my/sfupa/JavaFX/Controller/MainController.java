@@ -1,4 +1,4 @@
-package edu.francis.my.sfupa.Controller;
+package edu.francis.my.sfupa.JavaFX.Controller;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;

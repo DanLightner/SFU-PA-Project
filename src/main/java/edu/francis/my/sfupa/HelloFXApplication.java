@@ -1,12 +1,9 @@
 package edu.francis.my.sfupa;
 
-import edu.francis.my.sfupa.Models.ConnectDB;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -16,13 +13,14 @@ import java.io.IOException;
 public class HelloFXApplication extends Application {
 
     private static ConfigurableApplicationContext springContext;
-    private static ConnectDB database; // Inject database connection
+
 
     @Override
     public void init() {
         // Start the Spring Boot application context
         springContext = SpringApplication.run(SfuPaProjectApplication.class);
         // Get ConnectDB bean from Spring
+        /*
         database = springContext.getBean(ConnectDB.class);
 
         if (database.getConnection() != null) {
@@ -30,6 +28,8 @@ public class HelloFXApplication extends Application {
         } else {
             System.out.println("Failed to connect to the database.");
         }
+        */
+
     }
 
     @Override
@@ -55,10 +55,13 @@ public class HelloFXApplication extends Application {
         // Close the Spring application context when the JavaFX application stops
         //test
         springContext.close();
+        /*
         if (database != null) {
             System.out.println("Database connection closed successfully!");
             database.closeConnection();  // Ensure the connection is properly closed
         }
+
+         */
     }
 
     public static void main(String[] args) {
