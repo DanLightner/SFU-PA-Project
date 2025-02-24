@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="view.UploadGuestLecturer"
+            fx:controller="edu.francis.my.sfupa.JavaFX.Controller.MainController"
             prefHeight="400.0" prefWidth="600.0">
+
+    <VBox spacing="10" layoutX="50" layoutY="50">
+        <Label text="Upload Guest Lecturer CSV" />
+
+        <ComboBox fx:id="semesterCombo" promptText="Select Semester"/>
+        <ComboBox fx:id="courseCombo" promptText="Select Course"/>
+        <TextField fx:id="yearField" promptText="Enter Year"/>
+        <TextField fx:id="guestLecturerField" promptText="Enter Guest Lecturer Name"/>
+
+        <Button text="Select CSV" onAction="#handleSelectCSV"/>
+        <Button text="Submit" onAction="#handleSubmitCSV"/>
+        <Button text="Back" onAction="#handleBack"/>
+    </VBox>
 
 </AnchorPane>

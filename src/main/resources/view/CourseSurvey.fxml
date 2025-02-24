@@ -30,13 +30,11 @@
     <center>
         <VBox alignment="CENTER" spacing="15">
             <Label text="Welcome to SFU PA Application!" />
-            <Button text="Course Survey" onAction="#handleCourseSurvey"/>
-            <Button text="Instructor Eval" onAction="#handleInstructorEval"/>
-            <Button text="Gradebook" onAction="#handleGradebook"/>
             <Button text="Upload Guest Lecturer CSV" onAction="#handleUploadCSV"/>
             <Button text="View Guest Lecturers" onAction="#handleViewGuestLecturers"/>
             <Button text="Edit Guest Lecturer Surveys" onAction="#handleEditSurveys"/>
             <Button text="Analyze Guest Lecturer Surveys" onAction="#handleAnalyzeSurveys"/>
+            <Button text="Back to Home" onAction="#handleBack"/>
         </VBox>
     </center>
 

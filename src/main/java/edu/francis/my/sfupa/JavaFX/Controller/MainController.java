@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
 
@@ -63,12 +65,33 @@ public class MainController {
         loadScene(event, "/view/AnalyzeGuestLecturerSurveys.fxml");
     }
 
+
+
     @FXML
-    public void handleBack(ActionEvent event) throws IOException {
-        loadScene(event, "/view/main-view.fxml");
+    private ComboBox<String> semesterCombo;
+
+    @FXML
+    private ComboBox<String> courseCombo;
+
+    @FXML
+    private TextField yearField;
+
+    @FXML
+    private TextField guestLecturerField;
+
+    @FXML
+    public void handleSelectCSV(ActionEvent event) {
+        System.out.println("CSV Button Clicked");
     }
 
-
+    @FXML
+    public void handleBack(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/main-view.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 
 
 
