@@ -4,6 +4,7 @@ import edu.francis.my.sfupa.SQLite.Models.Course;
 import edu.francis.my.sfupa.SQLite.Repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/courses")
@@ -27,6 +28,23 @@ public class CourseController {
         return courseRepository.findById(id).orElse(null);
     }
 
+
+    @PutMapping("/{id}")
+    public Course updateCourse(@PathVariable Long id, @RequestBody Course courseDetails) {
+        Optional<Course> optionalCourse = courseRepository.findById(id);
+        if (optionalCourse.isPresent()) {
+            Course existingCourse = optionalCourse.get();
+            existingCourse.setCourseId(courseDetails.getcourseCode());
+            existingCourse.setName(courseDetails.getName());
+            return courseRepository.save(existingCourse);
+        }
+        return null;
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCourse(@PathVariable Long id) {
+        courseRepository.deleteById(id);
+    }
 
     /*
     To test the CRUD operations do this
