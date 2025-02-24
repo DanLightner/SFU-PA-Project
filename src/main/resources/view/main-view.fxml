@@ -26,11 +26,13 @@
         </MenuBar>
     </top>
 
-    <!-- Main Content Area -->
     <center>
-        <StackPane>
+        <VBox alignment="CENTER" spacing="15">
             <Label text="Welcome to SFU PA Application!" />
-        </StackPane>
+            <Button text="Course Survey" onAction="#handleCourseSurvey"/>
+            <Button text="Instructor Eval" onAction="#handleInstructorEval"/>
+            <Button text="Gradebook" onAction="#handleGradebook"/>
+        </VBox>
     </center>
 
     <!-- Status Bar -->
