@@ -1,39 +1,39 @@
 package edu.francis.my.sfupa.SQLite.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
+@Table(name = "Course")
 public class Course {
 
     @Id
-    private String courseId;  // Primary key, assuming it's a unique ID like "CS101"
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @NotBlank
+    private String courseCode;
     private String name;
-    private String description;
-
     // Getters and Setters
-    public String getCourseId() {
-        return courseId;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public Long getId() {
+        return id;
     }
 
-    public void setCourseId(String courseId) {
-        this.courseId = courseId;
+    public String getcourseCode() {
+        return courseCode;
+    }
+    public void setCourseId(String courseCode) {
+        this.courseCode = courseCode;
     }
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

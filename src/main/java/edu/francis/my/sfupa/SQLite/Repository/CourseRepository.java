@@ -3,7 +3,7 @@ package edu.francis.my.sfupa.SQLite.Repository;
 import edu.francis.my.sfupa.SQLite.Models.Course;
 import org.springframework.data.repository.CrudRepository;
 
-public interface CourseRepository extends CrudRepository<Course, String> {
-    // You can define custom query methods here if needed
-    //KINDA USELESS ATM
+public interface CourseRepository extends CrudRepository<Course, Long> {
 }
+
+

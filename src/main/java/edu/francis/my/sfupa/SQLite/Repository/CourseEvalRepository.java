@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CourseEvalRepository extends CrudRepository<CourseEval, Integer> {
     // You can define custom query methods here if needed
-    //KINDA USELESS ATM
+
 }

@@ -15,34 +15,41 @@ public class CourseEvalController {
     @Autowired
     private CourseEvalService courseEvalService;
 
-    // Endpoint to get all CourseEval records
+    // Get all CourseEval records
     @GetMapping
     public List<CourseEval> getAllCourseEvals() {
-        return courseEvalService.getAllCourseEvals();
+        return courseEvalService.findAll();
     }
 
-    // Endpoint to get a CourseEval by ID
+    // Get a CourseEval by ID
     @GetMapping("/{id}")
     public Optional<CourseEval> getCourseEvalById(@PathVariable Integer id) {
-        return courseEvalService.getCourseEvalById(id);
+        return courseEvalService.findById(id);
     }
 
-    // Endpoint to create a new CourseEval
+    // Create a new CourseEval
     @PostMapping
     public CourseEval createCourseEval(@RequestBody CourseEval courseEval) {
-        return courseEvalService.saveCourseEval(courseEval);
+        return courseEvalService.save(courseEval);
     }
 
-    // Endpoint to update an existing CourseEval by ID
+    // Update an existing CourseEval by ID
     @PutMapping("/{id}")
-    public CourseEval updateCourseEval(@PathVariable Integer id, @RequestBody CourseEval courseEval) {
-        // Assuming the service handles checking if the courseEval with ID exists
-        return courseEvalService.updateCourseEval(id, courseEval);
+    public Optional<CourseEval> updateCourseEval(@PathVariable Integer id, @RequestBody CourseEval courseEval) {
+        return courseEvalService.update(id, courseEval);
     }
 
-    // Endpoint to delete a CourseEval by ID
+    // Delete a CourseEval by ID
     @DeleteMapping("/{id}")
     public void deleteCourseEval(@PathVariable Integer id) {
-        courseEvalService.deleteCourseEval(id);
+        courseEvalService.delete(id);
     }
+
+
+    /*
+    If you want to test the CURD Operation for this code:
+
+    Do the following (MAKE SURE YOU IMPLEMENTED A PROPER VALUE IN COURSE BEFORE)
+
+     */
 }
