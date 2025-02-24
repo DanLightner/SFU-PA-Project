@@ -41,10 +41,35 @@ public class MainController {
         System.out.println("SFU PA Application v1.0");
     }
 
+
+
+    @FXML
+    public void handleUploadCSV(ActionEvent event) throws IOException {
+        loadScene(event, "/view/UploadGuestLecturer.fxml");
+    }
+
+    @FXML
+    public void handleViewGuestLecturers(ActionEvent event) throws IOException {
+        loadScene(event, "/view/ViewGuestLecturers.fxml");
+    }
+
+    @FXML
+    public void handleEditSurveys(ActionEvent event) throws IOException {
+        loadScene(event, "/view/EditGuestLecturerSurveys.fxml");
+    }
+
+    @FXML
+    public void handleAnalyzeSurveys(ActionEvent event) throws IOException {
+        loadScene(event, "/view/AnalyzeGuestLecturerSurveys.fxml");
+    }
+
     @FXML
     public void handleBack(ActionEvent event) throws IOException {
         loadScene(event, "/view/main-view.fxml");
     }
+
+
+
 
 
     private void loadScene(ActionEvent event, String fxmlPath) throws IOException {
