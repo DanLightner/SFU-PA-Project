@@ -5,7 +5,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.francis.my.sfupa.Controller.MainController"
+            fx:controller="edu.francis.my.sfupa.JavaFX.Controller.MainController"
             prefHeight="400.0" prefWidth="600.0">
 
     <!-- Menu Bar -->
@@ -26,11 +26,13 @@
         </MenuBar>
     </top>
 
-    <!-- Main Content Area -->
     <center>
-        <StackPane>
+        <VBox alignment="CENTER" spacing="15">
             <Label text="Welcome to SFU PA Application!" />
-        </StackPane>
+            <Button text="Course Survey" onAction="#handleCourseSurvey"/>
+            <Button text="Instructor Eval" onAction="#handleInstructorEval"/>
+            <Button text="Gradebook" onAction="#handleGradebook"/>
+        </VBox>
     </center>
 
     <!-- Status Bar -->
