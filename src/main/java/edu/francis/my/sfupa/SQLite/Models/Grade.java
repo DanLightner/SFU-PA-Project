@@ -24,5 +24,45 @@ public class Grade {
 
     @Column(name = "Retake", columnDefinition = "TINYINT")
     private boolean retake;
+    // Getters and Setters
+    public Long getIdGrade() {
+        return idGrade;
+    }
 
+    public void setIdGrade(Long idGrade) {
+        this.idGrade = idGrade;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Classes getStudentClass() {
+        return studentClass;
+    }
+
+    public void setStudentClass(Classes studentClass) {
+        this.studentClass = studentClass;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public boolean isRetake() {
+        return retake;
+    }
+
+    public void setRetake(boolean retake) {
+        this.retake = retake;
+    }
 }
+
