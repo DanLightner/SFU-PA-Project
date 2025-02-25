@@ -25,5 +25,4 @@ public class Grade {
     @Column(name = "Retake", columnDefinition = "TINYINT")
     private boolean retake;
 
-    // Constructors, Getters, and Setters...
 }
