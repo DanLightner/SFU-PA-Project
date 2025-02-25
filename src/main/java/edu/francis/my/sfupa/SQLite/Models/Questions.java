@@ -11,14 +11,23 @@ public class Questions {
     @Column(name = "idQuestions")
     private Long idQuestions;
 
-    @Column(name = "Text", columnDefinition = "MEDIUMTEXT")
+    @Column(name = "Text", nullable = false)
     private String text;
 
-    @Column(name = "Type", columnDefinition = "TINYINT")
-    private int type;
+    @Column(name = "Type", nullable = false)
+    private boolean type;
+
+    @ManyToOne
+    @JoinColumn(name="eval_id",nullable = false)
+    private CourseEval eval;
 
     // Constructors
     public Questions() {
+    }
+    public Questions(String text, boolean type) {
+        this.text = text;
+        this.type = type;
+        this.eval = eval;
     }
 
     public Long getIdQuestions() {
@@ -37,11 +46,11 @@ public class Questions {
         this.text = text;
     }
 
-    public int getType() {
+    public boolean getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(boolean type) {
         this.type = type;
     }
 }

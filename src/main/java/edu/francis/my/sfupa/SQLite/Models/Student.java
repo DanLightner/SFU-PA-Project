@@ -7,12 +7,14 @@ import jakarta.persistence.*;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idStudent")
     private Long idStudent;
 
     // Constructors
     public Student() {
+    }
+    public Student(Long idStudent) {
+        this.idStudent = idStudent;
     }
 
     public Long getIdStudent() {

@@ -18,6 +18,17 @@ public class ResponseOpen {
     @JoinColumn(name = "CourseEval_idCourseEval", nullable = false)
     private CourseEval courseEval;
 
+    @ManyToOne
+    @JoinColumn(name= "Question_questionId", nullable = false)
+    private Questions question;
+
+    public ResponseOpen() {}
+    public ResponseOpen(String response, CourseEval courseEval, Questions question) {
+        this.response = response;
+        this.courseEval = courseEval;
+        this.question = question;
+    }
+
     // Getters and Setters
     public Long getIdResponse() {
         return idResponse;
@@ -42,4 +53,8 @@ public class ResponseOpen {
     public void setCourseEval(CourseEval courseEval) {
         this.courseEval = courseEval;
     }
+
+    public Questions getQuestion() {return question;}
+
+    public void setQuestion(Questions question) {this.question = question;}
 }

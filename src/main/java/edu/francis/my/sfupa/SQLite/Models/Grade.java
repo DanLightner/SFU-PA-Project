@@ -16,14 +16,21 @@ public class Grade {
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "Class_idClass", nullable = false)
+    @JoinColumn(name = "Clas_idClass", nullable = false)
     private Classes studentClass;
 
-    @Column(name = "Grade", columnDefinition = "ENUM(...)")
+    @Column(name = "Grade", nullable = false)
     private String grade;
 
-    @Column(name = "Retake", columnDefinition = "TINYINT")
+    @Column(name = "Retake", nullable = false)
     private boolean retake;
+    public Grade() {}
+    public Grade(Student student, Classes studentClass, String grade, boolean retake) {
+        this.student = student;
+        this.studentClass = studentClass;
+        this.grade = grade;
+        this.retake = retake;
+    }
     // Getters and Setters
     public Long getIdGrade() {
         return idGrade;
