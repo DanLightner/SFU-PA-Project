@@ -64,7 +64,6 @@ public class MainController {
     }
 
 
-
     @FXML
     private ComboBox<String> semesterCombo;
 
