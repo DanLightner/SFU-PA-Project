@@ -12,9 +12,9 @@ public class Classes {
     @Column(name = "idClass")
     private Long idClass;
 
-    @NotBlank
-    @Column(name = "Class_Code", length = 10)
-    private String classCode;
+    @ManyToOne
+    @JoinColumn(name="Course_courseCode", nullable=false)
+    private Course classCode;
 
     @ManyToOne
     @JoinColumn(name = "Semester_idSemester", nullable = false)
@@ -28,7 +28,7 @@ public class Classes {
     public Classes() {
     }
 
-    public Classes(String classCode, Semester semester, SchoolYear schoolYear) {
+    public Classes(Course classCode, Semester semester, SchoolYear schoolYear) {
         this.classCode = classCode;
         this.semester = semester;
         this.schoolYear = schoolYear;
@@ -43,11 +43,11 @@ public class Classes {
         this.idClass = idClass;
     }
 
-    public String getClassCode() {
+    public Course getClassCode() {
         return classCode;
     }
 
-    public void setClassCode(String classCode) {
+    public void setClassCode(Course classCode) {
         this.classCode = classCode;
     }
 

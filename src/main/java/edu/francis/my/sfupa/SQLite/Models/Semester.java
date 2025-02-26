@@ -8,13 +8,23 @@ public class Semester {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "semester_name", nullable = false)
+    private SemesterName name;
+
+    // Constructors
+    public Semester() {
+    }
+    public Semester(SemesterName category) {
+        this.name = name;
+    }
     // Getters and Setters
-    public String getName() {
+    public SemesterName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(SemesterName name) {
         this.name = name;
     }
 }
