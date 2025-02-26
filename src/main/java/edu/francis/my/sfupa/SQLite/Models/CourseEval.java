@@ -13,7 +13,6 @@ public class CourseEval {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer rating;//what is rating?
 
     @ManyToOne
     @JoinColumn(name = "course_id")  // This is the foreign key in the CourseEval table
@@ -24,12 +23,10 @@ public class CourseEval {
     private Lecturer lecturer;
 
     public CourseEval() {}
-    public CourseEval(Integer id, Integer rating, Classes course, Lecturer lecturer) {
-        this.rating = rating;
+    public CourseEval(Integer id, Classes course, Lecturer lecturer) {
         this.course = course;
         this.lecturer = lecturer;
     }
-
 
     // Getters and setters
     public Integer getId() {
@@ -38,14 +35,6 @@ public class CourseEval {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getRating() {
-        return rating;
-    }
-
-    public void setRating(Integer rating) {
-        this.rating = rating;
     }
 
     public Classes getCourse() {
