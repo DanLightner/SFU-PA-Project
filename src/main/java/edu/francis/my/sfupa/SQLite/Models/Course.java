@@ -1,5 +1,6 @@
 package edu.francis.my.sfupa.SQLite.Models;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -8,19 +9,19 @@ import jakarta.validation.constraints.NotBlank;
 public class Course {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "courseCode", length = 10)
+    private String courseCode;
 
     @NotBlank
-    private String courseCode;
+    @Column(name = "name", length = 50)
     private String name;
-    // Getters and Setters
+    // Getters, Setters, Constructors
+    public Course(){
 
-    public void setId(Long id) {
-        this.id = id;
     }
-    public Long getId() {
-        return id;
+    public Course(String courseCode, String name) {
+        this.courseCode = courseCode;
+        this.name = name;
     }
 
     public String getcourseCode() {

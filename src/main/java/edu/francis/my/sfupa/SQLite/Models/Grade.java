@@ -16,14 +16,60 @@ public class Grade {
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "Class_idClass", nullable = false)
+    @JoinColumn(name = "Clas_idClass", nullable = false)
     private Classes studentClass;
 
-    @Column(name = "Grade", columnDefinition = "ENUM(...)")
+    @Column(name = "Grade", nullable = false)
     private String grade;
 
-    @Column(name = "Retake", columnDefinition = "TINYINT")
+    @Column(name = "Retake", nullable = false)
     private boolean retake;
+    public Grade() {}
+    public Grade(Student student, Classes studentClass, String grade, boolean retake) {
+        this.student = student;
+        this.studentClass = studentClass;
+        this.grade = grade;
+        this.retake = retake;
+    }
+    // Getters and Setters
+    public Long getIdGrade() {
+        return idGrade;
+    }
 
-    // Constructors, Getters, and Setters...
+    public void setIdGrade(Long idGrade) {
+        this.idGrade = idGrade;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Classes getStudentClass() {
+        return studentClass;
+    }
+
+    public void setStudentClass(Classes studentClass) {
+        this.studentClass = studentClass;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public boolean isRetake() {
+        return retake;
+    }
+
+    public void setRetake(boolean retake) {
+        this.retake = retake;
+    }
 }
+

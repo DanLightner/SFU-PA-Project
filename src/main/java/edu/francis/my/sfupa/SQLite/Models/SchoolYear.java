@@ -13,7 +13,7 @@ public class SchoolYear {
     private Long idSchoolYear;
 
     @NotBlank
-    @Column(name = "Name", length = 45)
+    @Column(name = "Name", length = 10)
     private String name;
 
     public SchoolYear() {
