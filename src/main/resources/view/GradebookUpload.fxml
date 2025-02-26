@@ -9,12 +9,9 @@
             prefHeight="400.0" prefWidth="600.0">
 
     <VBox spacing="10" layoutX="50" layoutY="50">
-        <Label text="Gradebook Management" style="-fx-font-size: 18px;"/>
-
-        <Button text="Run Reporting" onAction="#handleRunReporting"/>
-        <Button text="Upload Gradebook CSV" onAction="#handleUploadCSV"/>
-        <Button text="Check Student Grades" onAction="#handleCheckStudentGrades"/>
-        <Button text="Back to Main" onAction="#handleBackMain"/>
+        <Label text="Upload Gradebook CSV" style="-fx-font-size: 18px;"/>
+        <Button text="Select CSV File" onAction="#handleSelectCSV"/>
+        <Button text="Back to Gradebook" onAction="#handleBack"/>
     </VBox>
 
 </AnchorPane>
