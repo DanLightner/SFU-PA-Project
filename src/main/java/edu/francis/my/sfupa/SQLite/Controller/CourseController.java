@@ -24,14 +24,14 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public Course getCourse(@PathVariable Long id) {
-        return courseRepository.findById(id).orElse(null);
+    public Course getCourse(@PathVariable String courseCode) {
+        return courseRepository.findById(courseCode).orElse(null);
     }
-
+    //need to be changed, our pk is string courseCode
 
     @PutMapping("/{id}")
-    public Course updateCourse(@PathVariable Long id, @RequestBody Course courseDetails) {
-        Optional<Course> optionalCourse = courseRepository.findById(id);
+    public Course updateCourse(@PathVariable String courseCode, @RequestBody Course courseDetails) {
+        Optional<Course> optionalCourse = courseRepository.findById(courseCode);
         if (optionalCourse.isPresent()) {
             Course existingCourse = optionalCourse.get();
             existingCourse.setCourseId(courseDetails.getcourseCode());
@@ -42,8 +42,8 @@ public class CourseController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCourse(@PathVariable Long id) {
-        courseRepository.deleteById(id);
+    public void deleteCourse(@PathVariable String courseCode) {
+        courseRepository.deleteById(courseCode);
     }
 
     /*
