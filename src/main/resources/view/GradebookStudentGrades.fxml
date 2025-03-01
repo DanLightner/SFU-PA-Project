@@ -11,7 +11,6 @@
     <VBox spacing="10" layoutX="50" layoutY="50">
         <Label text="Check Student Grades" style="-fx-font-size: 18px;"/>
         <TextField fx:id="studentIdField" promptText="Enter Student ID"/>
-        <Button text="Search" onAction="#handleSearchGrades"/>
         <Button text="Back to Gradebook" onAction="#handleBack"/>
     </VBox>
 

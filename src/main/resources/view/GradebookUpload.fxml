@@ -10,7 +10,7 @@
 
     <VBox spacing="10" layoutX="50" layoutY="50">
         <Label text="Upload Gradebook CSV" style="-fx-font-size: 18px;"/>
-        <Button text="Select CSV File" onAction="#handleSelectCSV"/>
+
         <Button text="Back to Gradebook" onAction="#handleBack"/>
     </VBox>
 
