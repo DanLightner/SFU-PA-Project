@@ -11,7 +11,7 @@
     <VBox spacing="10" layoutX="50" layoutY="50">
         <Label text="Run Gradebook Report" style="-fx-font-size: 18px;"/>
        <!-- <Button text="Generate Report" onAction="#handleGenerateReport"/> -->
-        <Button text="Back to Gradebook" onAction="#handleBack"/>
+        <Button text="Back to Guest Lecturer" onAction="#handleBack"/>
     </VBox>
 
 </AnchorPane>
