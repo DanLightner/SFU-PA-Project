@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
 
@@ -42,9 +44,55 @@ public class MainController {
     }
 
     @FXML
-    public void handleBack(ActionEvent event) throws IOException {
-        loadScene(event, "/view/main-view.fxml");
+    public void handleUploadCSV(ActionEvent event) throws IOException {
+        loadScene(event, "/view/UploadGuestLecturer.fxml");
     }
+
+    @FXML
+    public void handleViewGuestLecturers(ActionEvent event) throws IOException {
+        loadScene(event, "/view/ViewGuestLecturers.fxml");
+    }
+
+    @FXML
+    public void handleEditSurveys(ActionEvent event) throws IOException {
+        loadScene(event, "/view/EditGuestLecturerSurveys.fxml");
+    }
+
+    @FXML
+    public void handleAnalyzeSurveys(ActionEvent event) throws IOException {
+        loadScene(event, "/view/AnalyzeGuestLecturerSurveys.fxml");
+    }
+
+
+    @FXML
+    private ComboBox<String> semesterCombo;
+
+    @FXML
+    private ComboBox<String> courseCombo;
+
+    @FXML
+    private TextField yearField;
+
+    @FXML
+    private TextField guestLecturerField;
+
+    @FXML
+    public void handleSelectCSV(ActionEvent event) {
+        System.out.println("CSV Button Clicked");
+    }
+    public void handleSubmitCSV(ActionEvent actionEvent) throws IOException {
+
+    }
+
+    @FXML
+    public void handleBack(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/main-view.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
 
 
     private void loadScene(ActionEvent event, String fxmlPath) throws IOException {
@@ -54,4 +102,6 @@ public class MainController {
         stage.setScene(new Scene(root));
         stage.show();
     }
+
+
 }
