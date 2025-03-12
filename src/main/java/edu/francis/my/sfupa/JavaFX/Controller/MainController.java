@@ -43,8 +43,6 @@ public class MainController {
         System.out.println("SFU PA Application v1.0");
     }
 
-
-
     @FXML
     public void handleUploadCSV(ActionEvent event) throws IOException {
         loadScene(event, "/view/UploadGuestLecturer.fxml");
@@ -82,6 +80,9 @@ public class MainController {
     public void handleSelectCSV(ActionEvent event) {
         System.out.println("CSV Button Clicked");
     }
+    public void handleSubmitCSV(ActionEvent actionEvent) throws IOException {
+
+    }
 
     @FXML
     public void handleBack(ActionEvent event) throws IOException {
@@ -101,4 +102,6 @@ public class MainController {
         stage.setScene(new Scene(root));
         stage.show();
     }
+
+
 }

@@ -1,0 +1,31 @@
+.root {
+    -fx-background-color: black;
+    --background-color: #121212;
+    --text-color: #e0e0e0;
+    --button-color: #333;
+    --button-hover-color: #444;
+    --border-color: #555;
+    --accent-color: #bb86fc;
+}
+
+* {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+}
+
+.button {
+    background-color: var(--button-color);
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--button-hover-color);
+}
+
+.accent {
+    color: var(--accent-color);
+}
