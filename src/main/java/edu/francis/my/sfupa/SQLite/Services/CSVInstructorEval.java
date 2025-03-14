@@ -39,7 +39,9 @@ public class CSVInstructorEval {
     private LecturerRepository lecturerRepository;
 
     // Hardcoded file path for testing - modify this as needed
-    private static final String DEFAULT_FILE_PATH = "C:\\Users\\danli\\Downloads\\Example of Instructor Eval.csv";
+    private static final String DEFAULT_FILE_PATH = System.getProperty("user.home") + "/Downloads/Example of Instructor Eval.csv";
+
+
 
     /**
      * Opens a file chooser dialog and processes the selected CSV file
@@ -165,6 +167,7 @@ public class CSVInstructorEval {
      * @return true if the file was successfully processed, false otherwise
      */
     public boolean processCSVByPath(String filePath, Long classId, Long lecturerId) {
+        System.out.println("Resolved file path: " + filePath);
         try {
             File file = new File(filePath);
             if (!file.exists()) {
@@ -198,7 +201,7 @@ public class CSVInstructorEval {
         // Example hardcoded values - modify these as needed for your testing
         Long classId = 1L;  // Example class ID
         Long lecturerId = 1L;  // Example lecturer ID
-        String testFilePath = "C:\\Users\\danli\\Downloads\\Example of Instructor Eval.csv";
+        String testFilePath = DEFAULT_FILE_PATH;
 
         System.out.println("Starting hardcoded import with file: " + testFilePath);
         boolean success = processCSVByPath(testFilePath, classId, lecturerId);
