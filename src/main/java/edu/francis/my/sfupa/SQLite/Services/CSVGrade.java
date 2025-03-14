@@ -1,7 +1,6 @@
 package edu.francis.my.sfupa.SQLite.Services;
 
-import edu.francis.my.sfupa.SQLite.Models.Course;
-import edu.francis.my.sfupa.SQLite.Models.Student;
+import edu.francis.my.sfupa.SQLite.Models.*;
 import edu.francis.my.sfupa.SQLite.Repository.CourseRepository;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -37,6 +36,7 @@ public class CSVGrade {
             List<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord record : csvRecords) {
+                Grade gradeRecord = new Grade(new Student(Long.parseLong(record.get("Student ID "))), new Classes(new Course("CPSC410","Some class"),new Semester(SemesterName.Fall), new SchoolYear("2024-2025")), record.get("Final Grade "), false);
                 //Student student = students.get(record.get("Student ID "));
                 String grade = record.get("Final Grade ");
             }
