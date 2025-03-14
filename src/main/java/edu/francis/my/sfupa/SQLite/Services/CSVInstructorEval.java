@@ -198,7 +198,7 @@ public class CSVInstructorEval {
         // Example hardcoded values - modify these as needed for your testing
         Long classId = 1L;  // Example class ID
         Long lecturerId = 1L;  // Example lecturer ID
-        String testFilePath = "src/main/resources/test_data/instructor_eval_sample.csv";
+        String testFilePath = "C:\\Users\\danli\\Downloads\\Example of Instructor Eval.csv";
 
         System.out.println("Starting hardcoded import with file: " + testFilePath);
         boolean success = processCSVByPath(testFilePath, classId, lecturerId);

@@ -1,5 +1,6 @@
 package edu.francis.my.sfupa;
 
+import edu.francis.my.sfupa.SQLite.Services.CSVInstructorEval;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,6 +21,15 @@ public class HelloFXApplication extends Application {
     public void init() {
         // Start the Spring Boot application context
         springContext = SpringApplication.run(SfuPaProjectApplication.class);
+
+        try {
+            CSVInstructorEval CSVInstructorEval = new CSVInstructorEval();
+            CSVInstructorEval.runHardcodedImport();
+            System.out.println("CSV Import did work");
+        }
+        catch (Exception e) {
+            System.out.println("CSV Import did NOT work");
+        }
         // Get ConnectDB bean from Spring
         /*
         database = springContext.getBean(ConnectDB.class);
