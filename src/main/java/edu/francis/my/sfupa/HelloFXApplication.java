@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class HelloFXApplication extends Application {
 
@@ -44,6 +45,9 @@ public class HelloFXApplication extends Application {
 
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root, 600, 400);
+        //scene.getStylesheets().add(getClass().getResource("/styles/dark-theme.css").toExternalForm());
+
+
 
         stage.setScene(scene);
         stage.setTitle("Spring Boot + JavaFX");
@@ -66,6 +70,7 @@ public class HelloFXApplication extends Application {
 
     public static void main(String[] args) {
         // Launch the JavaFX application
+
         launch(args);
     }
 }
