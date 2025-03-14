@@ -55,7 +55,7 @@ public class DataInitializer {
     public CommandLineRunner initDatabase() {
         return args -> {
             // Only initialize if the database is empty
-            if (courseRepository.count() == 1) {
+            if (courseRepository.count() == 0) {
                 System.out.println("Initializing database with test data...");
 
                 // Create courses

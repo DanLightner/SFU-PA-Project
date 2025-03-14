@@ -38,19 +38,98 @@ public class CSVInstructorEval {
     @Autowired
     private LecturerRepository lecturerRepository;
 
-    // Hardcoded file path for testing - modify this as needed
+    @Autowired
+    private CourseRepository courseRepository;
+
+    // Hardcoded file path for testing - maintain existing path logic
     private static final String DEFAULT_FILE_PATH = System.getProperty("user.home") + "/Downloads/Example of Instructor Eval.csv";
 
+    /**
+     * Creates a new CourseEval entry with manually entered data
+     * @param courseCode Course code (must exist in the database)
+     * @param semesterId Semester ID
+     * @param schoolYearId School year ID
+     * @param lecturerFirstName Lecturer's first name
+     * @param lecturerLastName Lecturer's last name
+     * @return The created CourseEval object or null if failed
+     */
+    public CourseEval createManualCourseEval(String courseCode, Long semesterId, Long schoolYearId,
+                                             String lecturerFirstName, String lecturerLastName) {
+        try {
+            // Find or create lecturer
+            Lecturer lecturer = findOrCreateLecturer(lecturerFirstName, lecturerLastName);
 
+            // Find course
+            Optional<Course> courseOpt = courseRepository.findById(courseCode);
+            if (courseOpt.isEmpty()) {
+                System.out.println("Course not found: " + courseCode);
+                return null;
+            }
+
+            // Find or create class (we need to improve this to find the exact class)
+            Classes classEntity = findOrCreateClass(courseOpt.get(), semesterId, schoolYearId);
+            if (classEntity == null) {
+                return null;
+            }
+
+            // Create course evaluation
+            CourseEval courseEval = new CourseEval();
+            courseEval.setCourse(classEntity);
+            courseEval.setLecturer(lecturer);
+
+            return courseEvalRepository.save(courseEval);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Find a lecturer by name or create a new one if not found
+     */
+    private Lecturer findOrCreateLecturer(String firstName, String lastName) {
+        // This is a simplified approach - in a real application, you'd want more robust logic
+        // to avoid duplicate entries
+        Iterable<Lecturer> lecturers = lecturerRepository.findAll();
+        for (Lecturer lecturer : lecturers) {
+            if (lecturer.getFName().equalsIgnoreCase(firstName) &&
+                    lecturer.getLName().equalsIgnoreCase(lastName)) {
+                return lecturer;
+            }
+        }
+
+        // Create new lecturer if not found
+        Lecturer newLecturer = new Lecturer(firstName, lastName);
+        return lecturerRepository.save(newLecturer);
+    }
+
+    /**
+     * Find or create a class based on course, semester, and school year
+     */
+    private Classes findOrCreateClass(Course course, Long semesterId, Long schoolYearId) {
+        // This would need more robust implementation in a real application
+        // For now, we'll just return null if we can't find the exact class
+        Iterable<Classes> classes = classesRepository.findAll();
+        for (Classes classItem : classes) {
+            if (classItem.getClassCode().getcourseCode().equals(course.getcourseCode()) &&
+                    Objects.equals(classItem.getSemester().getId(), semesterId) &&
+                    classItem.getSchoolYear().getIdSchoolYear().equals(schoolYearId)) {
+                return classItem;
+            }
+        }
+
+        // Return null instead of creating a new class since this should be manually entered
+        return null;
+    }
 
     /**
      * Opens a file chooser dialog and processes the selected CSV file
      * @param stage The JavaFX stage to display the file chooser
-     * @param classId The ID of the class for this evaluation
-     * @param lecturerId The ID of the lecturer being evaluated
+     * @param courseEvalId The ID of the course evaluation to attach questions and responses to
      * @return true if the file was successfully processed, false otherwise
      */
-    public boolean uploadCSV(Stage stage, Long classId, Long lecturerId) {
+    public boolean uploadCSV(Stage stage, Integer courseEvalId) {
         try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
@@ -64,7 +143,7 @@ public class CSVInstructorEval {
                 return false;
             }
 
-            processCSVFile(file, classId, lecturerId);
+            processCSVFile(file, courseEvalId);
             return true;
 
         } catch (Exception e) {
@@ -76,26 +155,17 @@ public class CSVInstructorEval {
     /**
      * Processes the CSV file and adds the data to the database
      * @param file The CSV file to process
-     * @param classId The ID of the class for this evaluation
-     * @param lecturerId The ID of the lecturer being evaluated
+     * @param courseEvalId The ID of the course evaluation to attach questions and responses to
      */
-    public void processCSVFile(File file, Long classId, Long lecturerId) throws IOException {
-        // Get class and lecturer entities
-        Optional<Classes> classOpt = classesRepository.findById(classId.intValue());
-        Optional<Lecturer> lecturerOpt = lecturerRepository.findById(lecturerId.intValue());
+    public void processCSVFile(File file, Integer courseEvalId) throws IOException {
+        // Get the course evaluation entity
+        Optional<CourseEval> courseEvalOpt = courseEvalRepository.findById(courseEvalId);
 
-        if (classOpt.isEmpty() || lecturerOpt.isEmpty()) {
-            throw new IllegalArgumentException("Class or lecturer not found");
+        if (courseEvalOpt.isEmpty()) {
+            throw new IllegalArgumentException("Course evaluation not found");
         }
 
-        Classes classEntity = classOpt.get();
-        Lecturer lecturer = lecturerOpt.get();
-
-        // Create a new course evaluation
-        CourseEval courseEval = new CourseEval();
-        courseEval.setCourse(classEntity);
-        courseEval.setLecturer(lecturer);
-        courseEval = courseEvalRepository.save(courseEval);
+        CourseEval courseEval = courseEvalOpt.get();
 
         // Read CSV using Apache Commons CSV
         try (FileReader fileReader = new FileReader(file);
@@ -162,11 +232,10 @@ public class CSVInstructorEval {
     /**
      * Processes a CSV file with the specified path
      * @param filePath The path to the CSV file
-     * @param classId The ID of the class for this evaluation
-     * @param lecturerId The ID of the lecturer being evaluated
+     * @param courseEvalId The ID of the course evaluation to attach questions and responses to
      * @return true if the file was successfully processed, false otherwise
      */
-    public boolean processCSVByPath(String filePath, Long classId, Long lecturerId) {
+    public boolean processCSVByPath(String filePath, Integer courseEvalId) {
         System.out.println("Resolved file path: " + filePath);
         try {
             File file = new File(filePath);
@@ -175,7 +244,7 @@ public class CSVInstructorEval {
                 return false;
             }
 
-            processCSVFile(file, classId, lecturerId);
+            processCSVFile(file, courseEvalId);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,32 +253,43 @@ public class CSVInstructorEval {
     }
 
     /**
-     * Convenience method to process a CSV file using the default hardcoded path
-     * @param classId The ID of the class for this evaluation
-     * @param lecturerId The ID of the lecturer being evaluated
-     * @return true if the file was successfully processed, false otherwise
-     */
-    public boolean processDefaultCSV(Long classId, Long lecturerId) {
-        return processCSVByPath(DEFAULT_FILE_PATH, classId, lecturerId);
-    }
-
-    /**
      * For testing purposes - allows running the CSV import with hardcoded values
      * This method can be called from any controller or test code
      */
     public void runHardcodedImport() {
-        // Example hardcoded values - modify these as needed for your testing
-        Long classId = 1L;  // Example class ID
-        Long lecturerId = 1L;  // Example lecturer ID
-        String testFilePath = DEFAULT_FILE_PATH;
+        try {
+            // First create a course evaluation with hardcoded values
+            // These would normally be manually entered by the user
+            String courseCode = "CS101";
+            Long semesterId = 1L;
+            Long schoolYearId = 1L;
+            String lecturerFirstName = "John";
+            String lecturerLastName = "Smith";
 
-        System.out.println("Starting hardcoded import with file: " + testFilePath);
-        boolean success = processCSVByPath(testFilePath, classId, lecturerId);
 
-        if (success) {
-            System.out.println("Hardcoded import completed successfully");
-        } else {
-            System.out.println("Hardcoded import failed");
+            //WILL NEED TO CHANGE THIS LATER!!! ABSOLUTELY!!
+            CourseEval courseEval = createManualCourseEval(courseCode, semesterId, schoolYearId,
+                    lecturerFirstName, lecturerLastName);
+
+            if (courseEval == null) {
+                System.out.println("Failed to create course evaluation for import test");
+                return;
+            }
+
+            // Now import the CSV data for this course evaluation
+            String testFilePath = DEFAULT_FILE_PATH;
+            System.out.println("Starting hardcoded import with file: " + testFilePath);
+
+            boolean success = processCSVByPath(testFilePath, courseEval.getId());
+
+            if (success) {
+                System.out.println("Hardcoded import completed successfully");
+            } else {
+                System.out.println("Hardcoded import failed");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error during hardcoded import");
         }
     }
 }
