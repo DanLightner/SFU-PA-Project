@@ -10,27 +10,29 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import java.io.IOException;
 
 @Component
 public class MainController {
 
-    private Stage stage;
+    @Autowired
+    private ApplicationContext springContext;
 
     @FXML
     private void handleCourseSurvey(ActionEvent event) throws IOException {
-        loadScene(event, "/view/CourseSurvey.fxml");
+        SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
     }
 
     @FXML
     private void handleInstructorEval(ActionEvent event) throws IOException {
-        loadScene(event, "/view/InstructorEval.fxml");
+        SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
     }
 
     @FXML
     private void handleGradebook(ActionEvent event) throws IOException {
-        loadScene(event, "/view/Gradebook.fxml");
+        SceneUtils.switchScene(event, "Gradebook.fxml", springContext);
     }
 
     @FXML
@@ -45,24 +47,23 @@ public class MainController {
 
     @FXML
     public void handleUploadCSV(ActionEvent event) throws IOException {
-        loadScene(event, "/view/UploadGuestLecturer.fxml");
+        SceneUtils.switchScene(event, "UploadGuestLecturer.fxml", springContext);
     }
 
     @FXML
     public void handleViewGuestLecturers(ActionEvent event) throws IOException {
-        loadScene(event, "/view/ViewGuestLecturers.fxml");
+        SceneUtils.switchScene(event, "ViewGuestLecturers.fxml", springContext);
     }
 
     @FXML
     public void handleEditSurveys(ActionEvent event) throws IOException {
-        loadScene(event, "/view/EditGuestLecturerSurveys.fxml");
+        SceneUtils.switchScene(event, "EditGuestLecturerSurveys.fxml", springContext);
     }
 
     @FXML
     public void handleAnalyzeSurveys(ActionEvent event) throws IOException {
-        loadScene(event, "/view/AnalyzeGuestLecturerSurveys.fxml");
+        SceneUtils.switchScene(event, "AnalyzeGuestLecturerSurveys.fxml", springContext);
     }
-
 
     @FXML
     private ComboBox<String> semesterCombo;
@@ -80,28 +81,13 @@ public class MainController {
     public void handleSelectCSV(ActionEvent event) {
         System.out.println("CSV Button Clicked");
     }
-    public void handleSubmitCSV(ActionEvent actionEvent) throws IOException {
 
+    public void handleSubmitCSV(ActionEvent actionEvent) throws IOException {
+        // Implement CSV handling logic here if needed
     }
 
     @FXML
     public void handleBack(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/main-view.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        SceneUtils.switchScene(event, "main-view.fxml", springContext);
     }
-
-
-
-    private void loadScene(ActionEvent event, String fxmlPath) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-        Parent root = loader.load();
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
-
-
 }
