@@ -37,8 +37,8 @@ public class CSVGrade {
 
             for (CSVRecord record : csvRecords) {
                 Grade gradeRecord = new Grade(new Student(Long.parseLong(record.get("Student ID "))), new Classes(new Course("CPSC410","Some class"),new Semester(SemesterName.Fall), new SchoolYear("2024-2025")), record.get("Final Grade "), false);
-                //Student student = students.get(record.get("Student ID "));
-                String grade = record.get("Final Grade ");
+                //preferably we get class info from user's input
+                //
             }
 
             // Close resources
