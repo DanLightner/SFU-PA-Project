@@ -3,18 +3,55 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GradebookController"
             prefHeight="400.0" prefWidth="600.0">
 
-    <VBox spacing="10" layoutX="50" layoutY="50">
-        <Label text="Gradebook Management" style="-fx-font-size: 18px;"/>
+    <!-- Menu Bar (Top) -->
+    <top>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Open" />
+                <MenuItem text="Save" />
+                <MenuItem text="Exit" onAction="#handleExit"/>
+            </Menu>
+            <Menu text="Edit">
+                <MenuItem text="Undo" />
+                <MenuItem text="Redo" />
+            </Menu>
+            <Menu text="Help">
+                <MenuItem text="About" onAction="#handleAbout"/>
+            </Menu>
+        </MenuBar>
+    </top>
 
-        <Button text="Run Reporting" onAction="#handleRunReporting"/>
-        <Button text="Upload Gradebook CSV" onAction="#handleUploadCSV"/>
-        <Button text="Check Student Grades" onAction="#handleCheckStudentGrades"/>
-        <Button text="Back to Main" onAction="#handleBackMain"/>
-    </VBox>
+    <!-- Sidebar Navigation (Left) -->
+    <left>
+        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+            <Button text="Dashboard" onAction="#handleBackMain" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button text="Guest Lecturer" onAction="#handleGuestLecturer" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button text="Gradebook" onAction="#handleCheckStudentGrades" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button text="Instructor Eval" onAction="#handleInstructorEval" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+        </VBox>
+    </left>
 
-</AnchorPane>
+    <!-- Main Content Area -->
+    <center>
+        <VBox alignment="CENTER" spacing="15">
+            <Label text="Gradebook Management" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Button text="Run Reporting" onAction="#handleRunReporting"/>
+            <Button text="Upload Gradebook CSV" onAction="#handleUploadCSV"/>
+            <Button text="Check Student Grades" onAction="#handleCheckStudentGrades"/>
+
+        </VBox>
+    </center>
+
+    <!-- Status Bar (Bottom) -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER" style="-fx-background-color: #F4F4F4; -fx-padding: 5px;">
+            <Label text="Status: Ready"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
