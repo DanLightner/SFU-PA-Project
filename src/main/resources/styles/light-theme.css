@@ -1,0 +1,65 @@
+/* Light Theme for JavaFX */
+
+.root {
+    -fx-background-color: #f9f9f9;
+    -fx-text-fill: #333;
+    -fx-font-family: "Arial", sans-serif;
+}
+
+.button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #333;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px 12px;
+}
+
+.button:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.button:pressed {
+    -fx-background-color: #e0e0e0;
+}
+
+.label {
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+}
+
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 3px;
+    -fx-padding: 5px;
+}
+
+.text-field:focused {
+    -fx-border-color: #0078d7;
+}
+
+.menu-bar {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ddd;
+}
+
+.menu-item {
+    -fx-text-fill: #333;
+}
+
+.menu-item:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ccc;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f5f5f5;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #cce5ff;
+}

@@ -1,0 +1,235 @@
+/* Saint Francis University Theme CSS */
+.root {
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-background-color: #FFFFFF;
+
+    /* SFU Color Variables */
+    -sfu-red: #C8102E;
+    -sfu-black: #000000;
+    -sfu-white: #FFFFFF;
+    -sfu-light-gray: #F5F5F5;
+    -sfu-gray: #CCCCCC;
+    -sfu-dark-gray: #555555;
+}
+
+/* Header Styles */
+.header-box {
+    -fx-background-color: -sfu-red;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 3);
+}
+
+.header-text {
+    -fx-text-fill: -sfu-white;
+    -fx-font-weight: bold;
+}
+
+/* Menu Bar */
+.menu-bar {
+    -fx-background-color: -sfu-black;
+}
+
+.menu {
+    -fx-text-fill: -sfu-white;
+}
+
+.menu-item {
+    -fx-background-color: -sfu-white;
+}
+
+.menu-item:hover {
+    -fx-background-color: -sfu-light-gray;
+}
+
+.menu .label {
+    -fx-text-fill: -sfu-white;
+}
+
+.menu-item .label {
+    -fx-text-fill: -sfu-black;
+}
+
+/* Menu Card Styles */
+.main-grid {
+    -fx-background-color: transparent;
+}
+
+.menu-card {
+    -fx-background-color: -sfu-white;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -sfu-gray;
+    -fx-border-width: 1;
+    -fx-padding: 20;
+    -fx-spacing: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-min-height: 150;
+}
+
+.card-title {
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sfu-red;
+}
+
+.card-description {
+    -fx-text-fill: -sfu-dark-gray;
+    -fx-font-size: 13;
+    -fx-text-alignment: center;
+    -fx-wrap-text: true;
+}
+
+/* Button Styles */
+.button {
+    -fx-background-color: -sfu-red;
+    -fx-text-fill: -sfu-white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 20;
+    -fx-background-radius: 3;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: derive(-sfu-red, -10%);
+}
+
+.button:pressed {
+    -fx-background-color: derive(-sfu-red, -20%);
+}
+
+.button.secondary {
+    -fx-background-color: -sfu-black;
+}
+
+.button.secondary:hover {
+    -fx-background-color: derive(-sfu-black, 20%);
+}
+
+.button.outline {
+    -fx-background-color: transparent;
+    -fx-border-color: -sfu-red;
+    -fx-border-width: 1;
+    -fx-text-fill: -sfu-red;
+}
+
+.button.outline:hover {
+    -fx-background-color: derive(-sfu-red, 90%);
+}
+
+/* Status Bar Styles */
+.status-bar {
+    -fx-background-color: -sfu-light-gray;
+    -fx-border-color: -sfu-gray;
+    -fx-border-width: 1 0 0 0;
+}
+
+/* Table Styles */
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: -sfu-red;
+    -fx-text-fill: -sfu-white;
+}
+
+.table-view .column-header-background .label {
+    -fx-text-fill: -sfu-white;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: -sfu-light-gray;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: derive(-sfu-red, 70%);
+}
+
+/* Form Styles */
+.text-field, .combo-box, .date-picker {
+    -fx-background-color: -sfu-white;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-border-color: -sfu-gray;
+    -fx-border-width: 1;
+    -fx-padding: 8;
+}
+
+.text-field:focused, .combo-box:focused, .date-picker:focused {
+    -fx-border-color: -sfu-red;
+}
+
+/* Tab Styles */
+.tab-pane {
+    -fx-tab-min-width: 120;
+}
+
+.tab {
+    -fx-background-color: -sfu-light-gray;
+    -fx-padding: 5 15;
+}
+
+.tab:selected {
+    -fx-background-color: -sfu-white;
+}
+
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-color: -sfu-red;
+}
+
+/* Label Styles */
+.label {
+    -fx-text-fill: -sfu-black;
+    -fx-font-size: 14px;
+}
+
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sfu-red;
+}
+
+.subtitle-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sfu-black;
+}
+
+/* Chart Styles */
+.chart {
+    -fx-padding: 10;
+    -fx-background-color: transparent;
+}
+
+.chart-title {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sfu-red;
+}
+
+.chart-plot-background {
+    -fx-background-color: -sfu-white;
+}
+
+.chart-series-line {
+    -fx-stroke: -sfu-red;
+    -fx-stroke-width: 2px;
+}
+
+.default-color0.chart-bar { -fx-bar-fill: -sfu-red; }
+.default-color1.chart-bar { -fx-bar-fill: -sfu-black; }
+.default-color2.chart-bar { -fx-bar-fill: -sfu-dark-gray; }
+
+/* Alerts and Dialog Styles */
+.dialog-pane {
+    -fx-background-color: -sfu-white;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: -sfu-red;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: -sfu-white;
+    -fx-font-weight: bold;
+}
