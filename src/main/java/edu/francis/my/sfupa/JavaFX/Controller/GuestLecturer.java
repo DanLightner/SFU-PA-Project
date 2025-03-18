@@ -1,16 +1,21 @@
 package edu.francis.my.sfupa.JavaFX.Controller;
 
-import edu.francis.my.sfupa.JavaFX.Controller.SceneUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import org.springframework.stereotype.Component;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Component
-public class GradebookController {
+public class GuestLecturer {
 
     @Autowired
     private ApplicationContext springContext;
@@ -32,7 +37,7 @@ public class GradebookController {
 
     @FXML
     public void handleBack(ActionEvent event) throws IOException {
-        SceneUtils.switchScene(event, "Gradebook.fxml", springContext);
+        SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
     }
 
     @FXML

@@ -8,11 +8,12 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer"
+            fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvaluation"
             prefHeight="400.0" prefWidth="600.0">
+
     <VBox spacing="10" layoutX="50" layoutY="50">
-        <Label text="Edit Guest Lecturer Survey" style="-fx-font-size: 18px;"/>
-        <!-- <Button text="Generate Report" onAction="#handleGenerateReport"/> -->
-        <Button text="Back to Guest Lecturer" onAction="#handleBack"/>
+        <Label text="Edit Instructor Evaluations" style="-fx-font-size: 18px;"/>
+
+        <Button text="Back to Instructor Evaluation" onAction="#handleBack"/>
     </VBox>
 </AnchorPane>

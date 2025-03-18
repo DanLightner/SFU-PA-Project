@@ -25,13 +25,13 @@ public class CourseController {
 
     @GetMapping("/{id}")
     public Course getCourse(@PathVariable Long id) {
-        return courseRepository.findById(id).orElse(null);
+        return courseRepository.findById(String.valueOf(id)).orElse(null);
     }
 
 
     @PutMapping("/{id}")
     public Course updateCourse(@PathVariable Long id, @RequestBody Course courseDetails) {
-        Optional<Course> optionalCourse = courseRepository.findById(id);
+        Optional<Course> optionalCourse = courseRepository.findById(String.valueOf(id));
         if (optionalCourse.isPresent()) {
             Course existingCourse = optionalCourse.get();
             existingCourse.setCourseId(courseDetails.getcourseCode());
@@ -43,7 +43,7 @@ public class CourseController {
 
     @DeleteMapping("/{id}")
     public void deleteCourse(@PathVariable Long id) {
-        courseRepository.deleteById(id);
+        courseRepository.deleteById(String.valueOf(id));
     }
 
     /*
