@@ -42,11 +42,16 @@ public class GradebookController {
     public void handleCheckStudentGrades(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "GradebookStudentGrades.fxml", springContext);
     }
+    @FXML
+    public void handleBack(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "Gradebook.fxml", springContext);
+    }
 
     @FXML
     public void handleBackMain(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "main-view.fxml", springContext);
     }
+
 
     // --- Menu Bar Actions ---
     @FXML
@@ -66,11 +71,15 @@ public class GradebookController {
     // --- Sidebar Navigation ---
     @FXML
     public void handleGuestLecturer(ActionEvent event) throws IOException {
-        SceneUtils.switchScene(event, "GuestLecturer.fxml", springContext);
+        SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
     }
 
     @FXML
     public void handleInstructorEval(ActionEvent event) throws IOException {
-        SceneUtils.switchScene(event, "InstructorEvaluation.fxml", springContext);
+        SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
+    }
+    @FXML
+    private void handleGradebook(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "Gradebook.fxml", springContext);
     }
 }

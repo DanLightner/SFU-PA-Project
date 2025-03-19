@@ -1,19 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+
+        <?import javafx.scene.control.*?>
+        <?import javafx.scene.layout.*?>
+        <?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer"
-
             prefHeight="400.0" prefWidth="600.0">
+
+<!-- Menu Bar (Top) -->
+<top>
+    <MenuBar>
+        <Menu text="File">
+            <MenuItem text="Open" />
+            <MenuItem text="Save" />
+            <MenuItem text="Exit" onAction="#handleExit"/>
+        </Menu>
+        <Menu text="Edit">
+            <MenuItem text="Undo" />
+            <MenuItem text="Redo" />
+        </Menu>
+        <Menu text="Help">
+            <MenuItem text="About" onAction="#handleAbout"/>
+        </Menu>
+    </MenuBar>
+</top>
+
+<!-- Sidebar Navigation (Left) -->
+<left>
+    <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+        <Button text="Dashboard" onAction="#handleBackMain" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+        <Button text="Guest Lecturer" onAction="#handleGuestLecturer" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+        <Button text="Gradebook" onAction="#handleGradebook" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+        <Button text="Instructor Eval" onAction="#handleInstructorEval" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+    </VBox>
+</left>
+
+<!-- Main Content Area -->
+<center>
     <VBox spacing="10" layoutX="50" layoutY="50">
         <Label text="Run Analyze Guest Lecturer Report" style="-fx-font-size: 18px;"/>
         <!-- <Button text="Generate Report" onAction="#handleGenerateReport"/> -->
         <Button text="Back to Guest Lecturer" onAction="#handleBack"/>
     </VBox>
-</AnchorPane>
+</center>
+
+</BorderPane>
+

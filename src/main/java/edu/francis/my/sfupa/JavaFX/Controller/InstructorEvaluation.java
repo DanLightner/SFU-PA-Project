@@ -18,6 +18,10 @@ public class InstructorEvaluation {
     public void handleAnalyzeData(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "InstructorEvalAnalyze.fxml", springContext);
     }
+    @FXML
+    public void handleBack(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
+    }
 
     @FXML
     public void handleEditEval(ActionEvent event) throws IOException {
@@ -52,7 +56,7 @@ public class InstructorEvaluation {
     // --- Sidebar Navigation ---
     @FXML
     public void handleGuestLecturer(ActionEvent event) throws IOException {
-        SceneUtils.switchScene(event, "GuestLecturer.fxml", springContext);
+        SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
     }
 
     @FXML
@@ -62,6 +66,6 @@ public class InstructorEvaluation {
 
     @FXML
     public void handleInstructorEval(ActionEvent event) throws IOException {
-        SceneUtils.switchScene(event, "InstructorEvaluation.fxml", springContext);
+        SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
     }
 }
