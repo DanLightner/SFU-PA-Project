@@ -31,7 +31,7 @@ public class GuestLecturer {
     @FXML
     private TextField guestLecturerField;
 
- 
+
 
     @FXML
     public void initialize() {
