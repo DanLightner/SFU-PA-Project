@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -30,10 +29,10 @@
     <!-- Sidebar Navigation (Left) -->
     <left>
         <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-            <Button text="Dashboard" onAction="#handleBackMain" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Guest Lecturer" onAction="#handleGuestLecturer" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Gradebook" onAction="#handleGradebook" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Instructor Eval" onAction="#handleInstructorEval" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button text="Dashboard" onAction="#handleBackMain"/>
+            <Button text="Guest Lecturer" onAction="#handleGuestLecturer"/>
+            <Button text="Gradebook" onAction="#handleGradebook"/>
+            <Button text="Instructor Eval" onAction="#handleInstructorEval"/>
         </VBox>
     </left>
 
@@ -41,10 +40,19 @@
     <center>
         <VBox spacing="10" alignment="CENTER">
             <Label text="Upload Guest Lecturer CSV" style="-fx-font-size: 18px;"/>
+
+            <Label text="Select Semester:" />
             <ComboBox fx:id="semesterCombo" promptText="Select Semester"/>
+
+            <Label text="Select Course:" />
             <ComboBox fx:id="courseCombo" promptText="Select Course"/>
-            <TextField fx:id="yearField" promptText="Enter Year"/>
+
+            <Label text="Select Year:" />
+            <ComboBox fx:id="yearCombo" promptText="Select Year"/>
+
+            <Label text="Guest Lecturer Name:" />
             <TextField fx:id="guestLecturerField" promptText="Enter Guest Lecturer Name"/>
+
             <Button text="Back" onAction="#handleBack"/>
         </VBox>
     </center>

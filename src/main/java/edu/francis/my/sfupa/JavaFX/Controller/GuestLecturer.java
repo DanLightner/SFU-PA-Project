@@ -2,24 +2,52 @@ package edu.francis.my.sfupa.JavaFX.Controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.stage.Stage;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import org.springframework.stereotype.Component;
-import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import javafx.collections.FXCollections;
 
 import java.io.IOException;
+import java.util.stream.IntStream;
 
 @Component
 public class GuestLecturer {
 
     @Autowired
     private ApplicationContext springContext;
+
+    @FXML
+    private ComboBox<String> semesterCombo;
+
+    @FXML
+    private ComboBox<String> courseCombo;
+
+    @FXML
+    private ComboBox<String> yearCombo;
+
+    @FXML
+    private TextField guestLecturerField;
+
+    @FXML
+    public void initialize() {
+        // Populate Semester Dropdown
+        semesterCombo.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
+
+        // Populate Course Dropdown with Example Courses
+        courseCombo.setItems(FXCollections.observableArrayList(
+                "Health 101", "Health Science 213", "Heart Studies 340"
+        ));
+
+        // Populate Year Dropdown (1960 - 2050)
+        yearCombo.setItems(FXCollections.observableArrayList(
+                IntStream.rangeClosed(1960, 2050)
+                        .mapToObj(String::valueOf)
+                        .toList()
+        ));
+    }
 
     @FXML
     public void handleRunReporting(ActionEvent event) throws IOException {
@@ -67,10 +95,12 @@ public class GuestLecturer {
     public void handleGuestLecturer(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
     }
+
     @FXML
     private void handleGradebook(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "Gradebook.fxml", springContext);
     }
+
     @FXML
     public void handleInstructorEval(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);

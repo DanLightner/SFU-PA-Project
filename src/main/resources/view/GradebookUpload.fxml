@@ -31,7 +31,7 @@
         <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
             <Button text="Dashboard" onAction="#handleBackMain" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
             <Button text="Guest Lecturer" onAction="#handleGuestLecturer" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Gradebook" onAction="#handleGradebook" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button text="Gradebook" style="-fx-background-color: #BDC3C7; -fx-text-fill: black; -fx-font-size: 14px;" disable="true"/>
             <Button text="Instructor Eval" onAction="#handleInstructorEval" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
         </VBox>
     </left>
@@ -39,8 +39,18 @@
     <!-- Main Content Area -->
     <center>
         <VBox spacing="10" alignment="CENTER">
-            <Label text="Upload Gradebook CSV" style="-fx-font-size: 18px;"/>
-            <Button text="Back to Gradebook" onAction="#handleBack"/>
+            <Label text="Upload Guest Lecturer CSV" style="-fx-font-size: 18px;"/>
+
+            <Label text="Select Semester:" />
+            <ComboBox fx:id="semesterCombo" promptText="Select Semester"/>
+
+            <Label text="Select Course:" />
+            <ComboBox fx:id="courseCombo" promptText="Select Course"/>
+
+            <Label text="Select Year:" />
+            <ComboBox fx:id="yearCombo" promptText="Select Year"/>
+
+            <Button text="Back" onAction="#handleBack"/>
         </VBox>
     </center>
 

@@ -40,13 +40,13 @@
 </left>
 
 <!-- Main Content Area -->
-<center>
-    <VBox spacing="10" layoutX="50" layoutY="50">
-        <Label text="Run Analyze Guest Lecturer Report" style="-fx-font-size: 18px;"/>
-        <!-- <Button text="Generate Report" onAction="#handleGenerateReport"/> -->
-        <Button text="Back to Guest Lecturer" onAction="#handleBack"/>
-    </VBox>
-</center>
+    <center>
+        <VBox spacing="10" alignment="CENTER">
+            <Label text="Run Analyze Guest Lecturer Report" style="-fx-font-size: 18px;"/>
+            <Button text="Back to Guest Lecturer" onAction="#handleBack"/>
+        </VBox>
+    </center>
+
 
 </BorderPane>
 
