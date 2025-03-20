@@ -1,9 +1,14 @@
 package edu.francis.my.sfupa.SQLite.Controller;
 
+import edu.francis.my.sfupa.JavaFX.Controller.CourseEvalCsvImporter;
 import edu.francis.my.sfupa.SQLite.Models.CourseEval;
 import edu.francis.my.sfupa.SQLite.Services.CourseEvalService;
+import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +19,10 @@ public class CourseEvalController {
 
     @Autowired
     private CourseEvalService courseEvalService;
+    @Autowired
+    private CourseEvalCsvImporter courseEvalCsvImporter; // This injects the CSV importer
+
+
 
     // Get all CourseEval records
     @GetMapping
@@ -52,4 +61,16 @@ public class CourseEvalController {
     Do the following (MAKE SURE YOU IMPLEMENTED A PROPER VALUE IN COURSE BEFORE)
 
      */
+    // Upload CSV file to import course evaluations
+    @PostMapping("/uploadCsv")
+    public ResponseEntity<String> uploadCsv(@RequestParam("file") MultipartFile file) {
+        try {
+            courseEvalCsvImporter.importCsv(file); // Call your existing method to import CSV
+            return ResponseEntity.ok("CSV file successfully uploaded and data imported!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing the CSV file: " + e.getMessage());
+        }
+    }
 }
+
