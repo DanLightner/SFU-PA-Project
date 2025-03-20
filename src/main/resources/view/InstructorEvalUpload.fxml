@@ -40,10 +40,21 @@
     </left>
 
     <!-- Main Content Area -->
+
     <center>
         <VBox spacing="10" alignment="CENTER">
             <Label text="Upload Instructor Evaluations" style="-fx-font-size: 18px;"/>
-            <Button text="Back to Instructor Evaluation" onAction="#handleBack"/>
+
+            <Label text="Select Semester:" />
+            <ComboBox fx:id="semesterCombo" promptText="Select Semester"/>
+
+            <Label text="Select Course:" />
+            <ComboBox fx:id="courseCombo" promptText="Select Course"/>
+
+            <Label text="Select Year:" />
+            <ComboBox fx:id="yearCombo" promptText="Select Year"/>
+
+            <Button text="Back" onAction="#handleBack"/>
         </VBox>
     </center>
 

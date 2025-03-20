@@ -29,21 +29,25 @@ public class GradebookController {
 
     @FXML
     public void initialize() {
-        // Populate Semester Dropdown
-        semesterCombo.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
+        if (semesterCombo != null) {
+            semesterCombo.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
+        }
 
-        // Populate Course Dropdown with Example Courses
-        courseCombo.setItems(FXCollections.observableArrayList(
-                "Health 101", "Health Science 213", "Heart Studies 340"
-        ));
+        if (courseCombo != null) {
+            courseCombo.setItems(FXCollections.observableArrayList(
+                    "Health 101", "Health Science 213", "Heart Studies 340"
+            ));
+        }
 
-        // Populate Year Dropdown (1960 - 2050)
-        yearCombo.setItems(FXCollections.observableArrayList(
-                IntStream.rangeClosed(1960, 2050)
-                        .mapToObj(String::valueOf)
-                        .toList()
-        ));
+        if (yearCombo != null) {
+            yearCombo.setItems(FXCollections.observableArrayList(
+                    IntStream.rangeClosed(1960, 2050)
+                            .mapToObj(String::valueOf)
+                            .toList()
+            ));
+        }
     }
+
 
     @FXML
     public void handleRunReporting(ActionEvent event) throws IOException {
