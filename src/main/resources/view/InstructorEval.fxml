@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvaluation"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvaluation">
 
     <!-- Menu Bar (Top) -->
     <top>
@@ -14,14 +16,14 @@
             <Menu text="File">
                 <MenuItem text="Open" />
                 <MenuItem text="Save" />
-                <MenuItem text="Exit" onAction="#handleExit"/>
+                <MenuItem onAction="#handleExit" text="Exit" />
             </Menu>
             <Menu text="Edit">
                 <MenuItem text="Undo" />
                 <MenuItem text="Redo" />
             </Menu>
             <Menu text="Help">
-                <MenuItem text="About" onAction="#handleAbout"/>
+                <MenuItem onAction="#handleAbout" text="About" />
             </Menu>
         </MenuBar>
     </top>
@@ -29,28 +31,21 @@
     <!-- Sidebar Navigation (Left) -->
     <left>
         <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-            <Button text="Dashboard" onAction="#handleBackMain" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Guest Lecturer" onAction="#handleGuestLecturer" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Gradebook" onAction="#handleGradebook" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Instructor Eval" onAction="#handleInstructorEval" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" underline="true" />
+            <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" underline="true" />
+            <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" underline="true" />
+            <Button disable="true" onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" />
         </VBox>
     </left>
 
     <!-- Main Content Area -->
     <center>
         <VBox alignment="CENTER" spacing="15">
-            <Label text="Instructor Evaluation Management" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
-            <Button text="Analyze Instructor Eval Data" onAction="#handleAnalyzeData"/>
-            <Button text="Edit Instructor Evaluation" onAction="#handleEditEval"/>
-            <Button text="Upload Instructor Evaluation" onAction="#handleUploadEval"/>
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Instructor Evaluation Management" />
+            <Button onAction="#handleAnalyzeData" text="Analyze Instructor Eval Data" />
+            <Button onAction="#handleEditEval" text="Edit Instructor Evaluation" />
+            <Button onAction="#handleUploadEval" text="Upload Instructor Evaluation" />
         </VBox>
     </center>
-
-    <!-- Status Bar (Bottom) -->
-    <bottom>
-        <HBox spacing="10" alignment="CENTER" style="-fx-background-color: #F4F4F4; -fx-padding: 5px;">
-            <Label text="Status: Ready"/>
-        </HBox>
-    </bottom>
 
 </BorderPane>

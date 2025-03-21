@@ -5,34 +5,30 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="edu.francis.my.sfupa.JavaFX.Controller.MainController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.MainController">
 
     <!-- Top Section: Welcome Label -->
     <top>
         <AnchorPane prefHeight="50.0">
-            <Label layoutX="100.0" layoutY="10.0" text="Welcome to SFU PA Application!" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+            <Label layoutX="100.0" layoutY="10.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Welcome to SFU PA Application!" />
         </AnchorPane>
     </top>
 
     <!-- Left Sidebar Menu -->
     <left>
         <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-            <Button text="Dashboard" onAction="#handleBack" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Guest Lecturer" onAction="#handleCourseSurvey" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Gradebook" onAction="#handleGradebook" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Instructor Eval" onAction="#handleInstructorEval" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button onAction="#handleBack" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" underline="true" />
+            <Button onAction="#handleCourseSurvey" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" underline="true" />
+            <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" underline="true" />
+            <Button onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" underline="true" />
         </VBox>
     </left>
 
     <!-- Main Content Area (Placeholder for Future Content) -->
     <center>
         <AnchorPane>
-            <Label layoutX="50.0" layoutY="50.0" text="Main Content Goes Here..." style="-fx-font-size: 16px;" />
+            <Label layoutX="50.0" layoutY="50.0" style="-fx-font-size: 16px;" text="Main Content Goes Here..." />
         </AnchorPane>
     </center>
 
