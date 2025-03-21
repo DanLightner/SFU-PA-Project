@@ -33,10 +33,10 @@
     <!-- Sidebar Navigation (Left) -->
     <left>
         <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-            <Button onAction="#handleBackMain" text="Dashboard" />
-            <Button onAction="#handleGuestLecturer" text="Guest Lecturer" />
-            <Button onAction="#handleGradebook" text="Gradebook" />
-            <Button onAction="#handleInstructorEval" text="Instructor Eval" />
+            <Button onAction="#handleBackMain" style="-fx-font-size: 14px; -fx-text-fill: black; -fx-background-color: #ECF0F1;" text="Dashboard" />
+            <Button disable="true" onAction="#handleGuestLecturer" style="-fx-font-size: 14px; -fx-background-color: #ECF0F1; -fx-text-fill: black;" text="Guest Lecturer" />
+            <Button onAction="#handleGradebook" style="-fx-font-size: 14px; -fx-text-fill: black; -fx-background-color: #ECF0F1;" text="Gradebook" />
+            <Button onAction="#handleInstructorEval" style="-fx-font-size: 14px; -fx-text-fill: black; -fx-background-color: #ECF0F1;" text="Instructor Eval" />
         </VBox>
     </left>
 
