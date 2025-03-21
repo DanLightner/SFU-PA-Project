@@ -165,11 +165,11 @@
 					<jar>${project.build.directory}/${project.build.finalName}.jar</jar>
 					<dontWrapJar>false</dontWrapJar>
 					<headerType>gui</headerType>
-					<workingDirectory>.</workingDirectory>
 					<jre>
-						<path>%JAVA_HOME%</path>
 						<minVersion>17.0.0</minVersion>
+						<maxVersion></maxVersion> <!-- Empty max version means any version above min -->
 						<jdkPreference>preferJre</jdkPreference>
+						<runtimeBits>64</runtimeBits>
 						<opts>
 							<opt>-Djava.library.path=./lib</opt>
 						</opts>
