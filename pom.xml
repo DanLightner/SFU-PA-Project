@@ -96,6 +96,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>edu.francis.my.sfupa.HelloFXApplication</mainClass>
+					<layout>JAR</layout>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 
@@ -116,7 +127,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 
 
 			<!-- Maven Compiler Plugin for Java 17 -->
