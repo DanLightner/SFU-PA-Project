@@ -3,6 +3,7 @@ package edu.francis.my.sfupa.JavaFX.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Component;
 import javafx.collections.FXCollections;
 import java.io.IOException;
 import java.util.stream.IntStream;
+import javafx.scene.Node;
+import javafx.stage.Stage;
+
 
 @Component
 public class GradebookController {
@@ -55,11 +59,31 @@ public class GradebookController {
         SceneUtils.switchScene(event, "GradeBookReport.fxml", springContext);
     }
 
+
     @FXML
     public void handleUploadCSV(ActionEvent event) throws IOException {
         // Switch to the Gradebook Upload scene
         SceneUtils.switchScene(event, "GradebookUpload.fxml", springContext);
     }
+    @FXML
+    private CheckBox retakeCheckBox;
+
+    @FXML
+    public void handleSubmit(ActionEvent event) {
+        // Clear selected values when Submit is clicked
+        if (semesterCombo != null) semesterCombo.getSelectionModel().clearSelection();
+        if (courseCombo != null) courseCombo.getSelectionModel().clearSelection();
+        if (yearCombo != null) yearCombo.getSelectionModel().clearSelection();
+        if (retakeCheckBox != null) retakeCheckBox.setSelected(false);
+
+        // Show a confirmation message
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Submission Successful");
+        alert.setHeaderText("Gradebook Submission");
+        alert.setContentText("Your selections have been cleared.");
+        alert.showAndWait();
+    }
+
 
     @FXML
     public void handleCheckStudentGrades(ActionEvent event) throws IOException {

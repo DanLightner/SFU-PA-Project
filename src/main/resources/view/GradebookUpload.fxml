@@ -50,7 +50,15 @@
             <Label text="Select Year:" />
             <ComboBox fx:id="yearCombo" promptText="Select Year"/>
 
-            <Button text="Back" onAction="#handleBack"/>
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Retake Allowed:" />
+                <CheckBox fx:id="retakeCheckBox" />
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Submit" onAction="#handleSubmit"/>
+                <Button text="Back" onAction="#handleBack"/>
+            </HBox>
         </VBox>
     </center>
 
