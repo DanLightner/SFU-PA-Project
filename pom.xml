@@ -128,6 +128,24 @@
 					<jlinkZipName>sfupa-runtime-zip</jlinkZipName>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/assembly/distribution.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
 			<plugin>
 				<groupId>com.akathist.maven.plugins.launch4j</groupId>
@@ -147,6 +165,7 @@
 					<jar>${project.build.directory}/${project.build.finalName}.jar</jar>
 					<dontWrapJar>false</dontWrapJar>
 					<headerType>gui</headerType>
+					<workingDirectory>.</workingDirectory>
 					<jre>
 						<path>%JAVA_HOME%</path>
 						<minVersion>17.0.0</minVersion>
