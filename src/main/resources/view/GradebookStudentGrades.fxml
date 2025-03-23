@@ -34,7 +34,7 @@
         <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
             <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" underline="true" />
             <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
-            <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" underline="true" />
+            <Button disable="true" onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" underline="true" />
             <Button onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" underline="true" />
         </VBox>
     </left>
@@ -43,7 +43,7 @@
     <center>
         <VBox alignment="CENTER" spacing="10">
             <Label style="-fx-font-size: 18px;" text="Check Student Grades" />
-            <TextField fx:id="studentIdField" promptText="Enter Student ID" />
+            <TextField fx:id="studentIdField" prefHeight="26.0" prefWidth="398.0" promptText="Enter Student ID" />
             <Button onAction="#handleBack" text="Back to Gradebook" />
         </VBox>
     </center>
