@@ -30,11 +30,11 @@
 
 <!-- Sidebar Navigation (Left) -->
 <left>
-    <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-        <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" textFill="WHITE" underline="true" />
-        <Button disable="true" onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" underline="true" />
-        <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" underline="true" />
-        <Button onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" underline="true" />
+    <VBox prefHeight="774.0" prefWidth="170.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+        <Button alignment="TOP_LEFT" onAction="#handleBackMain" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" textFill="WHITE" underline="true" />
+        <Button alignment="TOP_LEFT" disable="true" onAction="#handleGuestLecturer" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" underline="true" />
+        <Button alignment="TOP_LEFT" onAction="#handleGradebook" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" underline="true" />
+        <Button alignment="TOP_LEFT" onAction="#handleInstructorEval" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" underline="true" />
     </VBox>
 </left>
 
