@@ -76,7 +76,7 @@ public class InstructorEvaluation {
 
         if (yearCombo != null) {
             // Fetch school years from the repository
-            List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll();  // Assuming this method exists
+            List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll();
 
             // Convert school year names (like "2023-2024") into a list of strings
             List<String> schoolYearNames = schoolYears.stream()
