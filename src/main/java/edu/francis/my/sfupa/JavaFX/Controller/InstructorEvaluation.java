@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -53,12 +54,25 @@ public class InstructorEvaluation {
         if (semesterCombo != null) {
             semesterCombo.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
         }
-
         if (courseCombo != null) {
             courseCombo.setItems(FXCollections.observableArrayList(
                     "Health 101", "Health Science 213", "Heart Studies 340", "CS101"
             ));
         }
+
+           /*
+        if (courseCombo != null) {
+            Iterable<Course> courses = courseRepository.findAll();
+            List<String> courseNames = new ArrayList<>();
+
+            for (Course course : courses) {
+                courseNames.add(course.getName());
+            }
+
+            courseCombo.setItems(FXCollections.observableArrayList(courseNames));
+        }
+        */
+
 
         if (yearCombo != null) {
             // Fetch school years from the repository
@@ -142,6 +156,12 @@ public class InstructorEvaluation {
     }
 
 
+    // EVERYTHING BELOW IS RELATIGN TO INSTRUCTOR ANALYSIS
+
+
+
+
+
     @FXML
     public void handleAnalyzeData(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "InstructorEvalAnalyze.fxml", springContext);
@@ -196,4 +216,6 @@ public class InstructorEvaluation {
     public void handleInstructorEval(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
     }
+
+
 }
