@@ -183,7 +183,7 @@
 						<fileVersion>0.0.1.0</fileVersion>
 						<txtFileVersion>${project.version}</txtFileVersion>
 						<fileDescription>${project.name}</fileDescription>
-						<copyright>SFU PA Program 2024</copyright>
+						<copyright>SFU PA Program 2025</copyright>
 						<productVersion>0.0.1.0</productVersion>
 						<txtProductVersion>${project.version}</txtProductVersion>
 						<productName>${project.name}</productName>
