@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<<<<<<< HEAD
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.chart.*?>
@@ -9,9 +10,21 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalAnalysisController"
             prefHeight="600.0" prefWidth="800.0">
+=======
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvaluation">
+>>>>>>> parm
 
     <!-- Top Section: Filters -->
     <top>
+<<<<<<< HEAD
         <HBox spacing="10" alignment="CENTER" style="-fx-padding: 15;">
             <ComboBox fx:id="courseCmb" promptText="Select Course" />
             <ComboBox fx:id="yearCmb" promptText="Select School Year" />
@@ -41,6 +54,39 @@
                           wrapText="true"
                           prefHeight="200"/>
             </TitledPane>
+=======
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Open" />
+                <MenuItem text="Save" />
+                <MenuItem onAction="#handleExit" text="Exit" />
+            </Menu>
+            <Menu text="Edit">
+                <MenuItem text="Undo" />
+                <MenuItem text="Redo" />
+            </Menu>
+            <Menu text="Help">
+                <MenuItem onAction="#handleAbout" text="About" />
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <!-- Sidebar Navigation (Left) -->
+    <left>
+        <VBox prefHeight="774.0" prefWidth="170.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+            <Button alignment="TOP_LEFT" onAction="#handleBackMain" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" underline="true" />
+            <Button alignment="TOP_LEFT" onAction="#handleGuestLecturer" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" underline="true" />
+            <Button alignment="TOP_LEFT" onAction="#handleGradebook" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" underline="true" />
+            <Button alignment="TOP_LEFT" disable="true" onAction="#handleInstructorEval" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" underline="true" />
+        </VBox>
+    </left>
+
+    <!-- Main Content Area -->
+    <center>
+        <VBox alignment="CENTER" spacing="10">
+            <Label style="-fx-font-size: 18px;" text="Analyze Instructor Evaluations" />
+            <Button onAction="#handleBack" text="Back to Instructor Evaluation" />
+>>>>>>> parm
         </VBox>
     </center>
 </BorderPane>
