@@ -3,6 +3,7 @@ package edu.francis.my.sfupa.JavaFX.Controller;
 import edu.francis.my.sfupa.SQLite.Models.*;
 import edu.francis.my.sfupa.SQLite.Repository.*;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -12,9 +13,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.context.ApplicationContext;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static edu.francis.my.sfupa.HelloFXApplication.springContext;
+
 
 @Component
 public class InstructorEvalAnalysisController {
@@ -195,5 +201,26 @@ public class InstructorEvalAnalysisController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    // --- Sidebar Navigation ---
+    @FXML
+    public void handleGuestLecturer(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
+    }
+
+    @FXML
+    public void handleGradebook(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "Gradebook.fxml", springContext);
+    }
+
+    @FXML
+    public void handleInstructorEval(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
+    }
+
+    @FXML
+    public void handleBackMain(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "main-view.fxml", springContext);
     }
 }

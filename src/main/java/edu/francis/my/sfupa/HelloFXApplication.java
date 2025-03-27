@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class HelloFXApplication extends Application {
 
-    private static ConfigurableApplicationContext springContext;
+    public static ConfigurableApplicationContext springContext;
 
 
     @Override

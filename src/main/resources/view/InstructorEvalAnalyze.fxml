@@ -10,6 +10,16 @@
             fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalAnalysisController"
             prefHeight="600.0" prefWidth="800.0">
 
+
+
+    <left>
+        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+            <Button text="Dashboard" onAction="#" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button text="Guest Lecturer" onAction="#handleGuestLecturer" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button text="Gradebook" onAction="#handleGradebook" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button text="Instructor Eval" onAction="#handleInstructorEval" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+        </VBox>
+    </left>
     <!-- Top Section: Filters -->
     <top>
         <HBox spacing="10" alignment="CENTER" style="-fx-padding: 15;">
