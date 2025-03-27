@@ -47,6 +47,9 @@ public class InstructorEvaluation {
     private ComboBox<String> courseCombo;    // For selecting the course
 
     @FXML
+    private ComboBox<String> courseComboo;    // For selecting the course
+
+    @FXML
     private ComboBox<String> yearCombo;      // For selecting the year
 
     @FXML
@@ -54,9 +57,60 @@ public class InstructorEvaluation {
         if (semesterCombo != null) {
             semesterCombo.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
         }
+
         if (courseCombo != null) {
             courseCombo.setItems(FXCollections.observableArrayList(
-                    "Health 101", "Health Science 213", "Heart Studies 340", "CS101"
+                    "PA 400",
+                    "PA 401",
+                    "PA 402",
+                    "PA 403",
+                    "PA 404",
+                    "PA 405",
+                    "PA 406",
+                    "PA 420",
+                    "PA 421",
+                    "PA 422",
+                    "PA 423",
+                    "PA 424",
+                    "PA 425",
+                    "PA 426",
+                    "PA 427",
+                    "PA 428",
+                    "PA 429",
+                    "PA 430",
+                    "PA 431",
+                    "PA 432",
+                    "PA 451",
+                    "PA 452",
+                    "PA 453"
+            ));
+        }
+
+        if (courseComboo != null) {
+            courseComboo.setItems(FXCollections.observableArrayList(
+                    "Evidence-Based Medicine",
+                    "Introduction to U.S. Health Care",
+                    "History Taking and Patient Education Skills",
+                    "History Taking and Patient Education Skills Lab",
+                    "Public Health",
+                    "Clinical Skills",
+                    "Well Child",
+                    "Introduction to Medicine Module",
+                    "Hematology Medicine Module",
+                    "Endocrine Medicine Module",
+                    "Neurology Medicine Module",
+                    "Dermatology Medicine Module",
+                    "Musculoskeletal Medicine Module",
+                    "Eyes, Ears, Nose and Throat Medicine Module",
+                    "Behavioral Medicine Module",
+                    "Cardiovascular Medicine Module",
+                    "Pulmonary Medicine Module",
+                    "Gastrointestinal/Nutrition Medicine Module",
+                    "Genitourinary Medicine Module",
+                    "Reproductive Medicine Module",
+                    "Didactic Clinical Experiences and Medical Documentation I",
+                    "Didactic Clinical Experiences and Medical Documentation II",
+                    "Didactic Comprehensive Evaluation"
             ));
         }
 
