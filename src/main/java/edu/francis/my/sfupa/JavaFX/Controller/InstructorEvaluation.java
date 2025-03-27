@@ -1,4 +1,5 @@
 package edu.francis.my.sfupa.JavaFX.Controller;
+import javafx.scene.control.Label;
 
 import edu.francis.my.sfupa.SQLite.Models.*;
 import edu.francis.my.sfupa.SQLite.Repository.*;
@@ -142,58 +143,66 @@ public class InstructorEvaluation {
         }
     }
 
-    public void handleInstructorUploadEval() {
-        // Validate selections
-        if (semesterCombo.getValue() == null ||
-                courseCombo.getValue() == null ||
-                yearCombo.getValue() == null) {
+    private File selectedFile;  // Store the chosen file
 
-            showAlert("Please select Semester, Course, and Year before uploading.");
-            return;
-        }
+    @FXML
+    private Label selectedFileLabel;  // Reference to update label in UI
 
-        // Open file chooser for CSV
+    @FXML
+    public void handleChooseFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("CSV Files", "*.csv")
         );
-        File selectedFile = fileChooser.showOpenDialog(null);
+        File file = fileChooser.showOpenDialog(null);
 
+        if (file != null) {
+            selectedFile = file;
+            selectedFileLabel.setText(file.getName()); // Show file name in label
+        } else {
+            selectedFileLabel.setText("No file chosen");
+        }
+    }
+
+    @FXML
+    public void handleInstructorUploadEval() {
         if (selectedFile == null) {
-            return; // User cancelled
+            showAlert("Please choose a file before uploading.");
+            return;
+        }
+
+        // Validate selections
+        if (semesterCombo.getValue() == null ||
+                courseCombo.getValue() == null ||
+                yearCombo.getValue() == null) {
+            showAlert("Please select Semester, Course, and Year before uploading.");
+            return;
         }
 
         try {
-            // Find the selected semester, course, and year
-            SemesterName selectedSemester = SemesterName.fromString(semesterCombo.getValue()); // This line here
-
+            SemesterName selectedSemester = SemesterName.fromString(semesterCombo.getValue());
             Course selectedCourse = courseRepository.findByCourseCode(courseCombo.getValue());
-            System.out.println("Selected Course: " + courseCombo.getValue());
-            System.out.println(selectedCourse);
             SchoolYear selectedYear = schoolYearRepository.findByName(yearCombo.getValue());
 
-            System.out.println("Selected Year: " + yearCombo.getValue());
-
-
-            // Create manual course evaluation first
             CourseEval courseEval = CSVInstructorEval.createManualCourseEval(
                     selectedCourse.getcourseCode(),
-                    (long) selectedSemester.getId(), // Convert int to Long
+                    (long) selectedSemester.getId(),
                     selectedYear.getIdSchoolYear(),
                     "FirstName",
                     "LastName"
             );
-
 
             if (courseEval == null) {
                 showAlert("Failed to create course evaluation. Check your inputs.");
                 return;
             }
 
-            // Process the CSV file
             CSVInstructorEval.processCSVFile(selectedFile, courseEval.getId());
-
             showAlert("CSV uploaded and processed successfully!");
+
+            // Reset selected file after upload
+            selectedFile = null;
+            selectedFileLabel.setText("No file chosen");
 
         } catch (Exception e) {
             e.printStackTrace();

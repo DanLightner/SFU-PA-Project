@@ -53,6 +53,8 @@
             <Label text="Select Year:" />
             <ComboBox fx:id="yearCombo" promptText="Select Year"/>
 
+            <Button text="Choose File" onAction="#handleChooseFile" style="-fx-background-color: #2ECC71; -fx-text-fill: white;"/>
+            <Label fx:id="selectedFileLabel" text="No file chosen" />
             <Button text="Upload CSV" onAction="#handleInstructorUploadEval" style="-fx-background-color: #3498DB; -fx-text-fill: white;"/>
 
             <Button text="Back" onAction="#handleBack"/>
