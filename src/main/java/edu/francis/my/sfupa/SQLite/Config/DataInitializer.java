@@ -97,29 +97,29 @@ public class DataInitializer {
 
     private List<Course> initCourses() {
         List<Course> courses = Arrays.asList(
-                new Course("PA400", "Evidence-Based Medicine"),
-                new Course("PA401", "Introduction to U.S. Health Care"),
-                new Course("PA402", "History Taking and Patient Education Skills"),
-                new Course("PA403", "History Taking and Patient Education Skills Lab"),
-                new Course("PA404", "Public Health"),
-                new Course("PA405", "Clinical Skills"),
-                new Course("PA406", "Well Child"),
-                new Course("PA420", "Introduction to Medicine Module"),
-                new Course("PA421", "Hematology Medicine Module"),
-                new Course("PA422", "Endocrine Medicine Module"),
-                new Course("PA423", "Neurology Medicine Module"),
-                new Course("PA424", "Dermatology Medicine Module"),
-                new Course("PA425", "Musculoskeletal Medicine Module"),
-                new Course("PA426", "Eyes, Ears, Nose and Throat Medicine Module"),
-                new Course("PA427", "Behavioral Medicine Module"),
-                new Course("PA428", "Cardiovascular Medicine Module"),
-                new Course("PA429", "Pulmonary Medicine Module"),
-                new Course("PA430", "Gastrointestinal/Nutrition Medicine Module"),
-                new Course("PA431", "Genitourinary Medicine Module"),
-                new Course("PA432", "Reproductive Medicine Module"),
-                new Course("PA451", "Didactic Clinical Experiences and Medical Documentation I"),
-                new Course("PA452", "Didactic Clinical Experiences and Medical Documentation II"),
-                new Course("PA453", "Didactic Comprehensive Evaluation")
+                new Course("PA 400", "Evidence-Based Medicine"),
+                new Course("PA 401", "Introduction to U.S. Health Care"),
+                new Course("PA 402", "History Taking and Patient Education Skills"),
+                new Course("PA 403", "History Taking and Patient Education Skills Lab"),
+                new Course("PA 404", "Public Health"),
+                new Course("PA 405", "Clinical Skills"),
+                new Course("PA 406", "Well Child"),
+                new Course("PA 420", "Introduction to Medicine Module"),
+                new Course("PA 421", "Hematology Medicine Module"),
+                new Course("PA 422", "Endocrine Medicine Module"),
+                new Course("PA 423", "Neurology Medicine Module"),
+                new Course("PA 424", "Dermatology Medicine Module"),
+                new Course("PA 425", "Musculoskeletal Medicine Module"),
+                new Course("PA 426", "Eyes, Ears, Nose and Throat Medicine Module"),
+                new Course("PA 427", "Behavioral Medicine Module"),
+                new Course("PA 428", "Cardiovascular Medicine Module"),
+                new Course("PA 429", "Pulmonary Medicine Module"),
+                new Course("PA 430", "Gastrointestinal/Nutrition Medicine Module"),
+                new Course("PA 431", "Genitourinary Medicine Module"),
+                new Course("PA 432", "Reproductive Medicine Module"),
+                new Course("PA 451", "Didactic Clinical Experiences and Medical Documentation I"),
+                new Course("PA 452", "Didactic Clinical Experiences and Medical Documentation II"),
+                new Course("PA 453", "Didactic Comprehensive Evaluation")
         );
 
 
@@ -209,7 +209,7 @@ public class DataInitializer {
 
     private List<Student> initStudents() {
         List<Student> students = new ArrayList<>();
-        for (long i = 1000; i < 1100; i++) {
+        for (long i = 100; i < 110; i++) {
             Student student = new Student(i);
             students.add(student);
         }
