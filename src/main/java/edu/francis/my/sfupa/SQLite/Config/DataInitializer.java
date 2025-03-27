@@ -97,17 +97,31 @@ public class DataInitializer {
 
     private List<Course> initCourses() {
         List<Course> courses = Arrays.asList(
-                new Course("CS101", "Introduction to Programming"),
-                new Course("CS201", "Data Structures"),
-                new Course("CS301", "Algorithms"),
-                new Course("MA101", "Calculus I"),
-                new Course("MA201", "Linear Algebra"),
-                new Course("BIO101", "General Biology"),
-                new Course("CHEM101", "General Chemistry"),
-                new Course("PHYS101", "Physics I"),
-                new Course("ENG101", "Composition"),
-                new Course("HIST101", "World History")
+                new Course("PA400", "Evidence-Based Medicine"),
+                new Course("PA401", "Introduction to U.S. Health Care"),
+                new Course("PA402", "History Taking and Patient Education Skills"),
+                new Course("PA403", "History Taking and Patient Education Skills Lab"),
+                new Course("PA404", "Public Health"),
+                new Course("PA405", "Clinical Skills"),
+                new Course("PA406", "Well Child"),
+                new Course("PA420", "Introduction to Medicine Module"),
+                new Course("PA421", "Hematology Medicine Module"),
+                new Course("PA422", "Endocrine Medicine Module"),
+                new Course("PA423", "Neurology Medicine Module"),
+                new Course("PA424", "Dermatology Medicine Module"),
+                new Course("PA425", "Musculoskeletal Medicine Module"),
+                new Course("PA426", "Eyes, Ears, Nose and Throat Medicine Module"),
+                new Course("PA427", "Behavioral Medicine Module"),
+                new Course("PA428", "Cardiovascular Medicine Module"),
+                new Course("PA429", "Pulmonary Medicine Module"),
+                new Course("PA430", "Gastrointestinal/Nutrition Medicine Module"),
+                new Course("PA431", "Genitourinary Medicine Module"),
+                new Course("PA432", "Reproductive Medicine Module"),
+                new Course("PA451", "Didactic Clinical Experiences and Medical Documentation I"),
+                new Course("PA452", "Didactic Clinical Experiences and Medical Documentation II"),
+                new Course("PA453", "Didactic Comprehensive Evaluation")
         );
+
 
         courseRepository.saveAll(courses);
         System.out.println("Created " + courses.size() + " courses");
@@ -149,10 +163,23 @@ public class DataInitializer {
 
     private List<SchoolYear> initSchoolYears() {
         List<SchoolYear> schoolYears = Arrays.asList(
+                new SchoolYear("2020-2021"),
+                new SchoolYear("2021-2022"),
+                new SchoolYear("2022-2023"),
                 new SchoolYear("2023-2024"),
                 new SchoolYear("2024-2025"),
-                new SchoolYear("2025-2026")
+                new SchoolYear("2025-2026"),
+                new SchoolYear("2026-2027"),
+                new SchoolYear("2027-2028"),
+                new SchoolYear("2028-2029"),
+                new SchoolYear("2029-2030"),
+                new SchoolYear("2030-2031"),
+                new SchoolYear("2031-2032"),
+                new SchoolYear("2032-2033"),
+                new SchoolYear("2033-2034"),
+                new SchoolYear("2034-2035")
         );
+
 
         schoolYearRepository.saveAll(schoolYears);
         System.out.println("Created " + schoolYears.size() + " school years");
