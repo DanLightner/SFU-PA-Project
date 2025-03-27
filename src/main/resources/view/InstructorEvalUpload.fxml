@@ -44,8 +44,11 @@
             <Label text="Select Semester:" />
             <ComboBox fx:id="semesterCombo" promptText="Select Semester"/>
 
-            <Label text="Select Course:" />
+            <Label text="Select Course ID:" />
             <ComboBox fx:id="courseCombo" promptText="Select Course"/>
+
+            <Label text="Select Course Name:" />
+            <ComboBox fx:id="courseComboo" promptText="Select Course"/>
 
             <Label text="Select Year:" />
             <ComboBox fx:id="yearCombo" promptText="Select Year"/>
