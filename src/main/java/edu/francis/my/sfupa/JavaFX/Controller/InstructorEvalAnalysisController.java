@@ -63,7 +63,24 @@ public class InstructorEvalAnalysisController {
         yAxis.setLabel("Average Response");
     }
 
+
+
      */
+
+    @FXML
+    private void handleExit() {
+        System.exit(0);
+    }
+
+    @FXML
+    public void handleAbout(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("About SFU PA");
+        alert.setHeaderText("SFU PA Application");
+        alert.setContentText("This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
+        alert.showAndWait();
+    }
+
     @FXML
     public void initialize() {
         if (semesterCmb != null) {
@@ -71,7 +88,29 @@ public class InstructorEvalAnalysisController {
         }
         if (courseCmb != null) {
             courseCmb.setItems(FXCollections.observableArrayList(
-                    "Health 101", "Health Science 213", "Heart Studies 340", "CS101"
+                    "CS101", "PA 400",
+                    "PA 401",
+                    "PA 402",
+                    "PA 403",
+                    "PA 404",
+                    "PA 405",
+                    "PA 406",
+                    "PA 420",
+                    "PA 421",
+                    "PA 422",
+                    "PA 423",
+                    "PA 424",
+                    "PA 425",
+                    "PA 426",
+                    "PA 427",
+                    "PA 428",
+                    "PA 429",
+                    "PA 430",
+                    "PA 431",
+                    "PA 432",
+                    "PA 451",
+                    "PA 452",
+                    "PA 453"
             ));
         }
 
@@ -222,5 +261,9 @@ public class InstructorEvalAnalysisController {
     @FXML
     public void handleBackMain(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "main-view.fxml", springContext);
+    }
+    @FXML
+    public void handleBack(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
     }
 }
