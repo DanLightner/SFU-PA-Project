@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class HelloFXApplication extends Application {
 
-    private static ConfigurableApplicationContext springContext;
+    public static ConfigurableApplicationContext springContext;
 
 
     @Override
@@ -22,6 +22,7 @@ public class HelloFXApplication extends Application {
         // Start the Spring Boot application context
         springContext = SpringApplication.run(SfuPaProjectApplication.class);
 
+        /*
         try {
             // Retrieve the bean from the Spring context
             CSVInstructorEval csvInstructorEval = springContext.getBean(CSVInstructorEval.class);
@@ -31,6 +32,7 @@ public class HelloFXApplication extends Application {
             e.printStackTrace();
             System.out.println("CSV Import did NOT work");
         }
+        */
 
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<<<<<<< HEAD
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -27,8 +28,20 @@
             </Menu>
         </MenuBar>
     </top>
+=======
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.Insets?>
 
-    <!-- Sidebar Navigation (Left) -->
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalAnalysisController"
+            prefHeight="600.0" prefWidth="800.0">
+
+
+>>>>>>> master
+
     <left>
         <VBox prefHeight="774.0" prefWidth="170.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
             <Button alignment="TOP_LEFT" onAction="#handleBackMain" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" underline="true" />
@@ -37,13 +50,43 @@
             <Button alignment="TOP_LEFT" disable="true" onAction="#handleInstructorEval" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" underline="true" />
         </VBox>
     </left>
+    <!-- Top Section: Filters -->
+    <top>
+        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 15;">
+            <ComboBox fx:id="courseCmb" promptText="Select Course" />
+            <ComboBox fx:id="yearCmb" promptText="Select School Year" />
+            <ComboBox fx:id="semesterCmb" promptText="Select Semester" />
+            <Button text="Analyze" onAction="#analyzeEvaluations"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+        </HBox>
+    </top>
 
     <!-- Main Content Area -->
     <center>
+<<<<<<< HEAD
         <VBox alignment="CENTER" spacing="10">
             <Label style="-fx-font-size: 18px;" text="Analyze Instructor Evaluations" />
             <Button onAction="#handleBack" text="Back to Instructor Evaluation" />
+=======
+        <VBox spacing="15" style="-fx-padding: 15;">
+            <!-- Likert Scale Bar Chart -->
+            <BarChart fx:id="likertBarChart" title="Likert Scale Responses">
+                <xAxis>
+                    <CategoryAxis fx:id="xAxis" label="Question" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="yAxis" label="Average Response" lowerBound="0" upperBound="5" tickUnit="1" />
+                </yAxis>
+            </BarChart>
+
+            <!-- Open-Ended Responses Analysis -->
+            <TitledPane text="Open-Ended Responses Analysis" collapsible="false">
+                <TextArea fx:id="openEndedAnalysisArea"
+                          editable="false"
+                          wrapText="true"
+                          prefHeight="200"/>
+            </TitledPane>
+>>>>>>> master
         </VBox>
     </center>
-
 </BorderPane>

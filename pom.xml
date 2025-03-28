@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.2</version>
+		<version>3.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>edu.francis.my</groupId>
@@ -40,6 +40,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.akathist.maven.plugins.launch4j</groupId>
+			<artifactId>launch4j-maven-plugin</artifactId>
+			<version>2.5.3</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.hibernate.orm</groupId>
 			<artifactId>hibernate-community-dialects</artifactId>
@@ -103,7 +109,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<mainClass>edu.francis.my.sfupa.HelloFXApplication</mainClass>
-					<layout>JAR</layout>
 				</configuration>
 				<executions>
 					<execution>
@@ -123,15 +128,75 @@
 				<version>0.0.8</version>
 				<configuration>
 					<mainClass>edu.francis.my.sfupa.HelloFXApplication</mainClass>
+					<launcher>sfupa</launcher>
+					<jlinkImageName>sfupa-runtime</jlinkImageName>
+					<jlinkZipName>sfupa-runtime-zip</jlinkZipName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/assembly/distribution.xml</descriptor>
+					</descriptors>
 				</configuration>
 				<executions>
 					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
 						<goals>
-							<goal>run</goal>
+							<goal>single</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
+
+			<plugin>
+				<groupId>com.akathist.maven.plugins.launch4j</groupId>
+				<artifactId>launch4j-maven-plugin</artifactId>
+				<version>2.5.0</version>
+				<executions>
+					<execution>
+						<id>create-executable</id>
+						<phase>package</phase>
+						<goals>
+							<goal>launch4j</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<jar>${project.build.directory}/${project.build.finalName}.jar</jar>
+					<outfile>${project.build.directory}/${project.build.finalName}.exe</outfile>
+					<dontWrapJar>false</dontWrapJar>
+					<headerType>gui</headerType>
+
+					<jre>
+						<minVersion>17.0.0</minVersion>
+						<requires64Bit>true</requires64Bit>
+						<requiresJdk>false</requiresJdk>
+						<opts>
+							<opt>-Djava.library.path=./lib</opt>
+						</opts>
+					</jre>
+					<versionInfo>
+						<fileVersion>0.0.1.0</fileVersion>
+						<txtFileVersion>${project.version}</txtFileVersion>
+						<fileDescription>${project.name}</fileDescription>
+						<copyright>SFU PA Program 2025</copyright>
+						<productVersion>0.0.1.0</productVersion>
+						<txtProductVersion>${project.version}</txtProductVersion>
+						<productName>${project.name}</productName>
+						<internalName>${project.artifactId}</internalName>
+						<originalFilename>${project.build.finalName}.exe</originalFilename>
+						<companyName>SFU</companyName>
+					</versionInfo>
+				</configuration>
+			</plugin>
+
+
+
+
 
 
 			<!-- Maven Compiler Plugin for Java 17 -->
