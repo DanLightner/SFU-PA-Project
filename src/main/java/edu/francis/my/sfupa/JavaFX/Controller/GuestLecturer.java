@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.util.stream.IntStream;
@@ -77,6 +79,17 @@ public class GuestLecturer {
     @FXML
     public void handleBackMain(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "main-view.fxml", springContext);
+    }
+
+    @FXML
+    public void purple(MouseEvent event) {
+        Button button = (Button) event.getSource();
+        button.setStyle("-fx-background-color: transparent; -fx-text-fill: purple; -fx-font-size: 14px;");
+    }
+
+    public void white(MouseEvent event) {
+        Button button = (Button) event.getSource();
+        button.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;");
     }
 
     // --- Menu Bar Actions ---
