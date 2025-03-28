@@ -63,7 +63,24 @@ public class InstructorEvalAnalysisController {
         yAxis.setLabel("Average Response");
     }
 
+
+
      */
+
+    @FXML
+    private void handleExit() {
+        System.exit(0);
+    }
+
+    @FXML
+    public void handleAbout(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("About SFU PA");
+        alert.setHeaderText("SFU PA Application");
+        alert.setContentText("This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
+        alert.showAndWait();
+    }
+
     @FXML
     public void initialize() {
         if (semesterCmb != null) {
@@ -222,5 +239,9 @@ public class InstructorEvalAnalysisController {
     @FXML
     public void handleBackMain(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "main-view.fxml", springContext);
+    }
+    @FXML
+    public void handleBack(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
     }
 }

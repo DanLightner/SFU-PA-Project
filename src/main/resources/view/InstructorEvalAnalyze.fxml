@@ -9,29 +9,39 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalAnalysisController"
             prefHeight="600.0" prefWidth="800.0">
-
+    <top>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Open" />
+                <MenuItem text="Save" />
+                <MenuItem text="Exit" onAction="#handleExit"/>
+            </Menu>
+            <Menu text="Edit">
+                <MenuItem text="Undo" />
+                <MenuItem text="Redo" />
+            </Menu>
+            <Menu text="Help">
+                <MenuItem text="About" onAction="#handleAbout"/>
+            </Menu>
+        </MenuBar>
+    </top>
     <!-- Left Navigation Menu -->
     <left>
-        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-            <Button text="Dashboard" onAction="#handleBackMain" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Guest Lecturer" onAction="#handleGuestLecturer" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Gradebook" onAction="#handleGradebook" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
-            <Button text="Instructor Eval" onAction="#handleInstructorEval" style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+        <VBox prefWidth="150.0" minWidth="150.0" spacing="10"
+              style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+            <Button text="Dashboard" onAction="#handleBackMain"
+                    style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button text="Guest Lecturer" onAction="#handleGuestLecturer"
+                    style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button text="Gradebook" onAction="#handleGradebook"
+                    style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
+            <Button text="Instructor Eval" onAction="#handleInstructorEval"
+                    style="-fx-background-color: #ECF0F1; -fx-text-fill: black; -fx-font-size: 14px;" />
         </VBox>
     </left>
 
-    <!-- Top Section: Filters -->
-    <top>
-        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 15;">
-            <Region /> <!-- This takes up the remaining space to the left of the content -->
-            <ComboBox fx:id="courseCmb" promptText="Select Course" />
-            <ComboBox fx:id="yearCmb" promptText="Select School Year" />
-            <ComboBox fx:id="semesterCmb" promptText="Select Semester" />
-            <Button text="Analyze" onAction="#analyzeEvaluations"
-                    style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
-            <Region /> <!-- This takes up the remaining space to the right of the content -->
-        </HBox>
-    </top>
+
+
 
     <!-- Main Content Area -->
     <center>
@@ -55,5 +65,19 @@
             </TitledPane>
         </VBox>
     </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 15;">
+            <Region /> <!-- This takes up the remaining space to the left of the content -->
+            <ComboBox fx:id="courseCmb" promptText="Select Course" />
+            <ComboBox fx:id="yearCmb" promptText="Select School Year" />
+            <ComboBox fx:id="semesterCmb" promptText="Select Semester" />
+            <Button text="Analyze" onAction="#analyzeEvaluations"
+
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+            <Button text="Back" onAction="#handleBack"/>
+            <Region /> <!-- This takes up the remaining space to the right of the content -->
+        </HBox>
+    </bottom>
 
 </BorderPane>
