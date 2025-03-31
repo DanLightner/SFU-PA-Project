@@ -40,24 +40,31 @@
         </VBox>
     </left>
 
-    <!-- Main Content Area -->
+
+
     <center>
-        <VBox alignment="CENTER" spacing="10">
-            <Label style="-fx-font-size: 18px;" text="Upload Guest Lecturer CSV" />
+        <VBox spacing="10" alignment="CENTER">
+            <Label text="Upload Instructor Evaluations" style="-fx-font-size: 18px;"/>
 
             <Label text="Select Semester:" />
-            <ComboBox fx:id="semesterCombo" promptText="Select Semester" />
+            <ComboBox fx:id="semesterCombo" promptText="Select Semester"/>
 
-            <Label text="Select Course:" />
-            <ComboBox fx:id="courseCombo" promptText="Select Course" />
+            <Label text="Select Course ID:" />
+            <ComboBox fx:id="courseCombo" promptText="Select Course"/>
+
+
 
             <Label text="Select Year:" />
-            <ComboBox fx:id="yearCombo" promptText="Select Year" />
+            <ComboBox fx:id="yearCombo" promptText="Select Year"/>
 
             <Label text="Guest Lecturer Name:" />
             <TextField fx:id="guestLecturerField" promptText="Enter Guest Lecturer Name" />
 
-            <Button onAction="#handleBack" text="Back" />
+            <Button text="Choose File" onAction="#handleChooseFile" style="-fx-background-color: #2ECC71; -fx-text-fill: white;"/>
+            <Label fx:id="selectedFileLabel" text="No file chosen" />
+            <Button text="Upload CSV" onAction="#handleInstructorUploadEval" style="-fx-background-color: #3498DB; -fx-text-fill: white;"/>
+
+            <Button text="Back" onAction="#handleBack"/>
         </VBox>
     </center>
 
