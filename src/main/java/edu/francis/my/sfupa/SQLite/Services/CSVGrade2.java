@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 @Service
 public class CSVGrade2 {
-
+/*
     @Autowired
     private StudentRepository StudentRepository;
 
@@ -45,6 +45,8 @@ public class CSVGrade2 {
      * @param filePath Path to the CSV file, or null to use default path
      * @return List of created Grade objects
      */
+
+    /*
     public List<Grade> processGradesFromCSV(String filePath) {
         String path = (filePath != null) ? filePath : DEFAULT_FILE_PATH;
         List<Grade> createdGrades = new ArrayList<>();
@@ -83,6 +85,8 @@ public class CSVGrade2 {
     /**
      * Creates a Grade entry based on CSV data
      */
+
+    /*
     public Grade createGradeFromCSVData(Long studentId, String courseCode, String semesterName,
                                         String year, String gradeValue, boolean retake) {
         try {
@@ -146,6 +150,8 @@ public class CSVGrade2 {
     /**
      * Finds an existing class or creates a new one
      */
+
+    /*
     private Classes findOrCreateClass(Course course, Semester semester, int year) {
         Optional<Classes> classOpt = ClassesRepository.findByCourseAndSemesterAndYear(
                 course, semester, year);
@@ -164,6 +170,8 @@ public class CSVGrade2 {
     /**
      * JavaFX method to select CSV file and process grades
      */
+
+    /*
     public List<Grade> selectAndProcessGradeCSV() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Grade CSV File");
@@ -203,4 +211,6 @@ public class CSVGrade2 {
         return null;
 
     }
+
+    */
 }
