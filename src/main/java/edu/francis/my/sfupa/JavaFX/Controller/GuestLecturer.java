@@ -52,6 +52,10 @@ public class GuestLecturer {
     @FXML
     private TextField guestLecturerField;
 
+    @FXML
+    private TextField guestLecturerFieldLast;
+
+
 
 
     @FXML
@@ -190,6 +194,12 @@ public class GuestLecturer {
             String guestLecturerName = guestLecturerField.getText();
             if (guestLecturerName == null || guestLecturerName.trim().isEmpty()) {
                 showAlert("Please enter the Guest Lecturer's name before uploading.");
+                return;
+            }
+
+            String guestLecturerNameLast = guestLecturerFieldLast.getText();
+            if (guestLecturerNameLast == null || guestLecturerNameLast.trim().isEmpty()) {
+                showAlert("Please enter the Guest Lecturer's last name before uploading.");
                 return;
             }
 

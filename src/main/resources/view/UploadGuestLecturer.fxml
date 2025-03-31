@@ -60,6 +60,10 @@
             <Label text="Guest Lecturer Name:" />
             <TextField fx:id="guestLecturerField" promptText="Enter Guest Lecturer Name" />
 
+            <Label text="Guest Lecturer Last Name:" />
+            <TextField fx:id="guestLecturerFieldLast" promptText="Enter Guest Lecturer Last Name" />
+            
+
             <Button text="Choose File" onAction="#handleChooseFile" style="-fx-background-color: #2ECC71; -fx-text-fill: white;"/>
             <Label fx:id="selectedFileLabel" text="No file chosen" />
             <Button text="Upload CSV" onAction="#handleInstructorUploadEval" style="-fx-background-color: #3498DB; -fx-text-fill: white;"/>
