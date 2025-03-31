@@ -19,6 +19,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class CSVExportService {
+    /*
 
     @Autowired
     private CourseRepository courseRepository;
@@ -52,6 +53,8 @@ public class CSVExportService {
     /**
      * Creates the export directory if it doesn't exist
      */
+
+    /*
     public void createExportDirectoryIfNotExists() {
         Path path = Paths.get(CSV_DIRECTORY);
         if (!Files.exists(path)) {
@@ -67,6 +70,8 @@ public class CSVExportService {
      * Export all course evaluations with likert scale responses to CSV
      * @return Path to the created CSV file
      */
+
+    /*
     public String exportLikertResponses() {
         createExportDirectoryIfNotExists();
         String fileName = CSV_DIRECTORY + "/likert_responses_" + System.currentTimeMillis() + ".csv";
@@ -141,6 +146,7 @@ public class CSVExportService {
      * Export open-ended responses to CSV
      * @return Path to the created CSV file
      */
+    /*
     public String exportOpenResponses() {
         createExportDirectoryIfNotExists();
         String fileName = CSV_DIRECTORY + "/open_responses_" + System.currentTimeMillis() + ".csv";
@@ -181,6 +187,7 @@ public class CSVExportService {
      * Export grade distribution by course
      * @return Path to the created CSV file
      */
+    /*
     public String exportGradeDistribution() {
         createExportDirectoryIfNotExists();
         String fileName = CSV_DIRECTORY + "/grade_distribution_" + System.currentTimeMillis() + ".csv";
@@ -251,6 +258,8 @@ public class CSVExportService {
      * Export course evaluation summary
      * @return Path to the created CSV file
      */
+
+    /*
     public String exportEvaluationSummary() {
         createExportDirectoryIfNotExists();
         String fileName = CSV_DIRECTORY + "/evaluation_summary_" + System.currentTimeMillis() + ".csv";
@@ -377,6 +386,8 @@ public class CSVExportService {
     /**
      * Helper method to get course name from course code
      */
+
+    /*
     private String getCourseName(String courseCode) {
         Optional<Course> course = courseRepository.findById(courseCode);
         return course.map(Course::getName).orElse("Unknown Course");
@@ -385,6 +396,8 @@ public class CSVExportService {
     /**
      * Helper method to find lecturer name for a given course and question
      */
+
+    /*
     private String getLecturerNameForCourseAndQuestion(String courseCode, String questionText) {
         // This is a simplified implementation - in a real system you would want to query this more efficiently
         Iterable<CourseEval> evals = courseEvalRepository.findAll();
@@ -403,4 +416,5 @@ public class CSVExportService {
 
         return "Unknown Lecturer";
     }
+    */
 }
