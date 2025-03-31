@@ -36,10 +36,21 @@ public class CSVGrade {
             List<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord record : csvRecords) {
-                Grade gradeRecord = new Grade(new Student(Long.parseLong(record.get("Student ID "))), new Classes(new Course("CPSC410","Some class"),new Semester(SemesterName.Fall), new SchoolYear("2024-2025")), record.get("Final Grade "), false);
-                //preferably we get class info from user's input
-                //
+                Long studentId = Long.parseLong(record.get("Student ID").trim());
+                String finalGrade = record.get("Final Grade").trim();
+
+                Student student = new Student(studentId);
+                Course course = new Course("CPSC410", "Some class");
+                Semester semester = new Semester(SemesterName.FALL); // Ensure proper enum casing
+                SchoolYear schoolYear = new SchoolYear("2024-2025");
+                Classes classes = new Classes(course, semester, schoolYear);
+
+                Grade gradeRecord = new Grade(student, classes, finalGrade, false);
+
+                // Debugging/logging if needed
+                System.out.println("Processed Grade: " + gradeRecord);
             }
+
 
             // Close resources
             csvParser.close();

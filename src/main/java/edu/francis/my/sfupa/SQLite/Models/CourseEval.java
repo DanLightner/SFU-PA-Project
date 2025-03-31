@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
+import java.util.List;
+
 @Entity
 @Table(name = "CourseEval")
 public class CourseEval {
@@ -26,6 +28,9 @@ public class CourseEval {
     public CourseEval(Integer id, Classes course, Lecturer lecturer) {
         this.course = course;
         this.lecturer = lecturer;
+    }
+
+    public static void saveAll(List<CourseEval> courseEvals) {
     }
 
     // Getters and setters
