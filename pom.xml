@@ -21,7 +21,7 @@
 		<developer/>
 	</developers>
 	<scm>
-		<connection/>
+		<connection/> 
 		<developerConnection/>
 		<tag/>
 		<url/>
@@ -70,17 +70,17 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>21.0.6</version> <!-- Updated to 17 -->
+			<version>23.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>21.0.6</version> <!-- Updated to 17 -->
+			<version>23.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
-			<version>21.0.6</version> <!-- Updated to 17 -->
+			<version>23.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

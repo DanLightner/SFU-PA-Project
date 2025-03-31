@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalAnalysisController">
+<BorderPane prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalAnalysisController">
     <top>
         <MenuBar>
             <Menu text="File">
@@ -56,8 +56,8 @@
                 <ComboBox fx:id="semesterCmb" prefWidth="150" />
             </HBox>
 
-            <TitledPane text="Likert Scale Analysis" expanded="true">
-                <BarChart fx:id="likertBarChart" title="Likert Scale Responses" style="-fx-background-color: white;">
+            <TitledPane text="Likert Scale Analysis" expanded="true" minHeight="400">
+                <BarChart fx:id="likertBarChart" title="Likert Scale Responses" style="-fx-background-color: white;" minHeight="350">
                     <xAxis>
                         <CategoryAxis label="Question" fx:id="xAxis" />
                     </xAxis>
@@ -67,13 +67,13 @@
                 </BarChart>
             </TitledPane>
 
-            <TitledPane text="Open-Ended Responses Analysis" expanded="true">
+            <TitledPane text="Open-Ended Responses Analysis" expanded="true" minHeight="300">
                 <VBox spacing="10">
-                    <TextArea fx:id="openEndedAnalysisArea" editable="false" prefHeight="200" wrapText="true" 
-                             style="-fx-background-color: white; -fx-font-family: 'Segoe UI';" />
+                    <TextArea fx:id="openEndedAnalysisArea" editable="false" prefHeight="250" wrapText="true" 
+                             style="-fx-background-color: white; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px;" />
                     <HBox spacing="10" alignment="CENTER_RIGHT">
-                        <Button onAction="#analyzeEvaluations" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Analyze" />
-                        <Button onAction="#handleBack" text="Back" />
+                        <Button onAction="#analyzeEvaluations" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 15;" text="Analyze" />
+                        <Button onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 8 15;" text="Back" />
                     </HBox>
                 </VBox>
             </TitledPane>
