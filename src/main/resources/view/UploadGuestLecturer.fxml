@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer">
 
     <!-- Menu Bar (Top) -->
     <top>
@@ -33,10 +33,10 @@
     <!-- Sidebar Navigation (Left) -->
     <left>
         <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-            <Button onAction="#handleBackMain" style="-fx-font-size: 14px; -fx-text-fill: black; -fx-background-color: #ECF0F1;" text="Dashboard" />
-            <Button disable="true" onAction="#handleGuestLecturer" style="-fx-font-size: 14px; -fx-background-color: #ECF0F1; -fx-text-fill: black;" text="Guest Lecturer" />
-            <Button onAction="#handleGradebook" style="-fx-font-size: 14px; -fx-text-fill: black; -fx-background-color: #ECF0F1;" text="Gradebook" />
-            <Button onAction="#handleInstructorEval" style="-fx-font-size: 14px; -fx-text-fill: black; -fx-background-color: #ECF0F1;" text="Instructor Eval" />
+            <Button onAction="#handleBackMain" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Dashboard" underline="true" />
+            <Button disable="true" onAction="#handleGuestLecturer" style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: white;" text="Guest Lecturer" underline="true" />
+            <Button onAction="#handleGradebook" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Gradebook" underline="true" />
+            <Button onAction="#handleInstructorEval" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Instructor Eval" underline="true" />
         </VBox>
     </left>
 
