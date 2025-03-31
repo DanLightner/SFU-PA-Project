@@ -42,7 +42,7 @@ public class CSVInstructorEval {
     private CourseRepository courseRepository;
 
     // Hardcoded file path for testing - maintain existing path logic
-    private static final String DEFAULT_FILE_PATH = System.getProperty("user.home") + "/Downloads/Example of Instructor Eval.csv";
+    //private static final String DEFAULT_FILE_PATH = System.getProperty("user.home") + "/Downloads/Example of Instructor Eval.csv";
 
     /**
      * Creates a new CourseEval entry with manually entered data
@@ -108,8 +108,6 @@ public class CSVInstructorEval {
      * Find or create a class based on course, semester, and school year
      */
     private Classes findOrCreateClass(Course course, Long semesterId, Long schoolYearId) {
-        // This would need more robust implementation in a real application
-        // For now, we'll just return null if we can't find the exact class
         Iterable<Classes> classes = classesRepository.findAll();
         for (Classes classItem : classes) {
             if (classItem.getClassCode().getcourseCode().equals(course.getcourseCode()) &&
@@ -118,8 +116,6 @@ public class CSVInstructorEval {
                 return classItem;
             }
         }
-
-        // Return null instead of creating a new class since this should be manually entered
         return null;
     }
 
@@ -256,6 +252,8 @@ public class CSVInstructorEval {
      * For testing purposes - allows running the CSV import with hardcoded values
      * This method can be called from any controller or test code
      */
+
+    /*
     public void runHardcodedImport() {
         try {
             // First create a course evaluation with hardcoded values
@@ -291,5 +289,9 @@ public class CSVInstructorEval {
             e.printStackTrace();
             System.out.println("Error during hardcoded import");
         }
+
+
     }
+
+     */
 }
