@@ -3,19 +3,11 @@
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalAnalysisController">
+<BorderPane prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalAnalysisController">
     <top>
         <MenuBar>
             <Menu text="File">
@@ -32,9 +24,9 @@
             </Menu>
         </MenuBar>
     </top>
-    <!-- Left Navigation Menu -->
+
     <left>
-        <VBox minWidth="150.0" prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
             <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
             <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
             <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
@@ -42,39 +34,49 @@
         </VBox>
     </left>
 
-
-
-
-    <!-- Main Content Area -->
     <center>
-        <VBox spacing="15" style="-fx-padding: 15;">
-            <!-- Likert Scale Bar Chart -->
-            <BarChart fx:id="likertBarChart" title="Likert Scale Responses">
-                <xAxis>
-                    <CategoryAxis label="Question" fx:id="xAxis" />
-                </xAxis>
-                <yAxis>
-                    <NumberAxis fx:id="yAxis" label="Average Response" lowerBound="0" tickUnit="1" upperBound="5" />
-                </yAxis>
-            </BarChart>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
 
-            <!-- Open-Ended Responses Analysis -->
-            <TitledPane collapsible="false" text="Open-Ended Responses Analysis">
-                <TextArea fx:id="openEndedAnalysisArea" editable="false" prefHeight="200" wrapText="true" />
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Instructor Evaluation Analysis" />
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Select Lecturer:" />
+                <ComboBox fx:id="lecturerCombo" prefWidth="200" />
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Select Course:" />
+                <ComboBox fx:id="courseCmb" prefWidth="200" />
+                <Label text="Select Year:" />
+                <ComboBox fx:id="yearCmb" prefWidth="150" />
+                <Label text="Select Semester:" />
+                <ComboBox fx:id="semesterCmb" prefWidth="150" />
+            </HBox>
+
+            <TitledPane text="Likert Scale Analysis" expanded="true" minHeight="400">
+                <BarChart fx:id="likertBarChart" title="Likert Scale Responses" style="-fx-background-color: white;" minHeight="350">
+                    <xAxis>
+                        <CategoryAxis label="Question" fx:id="xAxis" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis fx:id="yAxis" label="Average Response" lowerBound="0" tickUnit="1" upperBound="5" />
+                    </yAxis>
+                </BarChart>
+            </TitledPane>
+
+            <TitledPane text="Open-Ended Responses Analysis" expanded="true" minHeight="300">
+                <VBox spacing="10">
+                    <TextArea fx:id="openEndedAnalysisArea" editable="false" prefHeight="250" wrapText="true" 
+                             style="-fx-background-color: white; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px;" />
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button onAction="#analyzeEvaluations" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 15;" text="Analyze" />
+                        <Button onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 8 15;" text="Back" />
+                    </HBox>
+                </VBox>
             </TitledPane>
         </VBox>
     </center>
-
-    <bottom>
-        <HBox alignment="CENTER" spacing="10" style="-fx-padding: 15;">
-            <Region /> <!-- This takes up the remaining space to the left of the content -->
-            <ComboBox fx:id="courseCmb" promptText="Select Course" />
-            <ComboBox fx:id="yearCmb" promptText="Select School Year" />
-            <ComboBox fx:id="semesterCmb" promptText="Select Semester" />
-            <Button onAction="#analyzeEvaluations" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Analyze" />
-            <Button onAction="#handleBack" text="Back" />
-            <Region /> <!-- This takes up the remaining space to the right of the content -->
-        </HBox>
-    </bottom>
-
 </BorderPane>
