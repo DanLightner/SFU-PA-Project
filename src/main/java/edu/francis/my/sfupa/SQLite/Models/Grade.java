@@ -8,29 +8,32 @@ public class Grade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idGrade")
+    @Column(name = "id_grade")
     private Long idGrade;
 
     @ManyToOne
-    @JoinColumn(name = "Student_idStudent", nullable = false)
+    @JoinColumn(name = "Student_id_student", nullable = false)
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "Clas_idClass", nullable = false)
+    @JoinColumn(name = "Class_id_class", nullable = false)
     private Classes studentClass;
 
-    @Column(name = "Grade", nullable = false)
+    @Column(name = "grade", nullable = false)
     private String grade;
 
-    @Column(name = "Retake", nullable = false)
+    @Column(name = "retake", nullable = false)
     private boolean retake;
+
     public Grade() {}
+
     public Grade(Student student, Classes studentClass, String grade, boolean retake) {
         this.student = student;
         this.studentClass = studentClass;
         this.grade = grade;
         this.retake = retake;
     }
+
     // Getters and Setters
     public Long getIdGrade() {
         return idGrade;

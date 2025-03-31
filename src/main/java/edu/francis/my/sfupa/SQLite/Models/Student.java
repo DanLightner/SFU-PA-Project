@@ -7,21 +7,21 @@ import jakarta.persistence.*;
 public class Student {
 
     @Id
-    @Column(name = "idStudent")
-    private Long idStudent;
+    @Column(name = "id_student")
+    private Long id_student;
 
     // Constructors
     public Student() {
     }
-    public Student(Long idStudent) {
-        this.idStudent = idStudent;
+    public Student(Long id_student) {
+        this.id_student = id_student;
     }
 
-    public Long getIdStudent() {
-        return idStudent;
+    public Long getId_student() {
+        return id_student;
     }
 
-    public void setIdStudent(Long idStudent) {
-        this.idStudent = idStudent;
+    public void setId_student(Long id_student) {
+        this.id_student = id_student;
     }
 }

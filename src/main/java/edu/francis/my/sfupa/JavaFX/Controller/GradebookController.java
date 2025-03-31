@@ -7,6 +7,7 @@ import edu.francis.my.sfupa.SQLite.Models.SemesterName;
 import edu.francis.my.sfupa.SQLite.Repository.CourseRepository;
 import edu.francis.my.sfupa.SQLite.Repository.SchoolYearRepository;
 import edu.francis.my.sfupa.SQLite.Services.CSVInstructorEval;
+import edu.francis.my.sfupa.SQLite.Services.CSVGrade;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -39,8 +40,10 @@ public class GradebookController {
     private SchoolYearRepository schoolYearRepository;
 
     @Autowired
-    private edu.francis.my.sfupa.SQLite.Services.CSVInstructorEval CSVInstructorEval;
-    //CHANGE
+    private CSVInstructorEval CSVInstructorEval;
+
+    @Autowired
+    private CSVGrade csvGrade;
 
     @FXML
     private ComboBox<String> semesterCombo;  // For selecting the semester
@@ -171,7 +174,7 @@ public class GradebookController {
     @FXML
     public void handleInstructorUploadEval() {
         if (selectedFile == null) {
-            showAlert("Please choose a file before uploading.");
+            showAlert(Alert.AlertType.ERROR, "Please choose a file before uploading.");
             return;
         }
 
@@ -179,7 +182,7 @@ public class GradebookController {
         if (semesterCombo.getValue() == null ||
                 courseCombo.getValue() == null ||
                 yearCombo.getValue() == null) {
-            showAlert("Please select Semester, Course, and Year before uploading.");
+            showAlert(Alert.AlertType.ERROR, "Please select Semester, Course, and Year before uploading.");
             return;
         }
 
@@ -198,13 +201,12 @@ public class GradebookController {
             );
 
             if (courseEval == null) {
-                showAlert("Failed to create course evaluation. Check your inputs.");
+                showAlert(Alert.AlertType.ERROR, "Failed to create course evaluation. Check your inputs.");
                 return;
             }
 
             CSVInstructorEval.processCSVFile(selectedFile, courseEval.getId());
-            showAlert("CSV uploaded and processed successfully! Retake: ");
-
+            showAlert(Alert.AlertType.INFORMATION, "CSV uploaded and processed successfully!");
 
             // Reset selected file after upload
             selectedFile = null;
@@ -212,13 +214,53 @@ public class GradebookController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error processing CSV: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Error processing CSV: " + e.getMessage());
         }
     }
 
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Gradebook Upload");
+    @FXML
+    public void handleUploadGrades() {
+        if (selectedFile == null) {
+            showAlert(Alert.AlertType.ERROR, "Please choose a file before uploading.");
+            return;
+        }
+
+        if (semesterCombo.getValue() == null || 
+            courseCombo.getValue() == null || 
+            yearCombo.getValue() == null) {
+            showAlert(Alert.AlertType.ERROR, "Please select Semester, Course, and Year before uploading.");
+            return;
+        }
+
+        try {
+            SemesterName selectedSemester = SemesterName.fromString(semesterCombo.getValue());
+            Course selectedCourse = courseRepository.findByCourseCode(courseCombo.getValue());
+            SchoolYear selectedYear = schoolYearRepository.findByName(yearCombo.getValue());
+
+            // Process the CSV file and count grades C and below
+            int gradesBelow = csvGrade.processGradeCSV(
+                selectedFile, 
+                selectedCourse.getcourseCode(),
+                selectedSemester.getId(),
+                selectedYear.getIdSchoolYear().intValue()
+            );
+            
+            String message = String.format("Grades uploaded successfully!\nNumber of grades C or below: %d", gradesBelow);
+            showAlert(Alert.AlertType.INFORMATION, message);
+
+            // Reset selected file after upload
+            selectedFile = null;
+            selectedFileLabel.setText("No file chosen");
+
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Error processing CSV:\n" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(alertType == Alert.AlertType.INFORMATION ? "Success" : "Error");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
@@ -265,11 +307,7 @@ public class GradebookController {
     @FXML
     public void handleAbout(ActionEvent event) {
         // Display an informational "About" alert
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("About SFU PA");
-        alert.setHeaderText("SFU PA Application");
-        alert.setContentText("This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
-        alert.showAndWait();
+        showAlert(Alert.AlertType.INFORMATION, "This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
     }
 
     // --- Sidebar Navigation ---
