@@ -50,10 +50,11 @@
             <Label text="Select Course ID:" />
             <ComboBox fx:id="courseCombo" promptText="Select Course" />
 
-
-
             <Label text="Select Year:" />
             <ComboBox fx:id="yearCombo" promptText="Select Year" />
+
+            <Label text="Select Lecturer:" />
+            <ComboBox fx:id="lecturerCombo" promptText="Select Lecturer" />
 
             <Button onAction="#handleChooseFile" style="-fx-background-color: #2ECC71; -fx-text-fill: white;" text="Choose File" />
             <Label fx:id="selectedFileLabel" text="No file chosen" />

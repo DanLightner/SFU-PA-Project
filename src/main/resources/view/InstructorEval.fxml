@@ -46,6 +46,7 @@
             <Button onAction="#handleAnalyzeData" text="Analyze Instructor Eval Data" />
             <Button onAction="#handleEditEval" text="Edit Instructor Evaluation" />
             <Button onAction="#handleUploadEval" text="Upload Instructor Evaluation" />
+            <Button onAction="#handleViewSpecificInstructor" text="View Specific Instructor Evaluations" />
         </VBox>
     </center>
 
