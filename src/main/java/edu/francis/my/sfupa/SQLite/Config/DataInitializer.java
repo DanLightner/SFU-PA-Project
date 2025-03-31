@@ -163,21 +163,21 @@ public class DataInitializer {
 
     private List<SchoolYear> initSchoolYears() {
         List<SchoolYear> schoolYears = Arrays.asList(
-                new SchoolYear("2020-2021"),
-                new SchoolYear("2021-2022"),
-                new SchoolYear("2022-2023"),
+               // new SchoolYear("2020-2021"),
+              //  new SchoolYear("2021-2022"),
+              //  new SchoolYear("2022-2023"),
                 new SchoolYear("2023-2024"),
-                new SchoolYear("2024-2025"),
-                new SchoolYear("2025-2026"),
-                new SchoolYear("2026-2027"),
-                new SchoolYear("2027-2028"),
-                new SchoolYear("2028-2029"),
-                new SchoolYear("2029-2030"),
-                new SchoolYear("2030-2031"),
-                new SchoolYear("2031-2032"),
-                new SchoolYear("2032-2033"),
-                new SchoolYear("2033-2034"),
-                new SchoolYear("2034-2035")
+                new SchoolYear("2024-2025")
+               // new SchoolYear("2025-2026"),
+               // new SchoolYear("2026-2027"),
+               // new SchoolYear("2027-2028"),
+               // new SchoolYear("2028-2029"),
+              //  new SchoolYear("2029-2030"),
+                //new SchoolYear("2030-2031"),
+              //  new SchoolYear("2031-2032"),
+               // new SchoolYear("2032-2033"),
+             //   new SchoolYear("2033-2034"),
+               // new SchoolYear("2034-2035")
         );
 
 
@@ -209,7 +209,7 @@ public class DataInitializer {
 
     private List<Student> initStudents() {
         List<Student> students = new ArrayList<>();
-        for (long i = 100; i < 110; i++) {
+        for (long i = 1000; i < 1100; i++) {
             Student student = new Student(i);
             students.add(student);
         }
