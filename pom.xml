@@ -21,7 +21,7 @@
 		<developer/>
 	</developers>
 	<scm>
-		<connection/>
+		<connection/> 
 		<developerConnection/>
 		<tag/>
 		<url/>
@@ -55,7 +55,7 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>21.0.6</version>
+			<version>23.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.opencsv</groupId>
@@ -70,17 +70,17 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>21.0.6</version> <!-- Updated to 17 -->
+			<version>23.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>21.0.6</version> <!-- Updated to 17 -->
+			<version>23.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
-			<version>21.0.6</version> <!-- Updated to 17 -->
+			<version>23.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -109,6 +109,15 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<mainClass>edu.francis.my.sfupa.HelloFXApplication</mainClass>
+					<jvmArguments>
+						--add-exports java.base/sun.misc=ALL-UNNAMED
+						--add-opens java.base/java.lang=ALL-UNNAMED
+						--add-opens java.base/java.lang.reflect=ALL-UNNAMED
+						--add-opens java.base/java.io=ALL-UNNAMED
+						--add-opens java.base/java.util=ALL-UNNAMED
+						--add-opens java.base/java.util.concurrent=ALL-UNNAMED
+						--enable-native-access=ALL-UNNAMED
+					</jvmArguments>
 				</configuration>
 				<executions>
 					<execution>
@@ -131,6 +140,15 @@
 					<launcher>sfupa</launcher>
 					<jlinkImageName>sfupa-runtime</jlinkImageName>
 					<jlinkZipName>sfupa-runtime-zip</jlinkZipName>
+					<options>
+						<option>--add-modules</option>
+						<option>javafx.controls,javafx.fxml</option>
+						<option>--add-exports</option>
+						<option>java.base/sun.misc=ALL-UNNAMED</option>
+						<option>--add-opens</option>
+						<option>java.base/java.lang=ALL-UNNAMED</option>
+						<option>--enable-native-access=ALL-UNNAMED</option>
+					</options>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -177,6 +195,19 @@
 						<requiresJdk>false</requiresJdk>
 						<opts>
 							<opt>-Djava.library.path=./lib</opt>
+							<opt>--add-exports</opt>
+							<opt>java.base/sun.misc=ALL-UNNAMED</opt>
+							<opt>--add-opens</opt>
+							<opt>java.base/java.lang=ALL-UNNAMED</opt>
+							<opt>--add-opens</opt>
+							<opt>java.base/java.lang.reflect=ALL-UNNAMED</opt>
+							<opt>--add-opens</opt>
+							<opt>java.base/java.io=ALL-UNNAMED</opt>
+							<opt>--add-opens</opt>
+							<opt>java.base/java.util=ALL-UNNAMED</opt>
+							<opt>--add-opens</opt>
+							<opt>java.base/java.util.concurrent=ALL-UNNAMED</opt>
+							<opt>--enable-native-access=ALL-UNNAMED</opt>
 						</opts>
 					</jre>
 					<versionInfo>

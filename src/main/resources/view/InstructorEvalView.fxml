@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalViewController">
+
+    <top>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Open" />
+                <MenuItem text="Save" />
+                <MenuItem onAction="#handleExit" text="Exit" />
+            </Menu>
+            <Menu text="Edit">
+                <MenuItem text="Undo" />
+                <MenuItem text="Redo" />
+            </Menu>
+            <Menu text="Help">
+                <MenuItem onAction="#handleAbout" text="About" />
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <left>
+        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+            <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
+            <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
+            <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
+            <Button onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" />
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Instructor Evaluation Details" />
+            
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Select Lecturer:" />
+                <ComboBox fx:id="lecturerCombo" prefWidth="200" />
+            </HBox>
+
+            <TableView fx:id="evaluationTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="courseIdColumn" text="Course ID" />
+                    <TableColumn fx:id="courseNameColumn" text="Course Name" />
+                    <TableColumn fx:id="semesterColumn" text="Semester" />
+                    <TableColumn fx:id="yearColumn" text="Year" />
+                </columns>
+            </TableView>
+
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button onAction="#handleBack" text="Back" />
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane> 

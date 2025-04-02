@@ -42,7 +42,7 @@ public class CSVInstructorEval {
     private CourseRepository courseRepository;
 
     // Hardcoded file path for testing - maintain existing path logic
-    private static final String DEFAULT_FILE_PATH = System.getProperty("user.home") + "/Downloads/Example of Instructor Eval.csv";
+    //private static final String DEFAULT_FILE_PATH = System.getProperty("user.home") + "/Downloads/Example of Instructor Eval.csv";
 
     /**
      * Creates a new CourseEval entry with manually entered data
@@ -53,6 +53,8 @@ public class CSVInstructorEval {
      * @param lecturerLastName Lecturer's last name
      * @return The created CourseEval object or null if failed
      */
+
+
     public CourseEval createManualCourseEval(String courseCode, Long semesterId, Long schoolYearId,
                                              String lecturerFirstName, String lecturerLastName) {
         try {
@@ -85,12 +87,11 @@ public class CSVInstructorEval {
         }
     }
 
+
     /**
      * Find a lecturer by name or create a new one if not found
      */
     private Lecturer findOrCreateLecturer(String firstName, String lastName) {
-        // This is a simplified approach - in a real application, you'd want more robust logic
-        // to avoid duplicate entries
         Iterable<Lecturer> lecturers = lecturerRepository.findAll();
         for (Lecturer lecturer : lecturers) {
             if (lecturer.getFName().equalsIgnoreCase(firstName) &&
@@ -98,18 +99,10 @@ public class CSVInstructorEval {
                 return lecturer;
             }
         }
-
-        // Create new lecturer if not found
         Lecturer newLecturer = new Lecturer(firstName, lastName);
         return lecturerRepository.save(newLecturer);
     }
-
-    /**
-     * Find or create a class based on course, semester, and school year
-     */
     private Classes findOrCreateClass(Course course, Long semesterId, Long schoolYearId) {
-        // This would need more robust implementation in a real application
-        // For now, we'll just return null if we can't find the exact class
         Iterable<Classes> classes = classesRepository.findAll();
         for (Classes classItem : classes) {
             if (classItem.getClassCode().getcourseCode().equals(course.getcourseCode()) &&
@@ -118,8 +111,6 @@ public class CSVInstructorEval {
                 return classItem;
             }
         }
-
-        // Return null instead of creating a new class since this should be manually entered
         return null;
     }
 
@@ -129,6 +120,8 @@ public class CSVInstructorEval {
      * @param courseEvalId The ID of the course evaluation to attach questions and responses to
      * @return true if the file was successfully processed, false otherwise
      */
+
+    /*
     public boolean uploadCSV(Stage stage, Integer courseEvalId) {
         try {
             FileChooser fileChooser = new FileChooser();
@@ -151,6 +144,8 @@ public class CSVInstructorEval {
             return false;
         }
     }
+    */
+
 
     /**
      * Processes the CSV file and adds the data to the database
@@ -235,6 +230,7 @@ public class CSVInstructorEval {
      * @param courseEvalId The ID of the course evaluation to attach questions and responses to
      * @return true if the file was successfully processed, false otherwise
      */
+    /*
     public boolean processCSVByPath(String filePath, Integer courseEvalId) {
         System.out.println("Resolved file path: " + filePath);
         try {
@@ -251,11 +247,14 @@ public class CSVInstructorEval {
             return false;
         }
     }
+    */
 
     /**
      * For testing purposes - allows running the CSV import with hardcoded values
      * This method can be called from any controller or test code
      */
+
+    /*
     public void runHardcodedImport() {
         try {
             // First create a course evaluation with hardcoded values
@@ -291,5 +290,9 @@ public class CSVInstructorEval {
             e.printStackTrace();
             System.out.println("Error during hardcoded import");
         }
+
+
     }
+
+     */
 }

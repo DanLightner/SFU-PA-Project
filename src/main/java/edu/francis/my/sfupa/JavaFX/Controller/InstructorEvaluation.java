@@ -41,6 +41,9 @@ public class InstructorEvaluation {
     @Autowired
     private CSVInstructorEval CSVInstructorEval;
 
+    @Autowired
+    private LecturerRepository lecturerRepository;
+
     @FXML
     private ComboBox<String> semesterCombo;  // For selecting the semester
 
@@ -52,6 +55,9 @@ public class InstructorEvaluation {
 
     @FXML
     private ComboBox<String> yearCombo;      // For selecting the year
+
+    @FXML
+    private ComboBox<String> lecturerCombo;
 
     @FXML
     public void initialize() {
@@ -115,20 +121,6 @@ public class InstructorEvaluation {
             ));
         }
 
-           /*
-        if (courseCombo != null) {
-            Iterable<Course> courses = courseRepository.findAll();
-            List<String> courseNames = new ArrayList<>();
-
-            for (Course course : courses) {
-                courseNames.add(course.getName());
-            }
-
-            courseCombo.setItems(FXCollections.observableArrayList(courseNames));
-        }
-        */
-
-
         if (yearCombo != null) {
             // Fetch school years from the repository
             List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll();
@@ -140,6 +132,20 @@ public class InstructorEvaluation {
 
             // Set the items for yearCombo
             yearCombo.setItems(FXCollections.observableArrayList(schoolYearNames));
+        }
+
+        if (lecturerCombo != null) {
+            // Fetch all lecturers
+            Iterable<Lecturer> lecturers = lecturerRepository.findAll();
+            List<String> lecturerNames = new ArrayList<>();
+
+            // Create formatted names (FirstName LastName)
+            for (Lecturer lecturer : lecturers) {
+                lecturerNames.add(lecturer.getFName() + " " + lecturer.getLName());
+            }
+
+            // Set the items for lecturerCombo
+            lecturerCombo.setItems(FXCollections.observableArrayList(lecturerNames));
         }
     }
 
@@ -174,8 +180,9 @@ public class InstructorEvaluation {
         // Validate selections
         if (semesterCombo.getValue() == null ||
                 courseCombo.getValue() == null ||
-                yearCombo.getValue() == null) {
-            showAlert("Please select Semester, Course, and Year before uploading.");
+                yearCombo.getValue() == null ||
+                lecturerCombo.getValue() == null) {
+            showAlert("Please select Semester, Course, Year, and Lecturer before uploading.");
             return;
         }
 
@@ -184,12 +191,21 @@ public class InstructorEvaluation {
             Course selectedCourse = courseRepository.findByCourseCode(courseCombo.getValue());
             SchoolYear selectedYear = schoolYearRepository.findByName(yearCombo.getValue());
 
+            // Split the selected lecturer name into first and last name
+            String[] lecturerFullName = lecturerCombo.getValue().split(" ");
+            if (lecturerFullName.length < 2) {
+                showAlert("Invalid lecturer name format");
+                return;
+            }
+            String firstName = lecturerFullName[0];
+            String lastName = lecturerFullName[1];
+
             CourseEval courseEval = CSVInstructorEval.createManualCourseEval(
                     selectedCourse.getcourseCode(),
                     (long) selectedSemester.getId(),
                     selectedYear.getIdSchoolYear(),
-                    "FirstName",
-                    "LastName"
+                    firstName,
+                    lastName
             );
 
             if (courseEval == null) {
@@ -280,5 +296,9 @@ public class InstructorEvaluation {
         SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
     }
 
+    @FXML
+    public void handleViewSpecificInstructor(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "InstructorEvalView.fxml", springContext);
+    }
 
 }

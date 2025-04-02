@@ -33,6 +33,7 @@ public class InstructorEvalAnalysisController {
     @FXML private BarChart<String, Number> likertBarChart;
     @FXML private CategoryAxis xAxis;
     @FXML private NumberAxis yAxis;
+    @FXML private ComboBox<String> lecturerCombo;
 
     @Autowired private CourseRepository courseRepository;
     @Autowired private SchoolYearRepository schoolYearRepository;
@@ -40,6 +41,8 @@ public class InstructorEvalAnalysisController {
     @Autowired private ResponseLikertRepository responseLikertRepository;
     @Autowired private ResponseOpenRepository responseOpenRepository;
     @Autowired private QuestionsRepository questionsRepository;
+    @Autowired private LecturerRepository lecturerRepository;
+    @Autowired private CourseEvalRepository courseEvalRepository;
 
 
     /*
@@ -83,109 +86,170 @@ public class InstructorEvalAnalysisController {
 
     @FXML
     public void initialize() {
-        if (semesterCmb != null) {
-            semesterCmb.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
-        }
-        if (courseCmb != null) {
-            courseCmb.setItems(FXCollections.observableArrayList(
-                    "CS101", "PA 400",
-                    "PA 401",
-                    "PA 402",
-                    "PA 403",
-                    "PA 404",
-                    "PA 405",
-                    "PA 406",
-                    "PA 420",
-                    "PA 421",
-                    "PA 422",
-                    "PA 423",
-                    "PA 424",
-                    "PA 425",
-                    "PA 426",
-                    "PA 427",
-                    "PA 428",
-                    "PA 429",
-                    "PA 430",
-                    "PA 431",
-                    "PA 432",
-                    "PA 451",
-                    "PA 452",
-                    "PA 453"
-            ));
-        }
-
-           /*
-        if (courseCombo != null) {
-            Iterable<Course> courses = courseRepository.findAll();
-            List<String> courseNames = new ArrayList<>();
-
-            for (Course course : courses) {
-                courseNames.add(course.getName());
-            }
-
-            courseCombo.setItems(FXCollections.observableArrayList(courseNames));
-        }
-        */
-
-
-        if (yearCmb != null) {
-            // Fetch school years from the repository
-            List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll();
-
-            // Convert school year names (like "2023-2024") into a list of strings
-            List<String> schoolYearNames = schoolYears.stream()
-                    .map(SchoolYear::getName)  // Assuming you have getName() method for the "name" field
-                    .collect(Collectors.toList());
-
-            // Set the items for yearCombo
-            yearCmb.setItems(FXCollections.observableArrayList(schoolYearNames));
-        }
+        setupLecturerComboBox();
+        setupYearComboBox();
+        setupSemesterComboBox();
+        setupChartStyle();
     }
 
+    private void setupLecturerComboBox() {
+        Iterable<Lecturer> lecturers = lecturerRepository.findAll();
+        List<String> lecturerNames = new ArrayList<>();
+        for (Lecturer lecturer : lecturers) {
+            lecturerNames.add(lecturer.getFName() + " " + lecturer.getLName());
+        }
+        lecturerCombo.setItems(FXCollections.observableArrayList(lecturerNames));
+        
+        lecturerCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                updateCourseComboBox(newVal);
+            }
+        });
+    }
 
+    private void updateCourseComboBox(String lecturerName) {
+        String[] nameParts = lecturerName.split(" ");
+        if (nameParts.length < 2) return;
+
+        String firstName = nameParts[0];
+        String lastName = nameParts[1];
+
+        // Find the lecturer
+        Lecturer lecturer = findLecturerByName(firstName, lastName);
+        if (lecturer == null) return;
+
+        // Get all course evaluations for this lecturer
+        Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
+        Set<String> uniqueCourses = new HashSet<>();
+        
+        for (CourseEval eval : allEvals) {
+            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
+                eval.getLecturer().getLName().equals(lecturer.getLName())) {
+                uniqueCourses.add(eval.getCourse().getClassCode().getcourseCode());
+            }
+        }
+
+        courseCmb.setItems(FXCollections.observableArrayList(uniqueCourses));
+    }
+
+    private Lecturer findLecturerByName(String firstName, String lastName) {
+        Iterable<Lecturer> lecturers = lecturerRepository.findAll();
+        for (Lecturer lecturer : lecturers) {
+            if (lecturer.getFName().equals(firstName) && lecturer.getLName().equals(lastName)) {
+                return lecturer;
+            }
+        }
+        return null;
+    }
+
+    private void setupChartStyle() {
+        if (likertBarChart != null) {
+            likertBarChart.setStyle("-fx-background-color: white;");
+            likertBarChart.setTitle("Likert Scale Responses");
+            
+            if (xAxis != null) {
+                xAxis.setStyle("-fx-font-size: 12px;");
+                xAxis.setTickLabelRotation(-45);
+            }
+            
+            if (yAxis != null) {
+                yAxis.setStyle("-fx-font-size: 12px;");
+            }
+        }
+    }
 
     @FXML
     public void analyzeEvaluations() {
-        if (courseCmb.getValue() == null ||
-                yearCmb.getValue() == null ||
-                semesterCmb.getValue() == null) {
-            showAlert("Please select Course, Year, and Semester");
+        if (lecturerCombo.getValue() == null || courseCmb.getValue() == null ||
+                yearCmb.getValue() == null || semesterCmb.getValue() == null) {
+            showAlert("Please select Lecturer, Course, Year, and Semester");
             return;
         }
 
-        analyzeLikertResponses();
-        analyzeOpenEndedResponses();
+        String[] nameParts = lecturerCombo.getValue().split(" ");
+        Lecturer lecturer = findLecturerByName(nameParts[0], nameParts[1]);
+        if (lecturer == null) return;
+
+        analyzeLikertResponses(lecturer);
+        analyzeOpenEndedResponses(lecturer);
     }
 
-    private void analyzeLikertResponses() {
+    private void analyzeLikertResponses(Lecturer lecturer) {
         likertBarChart.getData().clear();
         Map<Questions, List<ResponseLikert>> responsesGrouped = new HashMap<>();
 
-        for (ResponseLikert response : responseLikertRepository.findAll()) {
-            responsesGrouped
-                    .computeIfAbsent(response.getQuestion(), k -> new ArrayList<>())
-                    .add(response);
+        // Get course evaluations for the selected lecturer and course
+        Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
+        for (CourseEval eval : allEvals) {
+            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
+                eval.getLecturer().getLName().equals(lecturer.getLName()) &&
+                eval.getCourse().getClassCode().getcourseCode().equals(courseCmb.getValue())) {
+                
+                // Get all Likert responses for this evaluation
+                for (ResponseLikert response : responseLikertRepository.findAll()) {
+                    if (response.getCourseEval().getId().equals(eval.getId())) {
+                        responsesGrouped
+                            .computeIfAbsent(response.getQuestion(), k -> new ArrayList<>())
+                            .add(response);
+                    }
+                }
+            }
         }
 
+        // Create chart data
         for (Map.Entry<Questions, List<ResponseLikert>> entry : responsesGrouped.entrySet()) {
-            double avgResponse = 0.0;
-            List<ResponseLikert> responses = entry.getValue();
-            if (!responses.isEmpty()) {
-                double sum = 0;
-                for (ResponseLikert response : responses) {
-                    sum += mapLikertToNumeric(response.getResponse());
-                }
-                avgResponse = sum / responses.size();
-            }
-
+            double avgResponse = calculateAverageResponse(entry.getValue());
             XYChart.Series<String, Number> series = new XYChart.Series<>();
             series.setName(entry.getKey().getText());
             series.getData().add(new XYChart.Data<>("Average", avgResponse));
-
             likertBarChart.getData().add(series);
         }
     }
 
+    private double calculateAverageResponse(List<ResponseLikert> responses) {
+        if (responses.isEmpty()) return 0.0;
+        double sum = responses.stream()
+                .mapToDouble(response -> mapLikertToNumeric(response.getResponse()))
+                .sum();
+        return sum / responses.size();
+    }
+
+    private void analyzeOpenEndedResponses(Lecturer lecturer) {
+        StringBuilder analysis = new StringBuilder();
+        analysis.append("Open-Ended Response Analysis for ")
+                .append(lecturer.getFName())
+                .append(" ")
+                .append(lecturer.getLName())
+                .append("\n\n");
+
+        // Get course evaluations for the selected lecturer and course
+        Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
+        List<ResponseOpen> relevantResponses = new ArrayList<>();
+
+        for (CourseEval eval : allEvals) {
+            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
+                eval.getLecturer().getLName().equals(lecturer.getLName()) &&
+                eval.getCourse().getClassCode().getcourseCode().equals(courseCmb.getValue())) {
+                
+                for (ResponseOpen response : responseOpenRepository.findAll()) {
+                    if (response.getCourseEval().getId().equals(eval.getId())) {
+                        relevantResponses.add(response);
+                    }
+                }
+            }
+        }
+
+        if (!relevantResponses.isEmpty()) {
+            String aggregatedResponses = relevantResponses.stream()
+                    .map(ResponseOpen::getResponse)
+                    .collect(Collectors.joining("\n\n"));
+            analysis.append(performBasicTextAnalysis(aggregatedResponses));
+        } else {
+            analysis.append("No open-ended responses found for the selected criteria.");
+        }
+
+        openEndedAnalysisArea.setText(analysis.toString());
+    }
 
     private double mapLikertToNumeric(String likertResponse) {
         switch (likertResponse.toLowerCase()) {
@@ -195,18 +259,6 @@ public class InstructorEvalAnalysisController {
             case "agree": return 4.0;
             case "strongly agree": return 5.0;
             default: return 0.0;
-        }
-    }
-
-    private void analyzeOpenEndedResponses() {
-        List<ResponseOpen> openResponses = (List<ResponseOpen>) responseOpenRepository.findAll();
-        if (!openResponses.isEmpty()) {
-            String aggregatedResponses = openResponses.stream()
-                    .map(ResponseOpen::getResponse)
-                    .collect(Collectors.joining("\n\n"));
-            openEndedAnalysisArea.setText(performBasicTextAnalysis(aggregatedResponses));
-        } else {
-            openEndedAnalysisArea.setText("No open-ended responses found.");
         }
     }
 
@@ -265,5 +317,21 @@ public class InstructorEvalAnalysisController {
     @FXML
     public void handleBack(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
+    }
+
+    private void setupYearComboBox() {
+        if (yearCmb != null) {
+            List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll();
+            List<String> schoolYearNames = schoolYears.stream()
+                    .map(SchoolYear::getName)
+                    .collect(Collectors.toList());
+            yearCmb.setItems(FXCollections.observableArrayList(schoolYearNames));
+        }
+    }
+
+    private void setupSemesterComboBox() {
+        if (semesterCmb != null) {
+            semesterCmb.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
+        }
     }
 }
