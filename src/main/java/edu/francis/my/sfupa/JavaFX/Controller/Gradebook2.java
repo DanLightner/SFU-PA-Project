@@ -1,3 +1,4 @@
+/*
 package edu.francis.my.sfupa.JavaFX.Controller;
 
 import edu.francis.my.sfupa.SQLite.Models.*;
@@ -109,37 +110,18 @@ public class Gradebook2 {
             ));
         }
 
-           /*
-        if (courseCombo != null) {
-            Iterable<Course> courses = courseRepository.findAll();
-            List<String> courseNames = new ArrayList<>();
-
-            for (Course course : courses) {
-                courseNames.add(course.getName());
-            }
-
-            courseCombo.setItems(FXCollections.observableArrayList(courseNames));
-        }
-        */
-
-
         if (yearCombo != null) {
-            // Fetch school years from the repository
             List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll();
-
-            // Convert school year names (like "2023-2024") into a list of strings
             List<String> schoolYearNames = schoolYears.stream()
-                    .map(SchoolYear::getName)  // Assuming you have getName() method for the "name" field
+                    .map(SchoolYear::getName)
                     .collect(Collectors.toList());
-
-            // Set the items for yearCombo
             yearCombo.setItems(FXCollections.observableArrayList(schoolYearNames));
         }
     }
-    private File selectedFile;  // Store the chosen file
+    private File selectedFile;
 
     @FXML
-    private Label selectedFileLabel;  // Reference to update label in UI
+    private Label selectedFileLabel;
 
     @FXML
     public void handleChooseFile() {
@@ -151,7 +133,7 @@ public class Gradebook2 {
 
         if (file != null) {
             selectedFile = file;
-            selectedFileLabel.setText(file.getName()); // Show file name in label
+            selectedFileLabel.setText(file.getName());
         } else {
             selectedFileLabel.setText("No file chosen");
         }
@@ -164,7 +146,6 @@ public class Gradebook2 {
             return;
         }
 
-        // Validate selections
         if (semesterCombo.getValue() == null ||
                 courseCombo.getValue() == null ||
                 yearCombo.getValue() == null) {
@@ -173,26 +154,17 @@ public class Gradebook2 {
         }
 
         try {
-            //needed to cast to string
             SemesterName selectedSemester = SemesterName.fromString((String) semesterCombo.getValue());
             Course selectedCourse = courseRepository.findByCourseCode((String) courseCombo.getValue());
             SchoolYear selectedYear = schoolYearRepository.findByName((String) yearCombo.getValue());
 
             Grade grade=new Grade();
-            //make a grade
-            // Grade grade = CSVGrade...
-
 
             if (grade == null) {
                 showAlert("Failed to create course evaluation. Check your inputs.");
                 return;
             }
 
-            /*this for grades
-            CSVInstructorEval.processCSVFile(selectedFile, courseEval.getId());
-            showAlert("CSV uploaded and processed successfully!");
-            */
-            // Reset selected file after upload
             selectedFile = null;
             selectedFileLabel.setText("No file chosen");
 
@@ -215,7 +187,6 @@ public class Gradebook2 {
         SceneUtils.switchScene(event, "main-view.fxml", springContext);
     }
 
-    // --- Menu Bar Actions ---
     @FXML
     private void handleExit() {
         System.exit(0);
@@ -230,7 +201,6 @@ public class Gradebook2 {
         alert.showAndWait();
     }
 
-    // --- Sidebar Navigation ---
     @FXML
     public void handleGuestLecturer(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
@@ -245,5 +215,5 @@ public class Gradebook2 {
     public void handleInstructorEval(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
     }
-
 }
+*/

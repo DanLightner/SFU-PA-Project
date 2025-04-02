@@ -50,41 +50,96 @@ public class GradesCsvImporter {
             String[] line;
             reader.readNext(); // Skip header row (if present)
 
-            // Process each row in the CSV
+            int rowNumber = 1;
             while ((line = reader.readNext()) != null) {
-                // Assuming CSV format is: retake, Class_id_class, id_grade, student_id_student, grade
-                Boolean retake = Integer.parseInt(line[0]) == 1;  // Binary (0 or 1), 1 means true (retake)
-                Integer classId = Integer.parseInt(line[1]);  // Class ID (corresponds to the course)
-                Integer gradeId = Integer.parseInt(line[2]);  // Grade ID (if needed to reference a grade type)
-                Integer studentId = Integer.parseInt(line[3]);  // Student ID
-                String grade = line[4];  // Grade (e.g., A, B+, etc.)
+                rowNumber++;
+                
+                // Skip empty rows
+                if (line.length == 0 || (line.length == 1 && line[0].trim().isEmpty())) {
+                    continue;
+                }
 
-                // Fetch related class and student from the database
-                Classes course = classesRepository.findById(classId).orElse(null);
-                Student student = studentRepository.findById(studentId).orElse(null);
+                // Validate that we have all required fields
+                if (line.length < 5 || isAnyFieldEmpty(line)) {
+                    System.out.println("Skipping row " + rowNumber + ": Missing required fields");
+                    continue;
+                }
 
-                if (course != null && student != null) {
-                    // Create a new Grade entity
+                try {
+                    Boolean retake = Integer.parseInt(line[0].trim()) == 1;
+                    Integer classId = Integer.parseInt(line[1].trim());
+                    Integer gradeId = Integer.parseInt(line[2].trim());
+                    Long studentId = Long.parseLong(line[3].trim());
+                    String grade = line[4].trim();
+
+                    // Validate student ID and grade
+                    if (studentId == 0 || grade.isEmpty()) {
+                        System.out.println("Skipping row " + rowNumber + ": Empty student ID or grade");
+                        continue;
+                    }
+
+                    // First check if student exists
+                    Student student = studentRepository.findById(studentId).orElse(null);
+                    Classes course = classesRepository.findById(classId).orElse(null);
+
+                    if (course == null) {
+                        System.out.println("Skipping row " + rowNumber + ": Course not found with ID: " + classId);
+                        continue;
+                    }
+
+                    // If student doesn't exist, create new student
+                    if (student == null) {
+                        student = new Student();
+                        student.setId_student(studentId);  // Using the correct field name id_student
+                        try {
+                            student = studentRepository.save(student);
+                            System.out.println("Created new student with ID: " + student.getId_student());
+                        } catch (Exception e) {
+                            System.out.println("Error creating student in row " + rowNumber + ": " + e.getMessage());
+                            continue;
+                        }
+                    }
+
+                    // Create grade entry
                     Grade gradeEntity = new Grade();
-                    gradeEntity.setRetake(retake);  // Set the retake flag
-                    gradeEntity.setStudent(student);  // Set the related student
-                    gradeEntity.setStudentClass(course);  // Set the related class (studentClass)
-                    gradeEntity.setGrade(grade);  // Set the grade value
-
-                    // Add to the list for bulk saving later
+                    gradeEntity.setRetake(retake);
+                    gradeEntity.setStudent(student);
+                    gradeEntity.setStudentClass(course);
+                    gradeEntity.setGrade(grade);
                     gradeList.add(gradeEntity);
-                } else {
-                    System.out.println("Skipping row: Course or Student not found for Class ID: " + classId + ", Student ID: " + studentId);
+
+                } catch (NumberFormatException e) {
+                    System.out.println("Skipping row " + rowNumber + ": Invalid number format - " + e.getMessage());
+                    continue;
                 }
             }
 
-            // Save all Grade records to the database
-            gradeRepository.saveAll(gradeList);
-            System.out.println("CSV Data Imported Successfully!");
+            // Save all valid grade records to the database
+            if (!gradeList.isEmpty()) {
+                try {
+                    gradeRepository.saveAll(gradeList);
+                    System.out.println("Successfully imported " + gradeList.size() + " grades!");
+                } catch (Exception e) {
+                    System.out.println("Error saving grades: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("No valid data found to import.");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error importing CSV: " + e.getMessage());
         }
+    }
+
+    // Helper method to check if any field in the row is empty
+    private boolean isAnyFieldEmpty(String[] line) {
+        for (String field : line) {
+            if (field == null || field.trim().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
