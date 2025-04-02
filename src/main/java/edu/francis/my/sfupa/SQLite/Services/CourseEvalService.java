@@ -22,6 +22,18 @@ public class CourseEvalService {
 
     @Autowired
     private CourseRepository courseRepository;
+    public CourseEval save(CourseEval courseEval) {
+        try {
+            return courseEvalRepository.save(courseEval);
+        } catch (Exception e) {
+            System.err.println("[ERROR] Failed to save CourseEval: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
 
     /**
      * Creates a new CourseEval entry with manually entered data.
@@ -37,19 +49,37 @@ public class CourseEvalService {
         try {
             Lecturer lecturer = findOrCreateLecturer(lecturerFirstName, lecturerLastName);
             Optional<Course> courseOpt = courseRepository.findById(courseCode);
+
             if (courseOpt.isEmpty()) {
-                System.out.println("Course not found: " + courseCode);
+                System.err.println("[ERROR] Course not found: " + courseCode);
                 return null;
             }
+
             Classes classEntity = findOrCreateClass(courseOpt.get(), semesterId, schoolYearId);
             if (classEntity == null) {
+                System.err.println("[ERROR] Class creation failed for course: " + courseCode);
                 return null;
             }
+
             CourseEval courseEval = new CourseEval();
             courseEval.setCourse(classEntity);
             courseEval.setLecturer(lecturer);
+
+            // Save using the new save method
+            return saveCourseEval(courseEval);
+
+        } catch (Exception e) {
+            System.err.println("[ERROR] Failed to create CourseEval: " + e.getMessage());
+            e.printStackTrace(); // Consider logging this instead of printing
+            return null;
+        }
+    }
+
+    private CourseEval saveCourseEval(CourseEval courseEval) {
+        try {
             return courseEvalRepository.save(courseEval);
         } catch (Exception e) {
+            System.err.println("[ERROR] Failed to save CourseEval: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -86,4 +116,6 @@ public class CourseEvalService {
                 .findFirst()
                 .orElse(null);
     }
+
+    
 }
