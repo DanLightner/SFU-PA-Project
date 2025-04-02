@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalViewController">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalViewController">
 
     <top>
         <MenuBar>
@@ -25,21 +34,21 @@
 
     <left>
         <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-            <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
-            <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
-            <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
-            <Button onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" />
+            <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" underline="true" />
+            <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" underline="true" />
+            <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" underline="true" />
+            <Button disable="true" onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" underline="true" />
         </VBox>
     </left>
 
     <center>
         <VBox spacing="15">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
             <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Instructor Evaluation Details" />
             
-            <HBox spacing="10" alignment="CENTER_LEFT">
+            <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Select Lecturer:" />
                 <ComboBox fx:id="lecturerCombo" prefWidth="200" />
             </HBox>
@@ -53,10 +62,10 @@
                 </columns>
             </TableView>
 
-            <HBox spacing="10" alignment="CENTER_RIGHT">
+            <HBox alignment="CENTER_RIGHT" spacing="10">
                 <Button onAction="#handleBack" text="Back" />
             </HBox>
         </VBox>
     </center>
 
-</BorderPane> 
+</BorderPane>
