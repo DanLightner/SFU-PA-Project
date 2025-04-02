@@ -144,8 +144,8 @@
 						<option>--add-modules</option>
 						<option>javafx.controls,javafx.fxml</option>
 						<option>--add-exports</option>
-						<option>java.base/sun.misc=ALL-UNNAMED</option>
-						<option>--add-opens</option>
+
+						
 						<option>java.base/java.lang=ALL-UNNAMED</option>
 						<option>--enable-native-access=ALL-UNNAMED</option>
 					</options>
