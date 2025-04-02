@@ -2,8 +2,6 @@ package edu.francis.my.sfupa.JavaFX.Controller;
 
 import edu.francis.my.sfupa.SQLite.Models.*;
 import edu.francis.my.sfupa.SQLite.Repository.*;
-import edu.francis.my.sfupa.SQLite.Services.CSVGrade2;
-import edu.francis.my.sfupa.SQLite.Services.CSVInstructorEval;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -25,9 +23,6 @@ public class Gradebook2 {
 
     @Autowired
     private ApplicationContext springContext;
-
-    @Autowired
-    private CSVGrade2 CSVGrade2;
 
     @Autowired
     private ClassesRepository classesRepository;
