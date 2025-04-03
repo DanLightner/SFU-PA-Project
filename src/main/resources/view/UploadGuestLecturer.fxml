@@ -44,7 +44,7 @@
 
     <center>
         <VBox spacing="10" alignment="CENTER">
-            <Label text="Upload Instructor Evaluations" style="-fx-font-size: 18px;"/>
+            <Label text="Upload Guest Lecturer" style="-fx-font-size: 18px;"/>
 
             <Label text="Select Semester:" />
             <ComboBox fx:id="semesterCombo" promptText="Select Semester"/>
