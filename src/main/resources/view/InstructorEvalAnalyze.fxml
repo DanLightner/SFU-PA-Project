@@ -35,7 +35,7 @@
     </left>
 
     <center>
-        <VBox spacing="15">
+        <VBox spacing="15" VBox.vgrow="ALWAYS">
             <padding>
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
@@ -56,8 +56,8 @@
                 <ComboBox fx:id="semesterCmb" prefWidth="150" />
             </HBox>
 
-            <TitledPane text="Likert Scale Analysis" expanded="true" minHeight="400">
-                <BarChart fx:id="likertBarChart" title="Likert Scale Responses" style="-fx-background-color: white;" minHeight="350">
+            <TitledPane text="Likert Scale Analysis" expanded="true" VBox.vgrow="ALWAYS">
+                <BarChart fx:id="likertBarChart" title="Likert Scale Responses" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
                     <xAxis>
                         <CategoryAxis label="Question" fx:id="xAxis" />
                     </xAxis>
@@ -67,16 +67,17 @@
                 </BarChart>
             </TitledPane>
 
-            <TitledPane text="Open-Ended Responses Analysis" expanded="true" minHeight="300">
-                <VBox spacing="10">
-                    <TextArea fx:id="openEndedAnalysisArea" editable="false" prefHeight="250" wrapText="true" 
+            <TitledPane text="Open-Ended Responses Analysis" expanded="true" VBox.vgrow="ALWAYS">
+                <VBox spacing="10" VBox.vgrow="ALWAYS">
+                    <TextArea fx:id="openEndedAnalysisArea" editable="false" VBox.vgrow="ALWAYS" wrapText="true" 
                              style="-fx-background-color: white; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px;" />
-                    <HBox spacing="10" alignment="CENTER_RIGHT">
-                        <Button onAction="#analyzeEvaluations" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 15;" text="Analyze" />
-                        <Button onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 8 15;" text="Back" />
-                    </HBox>
                 </VBox>
             </TitledPane>
+
+            <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10;">
+                <Button onAction="#analyzeEvaluations" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 15;" text="Analyze" />
+                <Button onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 8 15;" text="Back" />
+            </HBox>
         </VBox>
     </center>
 </BorderPane>
