@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Button;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,6 +60,11 @@ public class GradebookController {
 
     @FXML
     private ComboBox<String> yearCombo;      // For selecting the year
+
+    @FXML
+    private Button uploadButton;
+    @FXML
+    private Button runReportButton;
 
     @FXML
     public void initialize() {
@@ -121,20 +127,6 @@ public class GradebookController {
                     "Didactic Comprehensive Evaluation"
             ));
         }
-
-           /*
-        if (courseCombo != null) {
-            Iterable<Course> courses = courseRepository.findAll();
-            List<String> courseNames = new ArrayList<>();
-
-            for (Course course : courses) {
-                courseNames.add(course.getName());
-            }
-
-            courseCombo.setItems(FXCollections.observableArrayList(courseNames));
-        }
-        */
-
 
         if (yearCombo != null) {
             // Fetch school years from the repository
@@ -266,11 +258,9 @@ public class GradebookController {
         alert.showAndWait();
     }
 
-
     @FXML
-    public void handleRunReporting(ActionEvent event) throws IOException {
-        // Switch to the Gradebook Report scene
-        SceneUtils.switchScene(event, "GradeBookReport.fxml", springContext);
+    public void handleRunReport(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "GradebookReport.fxml", springContext);
     }
 
     @FXML
