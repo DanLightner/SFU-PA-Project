@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<javafx.version>21.0.6</javafx.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -55,7 +56,7 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>21.0.6</version>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.opencsv</groupId>
@@ -70,17 +71,17 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>21.0.6</version>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>21.0.6</version>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
-			<version>21.0.6</version>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -116,10 +117,8 @@
 						--add-opens java.base/java.io=ALL-UNNAMED
 						--add-opens java.base/java.util=ALL-UNNAMED
 						--add-opens java.base/java.util.concurrent=ALL-UNNAMED
+						--add-opens java.base/java.nio=ALL-UNNAMED
 						--enable-native-access=ALL-UNNAMED
-						--add-opens=java.base/java.nio=ALL-UNNAMED
-						-Djansi.passthrough=true
-						-Dterminal.ansi=true
 						-Dprism.marlin.log=false
 						-Dsun.misc.Unsafe.skipWarnings=true
 					</jvmArguments>
@@ -151,13 +150,7 @@
 						<option>--add-exports</option>
 						<option>java.base/java.lang=ALL-UNNAMED</option>
 						<option>--enable-native-access=ALL-UNNAMED</option>
-						<option>--add-opens</option>
-						<option>java.base/java.nio=ALL-UNNAMED</option>
 					</options>
-					<jvmArgs>
-						<jvmArg>-Dprism.marlin.log=false</jvmArg>
-						<jvmArg>-Dsun.misc.Unsafe.skipWarnings=true</jvmArg>
-					</jvmArgs>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -201,28 +194,18 @@
 					<jre>
 						<minVersion>17.0.0</minVersion>
 						<requires64Bit>true</requires64Bit>
-						<requiresJdk>false</requiresJdk>
 						<opts>
 							<opt>-Djava.library.path=./lib</opt>
-							<opt>--add-exports</opt>
-							<opt>java.base/sun.misc=ALL-UNNAMED</opt>
-							<opt>--add-opens</opt>
-							<opt>java.base/java.lang=ALL-UNNAMED</opt>
-							<opt>--add-opens</opt>
-							<opt>java.base/java.lang.reflect=ALL-UNNAMED</opt>
-							<opt>--add-opens</opt>
-							<opt>java.base/java.io=ALL-UNNAMED</opt>
-							<opt>--add-opens</opt>
-							<opt>java.base/java.util=ALL-UNNAMED</opt>
-							<opt>--add-opens</opt>
-							<opt>java.base/java.util.concurrent=ALL-UNNAMED</opt>
-							<opt>--enable-native-access=ALL-UNNAMED</opt>
-							<opt>--add-opens</opt>
-							<opt>java.base/java.nio=ALL-UNNAMED</opt>
-							<opt>-Djansi.passthrough=true</opt>
-							<opt>-Dterminal.ansi=true</opt>
-							<opt>-Dprism.marlin.log=false</opt>
-							<opt>-Dsun.misc.Unsafe.skipWarnings=true</opt>
+							--add-exports java.base/sun.misc=ALL-UNNAMED
+							--add-opens java.base/java.lang=ALL-UNNAMED
+							--add-opens java.base/java.lang.reflect=ALL-UNNAMED
+							--add-opens java.base/java.io=ALL-UNNAMED
+							--add-opens java.base/java.util=ALL-UNNAMED
+							--add-opens java.base/java.util.concurrent=ALL-UNNAMED
+							--add-opens java.base/java.nio=ALL-UNNAMED
+							--enable-native-access=ALL-UNNAMED
+							-Dprism.marlin.log=false
+							-Dsun.misc.Unsafe.skipWarnings=true
 						</opts>
 					</jre>
 					<versionInfo>
@@ -251,8 +234,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.10.1</version> <!-- Ensure the plugin supports Java 17 -->
 				<configuration>
-					<source>17</source>
-					<target>17</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 		</plugins>
