@@ -260,7 +260,7 @@ public class GradebookController {
 
     @FXML
     public void handleRunReport(ActionEvent event) throws IOException {
-        SceneUtils.switchScene(event, "GradebookReport.fxml", springContext);
+        SceneUtils.switchScene(event, "GradeBookReport.fxml", springContext);
     }
 
     @FXML
