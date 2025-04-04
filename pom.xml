@@ -111,16 +111,11 @@
 				<configuration>
 					<mainClass>edu.francis.my.sfupa.HelloFXApplication</mainClass>
 					<jvmArguments>
-						--add-exports java.base/sun.misc=ALL-UNNAMED
 						--add-opens java.base/java.lang=ALL-UNNAMED
 						--add-opens java.base/java.lang.reflect=ALL-UNNAMED
 						--add-opens java.base/java.io=ALL-UNNAMED
 						--add-opens java.base/java.util=ALL-UNNAMED
 						--add-opens java.base/java.util.concurrent=ALL-UNNAMED
-						--add-opens java.base/java.nio=ALL-UNNAMED
-						--enable-native-access=ALL-UNNAMED
-						-Dprism.marlin.log=false
-						-Dsun.misc.Unsafe.skipWarnings=true
 					</jvmArguments>
 				</configuration>
 				<executions>
