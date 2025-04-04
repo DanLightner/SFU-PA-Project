@@ -185,7 +185,7 @@
 					<outfile>${project.build.directory}/${project.build.finalName}.exe</outfile>
 					<dontWrapJar>false</dontWrapJar>
 					<headerType>gui</headerType>
-
+					<chdir>.</chdir>
 					<jre>
 						<minVersion>17.0.0</minVersion>
 						<requires64Bit>true</requires64Bit>
