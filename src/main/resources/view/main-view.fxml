@@ -2,22 +2,45 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.MainController">
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.MainController">
 
     <!-- Top Section: Welcome Label -->
     <top>
-        <AnchorPane prefHeight="50.0">
-            <Label layoutX="100.0" layoutY="10.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Welcome to SFU PA Application!" />
+        <AnchorPane prefHeight="0.0" prefWidth="800.0">
+         <children>
+            <MenuBar layoutY="1.0" prefHeight="3.0" prefWidth="800.0">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </children>
         </AnchorPane>
     </top>
 
     <!-- Left Sidebar Menu -->
     <left>
-        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+        <VBox prefHeight="646.0" prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
             <Button disable="true" onAction="#handleBack" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
             <Button onAction="#handleCourseSurvey" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
             <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
@@ -27,8 +50,12 @@
 
     <!-- Main Content Area (Placeholder for Future Content) -->
     <center>
-        <AnchorPane>
-            <Label layoutX="50.0" layoutY="50.0" style="-fx-font-size: 16px;" text="Main Content Goes Here..." />
+        <AnchorPane prefHeight="641.0" prefWidth="650.0">
+            <Label layoutX="41.0" layoutY="45.0" prefHeight="55.0" prefWidth="551.0" style="-fx-font-size: 28; -fx-font-weight: bold;" text="Welcome to SFU PA Application!" />
+         <Label layoutX="41.0" layoutY="100.0" prefHeight="34.0" prefWidth="551.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Recently Added Files" />
+         <Button layoutX="270.0" layoutY="250.0" mnemonicParsing="false" onAction="#handleCourseSurvey" text="Guest Lecturer" />
+         <Button layoutX="278.0" layoutY="302.0" mnemonicParsing="false" onAction="#handleGradebook" text="Gradebook" />
+         <Button layoutX="270.0" layoutY="354.0" mnemonicParsing="false" onAction="#handleInstructorEval" text="Instructor Eval" />
         </AnchorPane>
     </center>
 
