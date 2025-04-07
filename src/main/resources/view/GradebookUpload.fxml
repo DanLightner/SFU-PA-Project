@@ -1,77 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GradebookController"
-            prefHeight="600.0" prefWidth="800.0">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GradebookController">
 
+    <!-- Menu Bar (Top) -->
     <top>
         <MenuBar>
             <Menu text="File">
                 <MenuItem text="Open" />
                 <MenuItem text="Save" />
-                <MenuItem text="Exit" onAction="#handleExit"/>
+                <MenuItem onAction="#handleExit" text="Exit" />
             </Menu>
             <Menu text="Edit">
                 <MenuItem text="Undo" />
                 <MenuItem text="Redo" />
             </Menu>
             <Menu text="Help">
-                <MenuItem text="About" onAction="#handleAbout"/>
+                <MenuItem onAction="#handleAbout" text="About" />
             </Menu>
         </MenuBar>
     </top>
 
+    <!-- Sidebar Navigation (Left) -->
     <left>
-        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-            <Button text="Dashboard" onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
-            <Button text="Guest Lecturer" onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
-            <Button text="Gradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" disable="true"/>
-            <Button text="Instructor Eval" onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
+        <VBox prefHeight="774.0" prefWidth="170.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+            <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" underline="true" />
+            <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" underline="true" />
+            <Button disable="true" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" underline="true" />
+            <Button onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" underline="true" />
         </VBox>
     </left>
 
+    <!-- Main Content Area -->
     <center>
-        <VBox spacing="15" alignment="CENTER">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
+        <VBox alignment="CENTER" spacing="10">
+            <Label style="-fx-font-size: 18px;" text="Upload Gradebook" />
 
-            <Label text="Upload Grades" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-            
-            <VBox spacing="5" style="-fx-padding: 10;">
-                <Label text="Select Course:" style="-fx-font-size: 14px;"/>
-                <ComboBox fx:id="courseCombo" prefWidth="300"/>
-            </VBox>
+            <Label text="Select Semester:" />
+            <ComboBox fx:id="semesterCombo" promptText="Select Semester" />
 
-            <VBox spacing="5" style="-fx-padding: 10;">
-                <Label text="Select Semester:" style="-fx-font-size: 14px;"/>
-                <ComboBox fx:id="semesterCombo" prefWidth="300"/>
-            </VBox>
+            <Label text="Select Course:" />
+            <ComboBox fx:id="courseCombo" promptText="Select Course" />
 
-            <VBox spacing="5" style="-fx-padding: 10;">
-                <Label text="Select Year:" style="-fx-font-size: 14px;"/>
-                <ComboBox fx:id="yearCombo" prefWidth="300"/>
-            </VBox>
+            <Label text="Select Year:" />
+            <ComboBox fx:id="yearCombo" promptText="Select Year" />
 
-            <VBox spacing="10" style="-fx-padding: 20;">
-                <Label text="Upload Grade CSV File" style="-fx-font-size: 14px;"/>
-                <Label text="(Required columns: ID, Final Grade)" style="-fx-font-size: 12px; -fx-text-fill: #666;"/>
-                <Button text="Choose File" onAction="#handleChooseFile" 
-                        style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20;"/>
-                <Label fx:id="selectedFileLabel" text="No file chosen" style="-fx-font-size: 12px;"/>
-            </VBox>
-
-            <HBox spacing="10" alignment="CENTER">
-                <Button text="Upload Grades" onAction="#handleUploadGrades" 
-                        style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20;"/>
-                <Button text="Back" onAction="#handleBack" 
-                        style="-fx-font-size: 14px; -fx-padding: 10 20;"/>
-            </HBox>
+            <Button onAction="#handleBack" text="Back" />
         </VBox>
     </center>
 
