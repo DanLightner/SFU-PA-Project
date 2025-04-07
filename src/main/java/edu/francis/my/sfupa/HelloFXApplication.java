@@ -43,7 +43,7 @@ public class HelloFXApplication extends Application {
         // Ensure dependency injection works with Spring
         fxmlLoader.setControllerFactory(springContext::getBean);
         Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root, 800, 600);
 
         // Add global stylesheet
         scene.getStylesheets().add(getClass().getResource("/styles/sfu-theme.css").toExternalForm());
