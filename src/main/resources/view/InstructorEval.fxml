@@ -6,9 +6,10 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvaluation">
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvaluation">
 
     <!-- Menu Bar (Top) -->
     <top>
@@ -30,11 +31,11 @@
 
     <!-- Sidebar Navigation (Left) -->
     <left>
-        <VBox prefHeight="774.0" prefWidth="170.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-            <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" underline="true" />
-            <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" underline="true" />
-            <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" underline="true" />
-            <Button disable="true" onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" underline="true" />
+        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+            <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
+            <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
+            <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
+            <Button disable="true" onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" />
         </VBox>
     </left>
 
@@ -45,7 +46,15 @@
             <Button onAction="#handleAnalyzeData" text="Analyze Instructor Eval Data" />
             <Button onAction="#handleEditEval" text="Edit Instructor Evaluation" />
             <Button onAction="#handleUploadEval" text="Upload Instructor Evaluation" />
+            <Button onAction="#handleViewSpecificInstructor" text="View Specific Instructor Evaluations" />
         </VBox>
     </center>
+
+    <!-- Status Bar (Bottom) -->
+    <bottom>
+        <HBox alignment="CENTER" spacing="10" style="-fx-background-color: #F4F4F4; -fx-padding: 5px;">
+            <Label text="Status: Ready" />
+        </HBox>
+    </bottom>
 
 </BorderPane>
