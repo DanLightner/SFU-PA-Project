@@ -1,50 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer">
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturerViewController">
 
-<!-- Menu Bar (Top) -->
-<top>
-    <MenuBar>
-        <Menu text="File">
-            <MenuItem text="Open" />
-            <MenuItem text="Save" />
-            <MenuItem onAction="#handleExit" text="Exit" />
-        </Menu>
-        <Menu text="Edit">
-            <MenuItem text="Undo" />
-            <MenuItem text="Redo" />
-        </Menu>
-        <Menu text="Help">
-            <MenuItem onAction="#handleAbout" text="About" />
-        </Menu>
-    </MenuBar>
-</top>
+    <!-- Menu Bar (Top) -->
+    <top>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Open" />
+                <MenuItem text="Save" />
+                <MenuItem onAction="#handleExit" text="Exit" />
+            </Menu>
+            <Menu text="Edit">
+                <MenuItem text="Undo" />
+                <MenuItem text="Redo" />
+            </Menu>
+            <Menu text="Help">
+                <MenuItem onAction="#handleAbout" text="About" />
+            </Menu>
+        </MenuBar>
+    </top>
 
-<!-- Sidebar Navigation (Left) -->
-<left>
-    <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-        <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
-        <Button disable="true" onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
-        <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
-        <Button onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" />
-    </VBox>
-</left>
+    <!-- Sidebar Navigation (Left) -->
+    <left>
+        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+            <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
+            <Button disable="true" onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
+            <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
+            <Button onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" />
+        </VBox>
+    </left>
 
-<!-- Main Content Area -->
-<center>
-    <VBox alignment="CENTER" spacing="10">
-        <Label style="-fx-font-size: 18px;" text="View Guest Lecturers" />
-        <!-- <Button text="Generate Report" onAction="#handleGenerateReport"/> -->
-        <Button onAction="#handleBack" text="Back to Guest Lecturer" />
-    </VBox>
-</center>
+    <!-- Main Content Area -->
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Guest Lecturer Evaluation Details" />
+            
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Select Guest Lecturer:" />
+                <ComboBox fx:id="lecturerCombo" prefWidth="200" />
+                <Button text="Add New Guest Lecturer" onAction="#handleAddGuestLecturer" style="-fx-background-color: #3498DB; -fx-text-fill: white;"/>
+            </HBox>
+
+            <TableView fx:id="evaluationTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="courseIdColumn" text="Course ID" />
+                    <TableColumn fx:id="courseNameColumn" text="Course Name" />
+                    <TableColumn fx:id="semesterColumn" text="Semester" />
+                    <TableColumn fx:id="yearColumn" text="Year" />
+                </columns>
+            </TableView>
+
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <Button onAction="#handleBack" text="Back" />
+            </HBox>
+        </VBox>
+    </center>
 
 </BorderPane>

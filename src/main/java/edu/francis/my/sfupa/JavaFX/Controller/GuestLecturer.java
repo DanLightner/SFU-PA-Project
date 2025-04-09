@@ -4,13 +4,14 @@ import edu.francis.my.sfupa.SQLite.Models.Course;
 import edu.francis.my.sfupa.SQLite.Models.CourseEval;
 import edu.francis.my.sfupa.SQLite.Models.SchoolYear;
 import edu.francis.my.sfupa.SQLite.Models.SemesterName;
+import edu.francis.my.sfupa.SQLite.Models.Lecturer;
 import edu.francis.my.sfupa.SQLite.Repository.SchoolYearRepository;
+import edu.francis.my.sfupa.SQLite.Repository.LecturerRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,136 +23,88 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.ArrayList;
 
 @Component
 public class GuestLecturer {
 
     @Autowired
     private edu.francis.my.sfupa.SQLite.Services.CSVInstructorEval CSVInstructorEval;
-    //CHANGE
 
     @Autowired
     private ApplicationContext springContext;
 
+    @Autowired
+    private LecturerRepository lecturerRepository;
+
     @FXML
     private ComboBox<String> semesterCombo;
+
     @Autowired
     private SchoolYearRepository schoolYearRepository;
 
     @FXML
     private ComboBox<String> courseCombo;
-    @FXML
-    private ComboBox<String> courseComboo;
 
     @Autowired
     private CourseRepository courseRepository;
+
     @FXML
     private ComboBox<String> yearCombo;
 
     @FXML
-    private TextField guestLecturerField;
+    private ComboBox<String> lecturerCombo;
 
     @FXML
-    private TextField guestLecturerFieldLast;
+    private Label selectedFileLabel;
 
-
-
+    private File selectedFile;
 
     @FXML
     public void initialize() {
+        setupSemesterComboBox();
+        setupCourseComboBox();
+        setupYearComboBox();
+        setupLecturerComboBox();
+    }
+
+    private void setupSemesterComboBox() {
         if (semesterCombo != null) {
             semesterCombo.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
         }
+    }
 
-        if (courseCombo != null) {
-            courseCombo.setItems(FXCollections.observableArrayList(
-                    "PA 400",
-                    "PA 401",
-                    "PA 402",
-                    "PA 403",
-                    "PA 404",
-                    "PA 405",
-                    "PA 406",
-                    "PA 420",
-                    "PA 421",
-                    "PA 422",
-                    "PA 423",
-                    "PA 424",
-                    "PA 425",
-                    "PA 426",
-                    "PA 427",
-                    "PA 428",
-                    "PA 429",
-                    "PA 430",
-                    "PA 431",
-                    "PA 432",
-                    "PA 451",
-                    "PA 452",
-                    "PA 453"
-            ));
-        }
-
-        if (courseComboo != null) {
-            courseComboo.setItems(FXCollections.observableArrayList(
-                    "Evidence-Based Medicine",
-                    "Introduction to U.S. Health Care",
-                    "History Taking and Patient Education Skills",
-                    "History Taking and Patient Education Skills Lab",
-                    "Public Health",
-                    "Clinical Skills",
-                    "Well Child",
-                    "Introduction to Medicine Module",
-                    "Hematology Medicine Module",
-                    "Endocrine Medicine Module",
-                    "Neurology Medicine Module",
-                    "Dermatology Medicine Module",
-                    "Musculoskeletal Medicine Module",
-                    "Eyes, Ears, Nose and Throat Medicine Module",
-                    "Behavioral Medicine Module",
-                    "Cardiovascular Medicine Module",
-                    "Pulmonary Medicine Module",
-                    "Gastrointestinal/Nutrition Medicine Module",
-                    "Genitourinary Medicine Module",
-                    "Reproductive Medicine Module",
-                    "Didactic Clinical Experiences and Medical Documentation I",
-                    "Didactic Clinical Experiences and Medical Documentation II",
-                    "Didactic Comprehensive Evaluation"
-            ));
-        }
-
-           /*
+    private void setupCourseComboBox() {
         if (courseCombo != null) {
             Iterable<Course> courses = courseRepository.findAll();
-            List<String> courseNames = new ArrayList<>();
-
+            List<String> courseOptions = new ArrayList<>();
             for (Course course : courses) {
-                courseNames.add(course.getName());
+                courseOptions.add(course.getcourseCode() + " - " + course.getName());
             }
-
-            courseCombo.setItems(FXCollections.observableArrayList(courseNames));
+            courseCombo.setItems(FXCollections.observableArrayList(courseOptions));
         }
-        */
+    }
 
-
+    private void setupYearComboBox() {
         if (yearCombo != null) {
-            // Fetch school years from the repository
             List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll();
-
-            // Convert school year names (like "2023-2024") into a list of strings
             List<String> schoolYearNames = schoolYears.stream()
-                    .map(SchoolYear::getName)  // Assuming you have getName() method for the "name" field
+                    .map(SchoolYear::getName)
                     .collect(Collectors.toList());
-
-            // Set the items for yearCombo
             yearCombo.setItems(FXCollections.observableArrayList(schoolYearNames));
         }
     }
 
-    private File selectedFile;  // Store the chosen file
-
-    @FXML
-    private Label selectedFileLabel;  // Reference to update label in UI
+    private void setupLecturerComboBox() {
+        if (lecturerCombo != null) {
+            Iterable<Lecturer> lecturers = lecturerRepository.findAll();
+            List<String> lecturerNames = new ArrayList<>();
+            for (Lecturer lecturer : lecturers) {
+                lecturerNames.add(lecturer.getFName() + " " + lecturer.getLName());
+            }
+            lecturerCombo.setItems(FXCollections.observableArrayList(lecturerNames));
+        }
+    }
 
     @FXML
     public void handleChooseFile() {
@@ -163,7 +116,7 @@ public class GuestLecturer {
 
         if (file != null) {
             selectedFile = file;
-            selectedFileLabel.setText(file.getName()); // Show file name in label
+            selectedFileLabel.setText(file.getName());
         } else {
             selectedFileLabel.setText("No file chosen");
         }
@@ -177,38 +130,30 @@ public class GuestLecturer {
         }
 
         // Validate selections
-        if (semesterCombo.getValue() == null ||
+        if (lecturerCombo.getValue() == null ||
+                semesterCombo.getValue() == null ||
                 courseCombo.getValue() == null ||
                 yearCombo.getValue() == null) {
-            showAlert("Please select Semester, Course, and Year before uploading.");
+            showAlert("Please select all fields before uploading.");
             return;
         }
 
         try {
+            String[] lecturerName = lecturerCombo.getValue().split(" ");
+            String firstName = lecturerName[0];
+            String lastName = lecturerName[1];
+
             SemesterName selectedSemester = SemesterName.fromString(semesterCombo.getValue());
-            Course selectedCourse = courseRepository.findByCourseCode(courseCombo.getValue());
+            String courseCode = courseCombo.getValue().split(" - ")[0];
+            Course selectedCourse = courseRepository.findByCourseCode(courseCode);
             SchoolYear selectedYear = schoolYearRepository.findByName(yearCombo.getValue());
 
-
-            // Validate Guest Lecturer Name
-            String guestLecturerName = guestLecturerField.getText();
-            if (guestLecturerName == null || guestLecturerName.trim().isEmpty()) {
-                showAlert("Please enter the Guest Lecturer's name before uploading.");
-                return;
-            }
-
-            String guestLecturerNameLast = guestLecturerFieldLast.getText();
-            if (guestLecturerNameLast == null || guestLecturerNameLast.trim().isEmpty()) {
-                showAlert("Please enter the Guest Lecturer's last name before uploading.");
-                return;
-            }
-
             CourseEval courseEval = CSVInstructorEval.createManualCourseEval(
-                    selectedCourse.getcourseCode(),
+                    courseCode,
                     (long) selectedSemester.getId(),
                     selectedYear.getIdSchoolYear(),
-                    "FirstName",
-                    "LastName"
+                    firstName,
+                    lastName
             );
 
             if (courseEval == null) {
@@ -217,8 +162,7 @@ public class GuestLecturer {
             }
 
             CSVInstructorEval.processCSVFile(selectedFile, courseEval.getId());
-            showAlert("CSV uploaded and processed successfully! Retake: ");
-
+            showAlert("Guest Lecturer CSV uploaded and processed successfully!");
 
             // Reset selected file after upload
             selectedFile = null;
@@ -237,7 +181,6 @@ public class GuestLecturer {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
 
     @FXML
     public void handleRunReporting(ActionEvent event) throws IOException {
@@ -294,5 +237,30 @@ public class GuestLecturer {
     @FXML
     public void handleInstructorEval(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
+    }
+
+    @FXML
+    public void handleViewGuestLecturers(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "ViewGuestLecturers.fxml", springContext);
+    }
+
+    @FXML
+    public void handleAddGuestLecturer(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "AddGuestLecturerManually.fxml", springContext);
+    }
+
+    @FXML
+    public void handleUploadGuestLecturer(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "UploadGuestLecturer.fxml", springContext);
+    }
+
+    @FXML
+    public void handleEditGuestLecturerSurveys(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "EditGuestLecturerSurveys.fxml", springContext);
+    }
+
+    @FXML
+    public void handleAnalyzeGuestLecturerSurveys(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "AnalyzeGuestLecturerSurveys.fxml", springContext);
     }
 }
