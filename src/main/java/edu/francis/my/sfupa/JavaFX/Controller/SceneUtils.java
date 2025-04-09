@@ -13,14 +13,6 @@ import java.net.URL;
 
 public class SceneUtils {
 
-    /**
-     * Switch to a new scene while applying the global stylesheet
-     *
-     * @param event The action event triggering the scene change
-     * @param fxmlFile The FXML file to load
-     * @param springContext The Spring application context for dependency injection
-     * @throws IOException If the FXML file cannot be loaded
-     */
     public static void switchScene(ActionEvent event, String fxmlFile, ApplicationContext springContext) throws IOException {
         try {
             // Try multiple ways to load the resource
