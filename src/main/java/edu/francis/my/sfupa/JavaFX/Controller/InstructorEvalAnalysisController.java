@@ -23,7 +23,7 @@ import static edu.francis.my.sfupa.HelloFXApplication.springContext;
 
 
 @Component
-public class InstructorEvalAnalysisController {
+public class  InstructorEvalAnalysisController {
 
     @FXML private ComboBox<String> courseCmb;
     @FXML private ComboBox<String> yearCmb;
