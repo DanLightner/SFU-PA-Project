@@ -56,7 +56,10 @@ public class GuestLecturer {
     private TextField guestLecturerFieldLast;
 
 
-
+    @FXML
+    public void handleAnalyzeData(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "InstructorEvalAnalyze.fxml", springContext);
+    }
 
     @FXML
     public void initialize() {
