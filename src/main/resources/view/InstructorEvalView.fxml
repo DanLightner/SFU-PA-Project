@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalViewController">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalViewController">
 
     <top>
         <MenuBar>
@@ -34,10 +34,10 @@
 
     <left>
         <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-            <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" underline="true" />
-            <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" underline="true" />
-            <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" underline="true" />
-            <Button disable="true" onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" underline="true" />
+            <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
+            <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
+            <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
+            <Button disable="true" onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" />
         </VBox>
     </left>
 

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer">
 
     <!-- Menu Bar (Top) -->
     <top>
@@ -33,29 +33,29 @@
     <!-- Sidebar Navigation (Left) -->
     <left>
         <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-            <Button onAction="#handleBackMain" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Dashboard" underline="true" />
-            <Button disable="true" onAction="#handleGuestLecturer" style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: white;" text="Guest Lecturer" underline="true" />
-            <Button onAction="#handleGradebook" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Gradebook" underline="true" />
-            <Button onAction="#handleInstructorEval" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Instructor Eval" underline="true" />
+            <Button onAction="#handleBackMain" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Dashboard" />
+            <Button disable="true" onAction="#handleGuestLecturer" style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: white;" text="Guest Lecturer" />
+            <Button onAction="#handleGradebook" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Gradebook" />
+            <Button onAction="#handleInstructorEval" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Instructor Eval" />
         </VBox>
     </left>
 
 
 
     <center>
-        <VBox alignment="CENTER" spacing="10">
-            <Label style="-fx-font-size: 18px;" text="Upload Guest Lecturer" />
+        <VBox spacing="10" alignment="CENTER">
+            <Label text="Upload Guest Lecturer" style="-fx-font-size: 18px;"/>
 
             <Label text="Select Semester:" />
-            <ComboBox fx:id="semesterCombo" promptText="Select Semester" />
+            <ComboBox fx:id="semesterCombo" promptText="Select Semester"/>
 
             <Label text="Select Course ID:" />
-            <ComboBox fx:id="courseCombo" promptText="Select Course" />
+            <ComboBox fx:id="courseCombo" promptText="Select Course"/>
 
 
 
             <Label text="Select Year:" />
-            <ComboBox fx:id="yearCombo" promptText="Select Year" />
+            <ComboBox fx:id="yearCombo" promptText="Select Year"/>
 
             <Label text="Guest Lecturer Name:" />
             <TextField fx:id="guestLecturerField" promptText="Enter Guest Lecturer Name" />
@@ -64,11 +64,11 @@
             <TextField fx:id="guestLecturerFieldLast" promptText="Enter Guest Lecturer Last Name" />
             
 
-            <Button onAction="#handleChooseFile" style="-fx-background-color: #2ECC71; -fx-text-fill: white;" text="Choose File" />
+            <Button text="Choose File" onAction="#handleChooseFile" style="-fx-background-color: #2ECC71; -fx-text-fill: white;"/>
             <Label fx:id="selectedFileLabel" text="No file chosen" />
-            <Button onAction="#handleInstructorUploadEval" style="-fx-background-color: #3498DB; -fx-text-fill: white;" text="Upload CSV" />
+            <Button text="Upload CSV" onAction="#handleInstructorUploadEval" style="-fx-background-color: #3498DB; -fx-text-fill: white;"/>
 
-            <Button onAction="#handleBack" text="Back" />
+            <Button text="Back" onAction="#handleBack"/>
         </VBox>
     </center>
 
