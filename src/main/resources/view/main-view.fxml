@@ -48,15 +48,15 @@
         </VBox>
     </left>
 
-    <!-- Main Content Area (Placeholder for Future Content) -->
     <center>
-        <AnchorPane prefHeight="641.0" prefWidth="650.0">
-            <Label layoutX="41.0" layoutY="45.0" prefHeight="55.0" prefWidth="551.0" style="-fx-font-size: 28; -fx-font-weight: bold;" text="Welcome to SFU PA Application!" />
-         <Label layoutX="41.0" layoutY="100.0" prefHeight="34.0" prefWidth="551.0" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Recently Added Files" />
-         <Button layoutX="270.0" layoutY="250.0" mnemonicParsing="false" onAction="#handleCourseSurvey" text="Guest Lecturer" />
-         <Button layoutX="278.0" layoutY="302.0" mnemonicParsing="false" onAction="#handleGradebook" text="Gradebook" />
-         <Button layoutX="270.0" layoutY="354.0" mnemonicParsing="false" onAction="#handleInstructorEval" text="Instructor Eval" />
-        </AnchorPane>
+        <VBox alignment="CENTER" prefHeight="618.0" prefWidth="1110.0" spacing="15.0">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="true" prefHeight="55.0" prefWidth="551.0" style="-fx-font-size: 28; -fx-font-weight: bold;" text="Welcome to SFU PA Application!" textAlignment="CENTER" />
+                <Button onAction="#handleCourseSurvey" text="Guest Lecturer" />
+                <Button onAction="#handleGradebook" text="Gradebook" />
+                <Button onAction="#handleInstructorEval" text="Instructor Eval" />
+            </children>
+        </VBox>
     </center>
 
 </BorderPane>
