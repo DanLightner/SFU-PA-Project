@@ -36,9 +36,6 @@ public class CSVInstructorEval {
     private ClassesRepository classesRepository;
 
     @Autowired
-    private LecturerRepository lecturerRepository;
-
-    @Autowired
     private CourseRepository courseRepository;
 
     // Hardcoded file path for testing - maintain existing path logic
@@ -49,18 +46,11 @@ public class CSVInstructorEval {
      * @param courseCode Course code (must exist in the database)
      * @param semesterId Semester ID
      * @param schoolYearId School year ID
-     * @param lecturerFirstName Lecturer's first name
-     * @param lecturerLastName Lecturer's last name
      * @return The created CourseEval object or null if failed
      */
 
-
-    public CourseEval createManualCourseEval(String courseCode, Long semesterId, Long schoolYearId,
-                                             String lecturerFirstName, String lecturerLastName) {
+    public CourseEval createManualCourseEval(String courseCode, Long semesterId, Long schoolYearId) {
         try {
-            // Find or create lecturer
-            Lecturer lecturer = findOrCreateLecturer(lecturerFirstName, lecturerLastName);
-
             // Find course
             Optional<Course> courseOpt = courseRepository.findById(courseCode);
             if (courseOpt.isEmpty()) {
@@ -68,7 +58,7 @@ public class CSVInstructorEval {
                 return null;
             }
 
-            // Find or create class (we need to improve this to find the exact class)
+            // Find or create class
             Classes classEntity = findOrCreateClass(courseOpt.get(), semesterId, schoolYearId);
             if (classEntity == null) {
                 return null;
@@ -77,7 +67,6 @@ public class CSVInstructorEval {
             // Create course evaluation
             CourseEval courseEval = new CourseEval();
             courseEval.setCourse(classEntity);
-            courseEval.setLecturer(lecturer);
 
             return courseEvalRepository.save(courseEval);
 
@@ -87,21 +76,6 @@ public class CSVInstructorEval {
         }
     }
 
-
-    /**
-     * Find a lecturer by name or create a new one if not found
-     */
-    private Lecturer findOrCreateLecturer(String firstName, String lastName) {
-        Iterable<Lecturer> lecturers = lecturerRepository.findAll();
-        for (Lecturer lecturer : lecturers) {
-            if (lecturer.getFName().equalsIgnoreCase(firstName) &&
-                    lecturer.getLName().equalsIgnoreCase(lastName)) {
-                return lecturer;
-            }
-        }
-        Lecturer newLecturer = new Lecturer(firstName, lastName);
-        return lecturerRepository.save(newLecturer);
-    }
     private Classes findOrCreateClass(Course course, Long semesterId, Long schoolYearId) {
         Iterable<Classes> classes = classesRepository.findAll();
         for (Classes classItem : classes) {
@@ -153,7 +127,6 @@ public class CSVInstructorEval {
      * @param courseEvalId The ID of the course evaluation to attach questions and responses to
      */
     public void processCSVFile(File file, Integer courseEvalId) throws IOException {
-        // Get the course evaluation entity
         Optional<CourseEval> courseEvalOpt = courseEvalRepository.findById(courseEvalId);
 
         if (courseEvalOpt.isEmpty()) {
@@ -162,18 +135,14 @@ public class CSVInstructorEval {
 
         CourseEval courseEval = courseEvalOpt.get();
 
-        // Read CSV using Apache Commons CSV
         try (FileReader fileReader = new FileReader(file);
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
 
-            // Get headers and process them to identify question columns
             Map<String, Integer> headerMap = csvParser.getHeaderMap();
             Map<Integer, Questions> questionMap = new HashMap<>();
 
-            // Pattern to match question IDs in column headers
             Pattern questionPattern = Pattern.compile("(\\d+):\\s+(.*)");
 
-            // Process headers to identify question columns and create question entities
             for (Map.Entry<String, Integer> entry : headerMap.entrySet()) {
                 String header = entry.getKey();
                 Matcher matcher = questionPattern.matcher(header);
@@ -182,7 +151,6 @@ public class CSVInstructorEval {
                     String questionId = matcher.group(1);
                     String questionText = matcher.group(2);
 
-                    // Determine if it's a Likert scale or open-ended question
                     boolean isLikert = !questionText.toLowerCase().contains("name") &&
                             !questionText.toLowerCase().contains("suggest") &&
                             !questionText.toLowerCase().contains("comment");
@@ -195,27 +163,21 @@ public class CSVInstructorEval {
                 }
             }
 
-            // Process records (each record is a student's evaluation)
             List<CSVRecord> records = csvParser.getRecords();
             for (CSVRecord record : records) {
-                // Process each question column for this record
                 for (Map.Entry<Integer, Questions> entry : questionMap.entrySet()) {
                     int columnIndex = entry.getKey();
                     Questions question = entry.getValue();
                     String response = record.get(columnIndex);
 
-                    // Skip empty responses
                     if (response == null || response.trim().isEmpty()) {
                         continue;
                     }
 
-                    // Save the response based on question type
                     if (question.getType()) {
-                        // Likert scale response
                         ResponseLikert likertResponse = new ResponseLikert(response, courseEval, question);
                         responseLikertRepository.save(likertResponse);
                     } else {
-                        // Open-ended response
                         ResponseOpen openResponse = new ResponseOpen(response, courseEval, question);
                         responseOpenRepository.save(openResponse);
                     }

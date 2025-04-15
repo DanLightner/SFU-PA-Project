@@ -14,13 +14,11 @@ import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static edu.francis.my.sfupa.HelloFXApplication.springContext;
-
 
 @Component
 public class InstructorEvalAnalysisController {
@@ -33,7 +31,6 @@ public class InstructorEvalAnalysisController {
     @FXML private BarChart<String, Number> likertBarChart;
     @FXML private CategoryAxis xAxis;
     @FXML private NumberAxis yAxis;
-    @FXML private ComboBox<String> lecturerCombo;
 
     @Autowired private CourseRepository courseRepository;
     @Autowired private SchoolYearRepository schoolYearRepository;
@@ -41,105 +38,25 @@ public class InstructorEvalAnalysisController {
     @Autowired private ResponseLikertRepository responseLikertRepository;
     @Autowired private ResponseOpenRepository responseOpenRepository;
     @Autowired private QuestionsRepository questionsRepository;
-    @Autowired private LecturerRepository lecturerRepository;
     @Autowired private CourseEvalRepository courseEvalRepository;
 
-
-    /*
     @FXML
     public void initialize() {
-        // Convert Iterable<Course> to List<Course> and then set it to the ComboBox
-        List<Course> courses = new ArrayList<>();
-        courseRepository.findAll().forEach(courses::add);
-        courseCmb.setItems(FXCollections.observableArrayList(courses));
-
-        // Set items for yearCmb (ComboBox for SchoolYear)
-        List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll(); // Properly cast Iterable to List
-        yearCmb.setItems(FXCollections.observableArrayList(schoolYears));
-
-        // Set items for semesterCmb (ComboBox for Semester)
-        List<Semester> semesters = (List<Semester>) semesterRepository.findAll(); // Properly cast Iterable to List
-        semesterCmb.setItems(FXCollections.observableArrayList(semesters));
-
-        // Set labels for chart axes
-        xAxis.setLabel("Question");
-        yAxis.setLabel("Average Response");
-    }
-
-
-
-     */
-
-    @FXML
-    private void handleExit() {
-        System.exit(0);
-    }
-
-    @FXML
-    public void handleAbout(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("About SFU PA");
-        alert.setHeaderText("SFU PA Application");
-        alert.setContentText("This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
-        alert.showAndWait();
-    }
-
-    @FXML
-    public void initialize() {
-        setupLecturerComboBox();
+        setupCourseComboBox();
         setupYearComboBox();
         setupSemesterComboBox();
         setupChartStyle();
     }
 
-    private void setupLecturerComboBox() {
-        Iterable<Lecturer> lecturers = lecturerRepository.findAll();
-        List<String> lecturerNames = new ArrayList<>();
-        for (Lecturer lecturer : lecturers) {
-            lecturerNames.add(lecturer.getFName() + " " + lecturer.getLName());
+    private void setupCourseComboBox() {
+        if (courseCmb != null) {
+            List<Course> courses = new ArrayList<>();
+            courseRepository.findAll().forEach(courses::add);
+            List<String> courseCodes = courses.stream()
+                    .map(Course::getcourseCode)
+                    .collect(Collectors.toList());
+            courseCmb.setItems(FXCollections.observableArrayList(courseCodes));
         }
-        lecturerCombo.setItems(FXCollections.observableArrayList(lecturerNames));
-        
-        lecturerCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                updateCourseComboBox(newVal);
-            }
-        });
-    }
-
-    private void updateCourseComboBox(String lecturerName) {
-        String[] nameParts = lecturerName.split(" ");
-        if (nameParts.length < 2) return;
-
-        String firstName = nameParts[0];
-        String lastName = nameParts[1];
-
-        // Find the lecturer
-        Lecturer lecturer = findLecturerByName(firstName, lastName);
-        if (lecturer == null) return;
-
-        // Get all course evaluations for this lecturer
-        Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
-        Set<String> uniqueCourses = new HashSet<>();
-        
-        for (CourseEval eval : allEvals) {
-            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
-                eval.getLecturer().getLName().equals(lecturer.getLName())) {
-                uniqueCourses.add(eval.getCourse().getClassCode().getcourseCode());
-            }
-        }
-
-        courseCmb.setItems(FXCollections.observableArrayList(uniqueCourses));
-    }
-
-    private Lecturer findLecturerByName(String firstName, String lastName) {
-        Iterable<Lecturer> lecturers = lecturerRepository.findAll();
-        for (Lecturer lecturer : lecturers) {
-            if (lecturer.getFName().equals(firstName) && lecturer.getLName().equals(lastName)) {
-                return lecturer;
-            }
-        }
-        return null;
     }
 
     private void setupChartStyle() {
@@ -160,32 +77,24 @@ public class InstructorEvalAnalysisController {
 
     @FXML
     public void analyzeEvaluations() {
-        if (lecturerCombo.getValue() == null || courseCmb.getValue() == null ||
-                yearCmb.getValue() == null || semesterCmb.getValue() == null) {
-            showAlert("Please select Lecturer, Course, Year, and Semester");
+        if (courseCmb.getValue() == null ||
+                yearCmb.getValue() == null ||
+                semesterCmb.getValue() == null) {
+            showAlert("Please select Course, Year, and Semester");
             return;
         }
 
-        String[] nameParts = lecturerCombo.getValue().split(" ");
-        Lecturer lecturer = findLecturerByName(nameParts[0], nameParts[1]);
-        if (lecturer == null) return;
-
-        analyzeLikertResponses(lecturer);
-        analyzeOpenEndedResponses(lecturer);
+        analyzeLikertResponses();
+        analyzeOpenEndedResponses();
     }
 
-    private void analyzeLikertResponses(Lecturer lecturer) {
+    private void analyzeLikertResponses() {
         likertBarChart.getData().clear();
         Map<Questions, List<ResponseLikert>> responsesGrouped = new HashMap<>();
 
-        // Get course evaluations for the selected lecturer and course
         Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
         for (CourseEval eval : allEvals) {
-            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
-                eval.getLecturer().getLName().equals(lecturer.getLName()) &&
-                eval.getCourse().getClassCode().getcourseCode().equals(courseCmb.getValue())) {
-                
-                // Get all Likert responses for this evaluation
+            if (eval.getCourse().getClassCode().getcourseCode().equals(courseCmb.getValue())) {
                 for (ResponseLikert response : responseLikertRepository.findAll()) {
                     if (response.getCourseEval().getId().equals(eval.getId())) {
                         responsesGrouped
@@ -196,7 +105,6 @@ public class InstructorEvalAnalysisController {
             }
         }
 
-        // Create chart data
         for (Map.Entry<Questions, List<ResponseLikert>> entry : responsesGrouped.entrySet()) {
             double avgResponse = calculateAverageResponse(entry.getValue());
             XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -214,23 +122,15 @@ public class InstructorEvalAnalysisController {
         return sum / responses.size();
     }
 
-    private void analyzeOpenEndedResponses(Lecturer lecturer) {
+    private void analyzeOpenEndedResponses() {
         StringBuilder analysis = new StringBuilder();
-        analysis.append("Open-Ended Response Analysis for ")
-                .append(lecturer.getFName())
-                .append(" ")
-                .append(lecturer.getLName())
-                .append("\n\n");
+        analysis.append("Open-Ended Response Analysis\n\n");
 
-        // Get course evaluations for the selected lecturer and course
         Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
         List<ResponseOpen> relevantResponses = new ArrayList<>();
 
         for (CourseEval eval : allEvals) {
-            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
-                eval.getLecturer().getLName().equals(lecturer.getLName()) &&
-                eval.getCourse().getClassCode().getcourseCode().equals(courseCmb.getValue())) {
-                
+            if (eval.getCourse().getClassCode().getcourseCode().equals(courseCmb.getValue())) {
                 for (ResponseOpen response : responseOpenRepository.findAll()) {
                     if (response.getCourseEval().getId().equals(eval.getId())) {
                         relevantResponses.add(response);
@@ -294,7 +194,20 @@ public class InstructorEvalAnalysisController {
         alert.showAndWait();
     }
 
-    // --- Sidebar Navigation ---
+    @FXML
+    private void handleExit() {
+        System.exit(0);
+    }
+
+    @FXML
+    public void handleAbout(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("About SFU PA");
+        alert.setHeaderText("SFU PA Application");
+        alert.setContentText("This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
+        alert.showAndWait();
+    }
+
     @FXML
     public void handleGuestLecturer(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
@@ -314,6 +227,7 @@ public class InstructorEvalAnalysisController {
     public void handleBackMain(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "main-view.fxml", springContext);
     }
+
     @FXML
     public void handleBack(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);

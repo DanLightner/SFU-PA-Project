@@ -151,9 +151,7 @@ public class GuestLecturer {
             CourseEval courseEval = CSVInstructorEval.createManualCourseEval(
                     courseCode,
                     (long) selectedSemester.getId(),
-                    selectedYear.getIdSchoolYear(),
-                    firstName,
-                    lastName
+                    selectedYear.getIdSchoolYear()
             );
 
             if (courseEval == null) {

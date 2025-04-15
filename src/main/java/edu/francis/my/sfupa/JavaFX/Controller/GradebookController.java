@@ -187,9 +187,7 @@ public class GradebookController {
             CourseEval courseEval = CSVInstructorEval.createManualCourseEval(
                     selectedCourse.getcourseCode(),
                     (long) selectedSemester.getId(),
-                    selectedYear.getIdSchoolYear(),
-                    "FirstName",
-                    "LastName"
+                    selectedYear.getIdSchoolYear()
             );
 
             if (courseEval == null) {
