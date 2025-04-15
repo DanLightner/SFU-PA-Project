@@ -26,7 +26,7 @@ import java.util.List;
 @Component
 public class GradebookStudentGradesController {
     @Autowired
-    private ApplicationContext applicationContext;
+    private ApplicationContext springContext;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -213,9 +213,28 @@ public class GradebookStudentGradesController {
     }
 
     @FXML
-    private void handleBack() {
-        Stage stage = (Stage) studentIdField.getScene().getWindow();
-        stage.close();
+    public void handleBack(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "Gradebook.fxml", springContext);
+    }
+
+    @FXML
+    public void handleBackMain(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "main-view.fxml", springContext);
+    }
+
+    @FXML
+    public void handleGuestLecturer(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
+    }
+
+    @FXML
+    public void handleGradebook(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "Gradebook.fxml", springContext);
+    }
+
+    @FXML
+    public void handleInstructorEval(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
     }
 
     @FXML
@@ -224,44 +243,12 @@ public class GradebookStudentGradesController {
     }
 
     @FXML
-    private void handleAbout() {
-        showAlert("About", "Student Grades Lookup System\nVersion 1.0");
-    }
-
-    @FXML
-    private void handleBackMain(ActionEvent event) {
-        try {
-            SceneUtils.switchScene(event, "/view/Main.fxml", applicationContext);
-        } catch (IOException e) {
-            showAlert("Error", "Failed to switch to main screen: " + e.getMessage());
-        }
-    }
-
-    @FXML
-    private void handleGuestLecturer(ActionEvent event) {
-        try {
-            SceneUtils.switchScene(event, "/view/GuestLecturer.fxml", applicationContext);
-        } catch (IOException e) {
-            showAlert("Error", "Failed to switch to guest lecturer screen: " + e.getMessage());
-        }
-    }
-
-    @FXML
-    private void handleGradebook(ActionEvent event) {
-        try {
-            SceneUtils.switchScene(event, "/view/Gradebook.fxml", applicationContext);
-        } catch (IOException e) {
-            showAlert("Error", "Failed to switch to gradebook screen: " + e.getMessage());
-        }
-    }
-
-    @FXML
-    private void handleInstructorEval(ActionEvent event) {
-        try {
-            SceneUtils.switchScene(event, "/view/InstructorEval.fxml", applicationContext);
-        } catch (IOException e) {
-            showAlert("Error", "Failed to switch to instructor evaluation screen: " + e.getMessage());
-        }
+    public void handleAbout(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("About SFU PA");
+        alert.setHeaderText("SFU PA Application");
+        alert.setContentText("This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
+        alert.showAndWait();
     }
 
     // Model class for course grades
