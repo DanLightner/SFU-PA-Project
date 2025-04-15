@@ -21,7 +21,7 @@ public class CourseEval {
     private Classes course;  // Reference to the Clsses entity (not courseCode)
 
     @ManyToOne
-    @JoinColumn(name="lecturer_id")
+    @JoinColumn(name="lecturer_id", nullable = true)
     private Lecturer lecturer;
 
     public CourseEval() {}

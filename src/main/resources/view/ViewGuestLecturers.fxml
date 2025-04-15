@@ -53,16 +53,23 @@
             
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Select Guest Lecturer:" />
-                <ComboBox fx:id="lecturerCombo" prefWidth="200" />
+                <ComboBox fx:id="lecturerCombo" prefWidth="200" promptText="Select a lecturer"/>
                 <Button text="Add New Guest Lecturer" onAction="#handleAddGuestLecturer" style="-fx-background-color: #3498DB; -fx-text-fill: white;"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Filter by Semester:" />
+                <ComboBox fx:id="semesterFilterCombo" prefWidth="150" promptText="All Semesters"/>
+                <Label text="Filter by Year:" />
+                <ComboBox fx:id="yearFilterCombo" prefWidth="150" promptText="All Years"/>
             </HBox>
 
             <TableView fx:id="evaluationTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="courseIdColumn" text="Course ID" />
-                    <TableColumn fx:id="courseNameColumn" text="Course Name" />
-                    <TableColumn fx:id="semesterColumn" text="Semester" />
-                    <TableColumn fx:id="yearColumn" text="Year" />
+                    <TableColumn fx:id="courseIdColumn" text="Course ID" prefWidth="100"/>
+                    <TableColumn fx:id="courseNameColumn" text="Course Name" prefWidth="250"/>
+                    <TableColumn fx:id="semesterColumn" text="Semester" prefWidth="100"/>
+                    <TableColumn fx:id="yearColumn" text="Year" prefWidth="100"/>
                 </columns>
             </TableView>
 

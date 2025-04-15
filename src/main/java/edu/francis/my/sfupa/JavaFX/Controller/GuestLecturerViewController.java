@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Controller
 public class GuestLecturerViewController {
@@ -27,6 +29,9 @@ public class GuestLecturerViewController {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private LecturerRepository lecturerRepository;
 
     @FXML
     private TableView<GuestLecturerData> evaluationTable;
@@ -44,9 +49,61 @@ public class GuestLecturerViewController {
     private TableColumn<GuestLecturerData, String> yearColumn;
 
     @FXML
+    private ComboBox<String> lecturerCombo;
+
+    @FXML
+    private ComboBox<String> semesterFilterCombo;
+
+    @FXML
+    private ComboBox<String> yearFilterCombo;
+
+    @FXML
     public void initialize() {
         setupTableView();
-        loadAllEvaluations();
+        setupComboBoxes();
+        
+        // Add listeners for filtering
+        lecturerCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                updateTableForSelectedLecturer();
+            }
+        });
+
+        semesterFilterCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            updateTableForSelectedLecturer();
+        });
+
+        yearFilterCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            updateTableForSelectedLecturer();
+        });
+    }
+
+    private void setupComboBoxes() {
+        // Setup lecturer combo
+        List<Lecturer> lecturers = StreamSupport.stream(lecturerRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+        List<String> lecturerNames = lecturers.stream()
+                .filter(l -> l != null && l.getFName() != null && l.getLName() != null)
+                .map(l -> l.getFName() + " " + l.getLName())
+                .collect(Collectors.toList());
+        lecturerCombo.setItems(FXCollections.observableArrayList(lecturerNames));
+
+        // Setup semester filter
+        semesterFilterCombo.setItems(FXCollections.observableArrayList("All", "Spring", "Summer", "Fall", "Winter"));
+        semesterFilterCombo.setValue("All");
+
+        // Setup year filter with null checks
+        List<String> years = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+                .filter(eval -> eval != null && 
+                        eval.getCourse() != null && 
+                        eval.getCourse().getSchoolYear() != null &&
+                        eval.getCourse().getSchoolYear().getName() != null)
+                .map(eval -> eval.getCourse().getSchoolYear().getName())
+                .distinct()
+                .collect(Collectors.toList());
+        years.add(0, "All");
+        yearFilterCombo.setItems(FXCollections.observableArrayList(years));
+        yearFilterCombo.setValue("All");
     }
 
     private void setupTableView() {
@@ -56,25 +113,60 @@ public class GuestLecturerViewController {
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
     }
 
-    private void loadAllEvaluations() {
-        ObservableList<GuestLecturerData> data = FXCollections.observableArrayList();
-        
-        Iterable<CourseEval> courseEvals = courseEvalRepository.findAll();
-        for (CourseEval eval : courseEvals) {
-            Classes classEntity = eval.getCourse();
-            Course course = classEntity.getClassCode();
-            Semester semester = classEntity.getSemester();
-            SchoolYear year = classEntity.getSchoolYear();
-
-            data.add(new GuestLecturerData(
-                course.getcourseCode(),
-                course.getName(),
-                semester.getName().toString(),
-                year.getName()
-            ));
+    private void updateTableForSelectedLecturer() {
+        if (lecturerCombo.getValue() == null) {
+            evaluationTable.getItems().clear();
+            return;
         }
 
-        evaluationTable.setItems(data);
+        String[] lecturerName = lecturerCombo.getValue().split(" ");
+        String firstName = lecturerName[0];
+        String lastName = lecturerName[1];
+
+        // Find the lecturer
+        Lecturer selectedLecturer = StreamSupport.stream(lecturerRepository.findAll().spliterator(), false)
+                .filter(l -> l.getFName().equals(firstName) && l.getLName().equals(lastName))
+                .findFirst()
+                .orElse(null);
+
+        if (selectedLecturer == null) {
+            return;
+        }
+
+        // Get all valid course evaluations for this lecturer using the new method
+        Iterable<CourseEval> lecturerEvals = courseEvalRepository.findValidEvaluationsByLecturerId(selectedLecturer.getId());
+
+        // Apply filters
+        String selectedSemester = semesterFilterCombo.getValue();
+        String selectedYear = yearFilterCombo.getValue();
+
+        ObservableList<GuestLecturerData> filteredData = FXCollections.observableArrayList();
+        
+        for (CourseEval eval : lecturerEvals) {
+            try {
+                Classes classEntity = eval.getCourse();
+                Course course = classEntity.getClassCode();
+                String semester = classEntity.getSemester().getName().toString();
+                String year = classEntity.getSchoolYear().getName();
+
+                // Apply filters
+                if ((selectedSemester.equals("All") || semester.equals(selectedSemester)) &&
+                    (selectedYear.equals("All") || year.equals(selectedYear))) {
+                    
+                    filteredData.add(new GuestLecturerData(
+                        course.getcourseCode(),
+                        course.getName(),
+                        semester,
+                        year
+                    ));
+                }
+            } catch (Exception e) {
+                // Skip this entry if there's any error accessing the data
+                continue;
+            }
+        }
+
+        evaluationTable.setItems(filteredData);
     }
 
     // Navigation methods

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Controller
 public class GuestLecturerAnalysisController {
@@ -76,32 +77,41 @@ public class GuestLecturerAnalysisController {
         setupYearComboBox();
         setupSemesterComboBox();
         setupChartStyle();
-    }
 
-    private void setupLecturerComboBox() {
-        Iterable<Lecturer> lecturers = lecturerRepository.findAll();
-        List<String> lecturerNames = new ArrayList<>();
-        for (Lecturer lecturer : lecturers) {
-            lecturerNames.add(lecturer.getFName() + " " + lecturer.getLName());
-        }
-        lecturerCombo.setItems(FXCollections.observableArrayList(lecturerNames));
-        
+        // Add listeners for automatic updates
         lecturerCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 updateCourseComboBox(newVal);
             }
         });
+
+        courseCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && lecturerCombo.getValue() != null) {
+                analyzeData();
+            }
+        });
+    }
+
+    private void setupLecturerComboBox() {
+        // Get all lecturers
+        List<Lecturer> lecturers = StreamSupport.stream(lecturerRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+
+        // Create list of lecturer names
+        List<String> lecturerNames = lecturers.stream()
+                .map(l -> l.getFName() + " " + l.getLName())
+                .collect(Collectors.toList());
+
+        lecturerCombo.setItems(FXCollections.observableArrayList(lecturerNames));
     }
 
     private void updateCourseComboBox(String lecturerName) {
         if (lecturerName == null || lecturerName.trim().isEmpty()) {
-            courseCombo.getItems().clear();
             return;
         }
 
         String[] nameParts = lecturerName.split(" ", 2);
         if (nameParts.length < 2) {
-            courseCombo.getItems().clear();
             return;
         }
 
@@ -111,32 +121,28 @@ public class GuestLecturerAnalysisController {
         // Find the lecturer
         Lecturer lecturer = findLecturerByName(firstName, lastName);
         if (lecturer == null) {
-            courseCombo.getItems().clear();
             return;
         }
 
         // Get all course evaluations for this lecturer
-        Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
-        Set<String> uniqueCourses = new HashSet<>();
-        
-        for (CourseEval eval : allEvals) {
-            if (eval.getLecturer() != null && 
-                eval.getLecturer().getFName().equals(lecturer.getFName()) && 
-                eval.getLecturer().getLName().equals(lecturer.getLName()) &&
-                eval.getCourse() != null &&
-                eval.getCourse().getClassCode() != null) {
-                    
-                String courseCode = eval.getCourse().getClassCode().getcourseCode();
-                String courseName = eval.getCourse().getClassCode().getName();
-                if (courseCode != null && courseName != null) {
-                    uniqueCourses.add(courseCode + " - " + courseName);
-                }
-            }
-        }
+        List<String> courses = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+                .filter(eval -> eval.getLecturer() != null &&
+                        eval.getLecturer().getId().equals(lecturer.getId()) &&
+                        eval.getCourse() != null &&
+                        eval.getCourse().getClassCode() != null)
+                .map(eval -> {
+                    Course course = eval.getCourse().getClassCode();
+                    return course.getcourseCode() + " - " + course.getName();
+                })
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
 
-        List<String> sortedCourses = new ArrayList<>(uniqueCourses);
-        Collections.sort(sortedCourses);
-        courseCombo.setItems(FXCollections.observableArrayList(sortedCourses));
+        courseCombo.setItems(FXCollections.observableArrayList(courses));
+        
+        if (!courses.isEmpty()) {
+            courseCombo.getSelectionModel().selectFirst();
+        }
     }
 
     private void setupYearComboBox() {
@@ -185,10 +191,12 @@ public class GuestLecturerAnalysisController {
         String semester = semesterCombo.getValue();
 
         // Find the lecturer
-        Lecturer lecturer = findLecturerByName(lecturerName[0], lecturerName[1]);
-        if (lecturer == null) {
-            showAlert("Lecturer not found.");
-            return;
+        Lecturer lecturer = null;
+        if (lecturerName.length >= 2) {
+            lecturer = findLecturerByName(lecturerName[0], lecturerName[1]);
+            if (lecturer == null) {
+                showAlert("Lecturer not found. Analyzing data for all lecturers for this course.");
+            }
         }
 
         analyzeLikertResponses(lecturer, courseCode);
@@ -202,9 +210,19 @@ public class GuestLecturerAnalysisController {
         // Get course evaluations for the selected lecturer and course
         Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
         for (CourseEval eval : allEvals) {
-            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
-                eval.getLecturer().getLName().equals(lecturer.getLName()) &&
+            // Check if the course matches
+            if (eval.getCourse() != null && 
+                eval.getCourse().getClassCode() != null &&
                 eval.getCourse().getClassCode().getcourseCode().equals(courseCode)) {
+                
+                // If lecturer is specified, check if it matches
+                if (lecturer != null) {
+                    if (eval.getLecturer() == null || 
+                        !eval.getLecturer().getFName().equals(lecturer.getFName()) || 
+                        !eval.getLecturer().getLName().equals(lecturer.getLName())) {
+                        continue;
+                    }
+                }
                 
                 // Get all Likert responses for this evaluation
                 for (ResponseLikert response : responseLikertRepository.findAll()) {
@@ -238,9 +256,7 @@ public class GuestLecturerAnalysisController {
     private void analyzeOpenEndedResponses(Lecturer lecturer, String courseCode) {
         StringBuilder analysis = new StringBuilder();
         analysis.append("Open-Ended Response Analysis for ")
-                .append(lecturer.getFName())
-                .append(" ")
-                .append(lecturer.getLName())
+                .append(lecturer != null ? lecturer.getFName() + " " + lecturer.getLName() : "All Lecturers")
                 .append("\n\n");
 
         // Get course evaluations for the selected lecturer and course
@@ -248,9 +264,19 @@ public class GuestLecturerAnalysisController {
         List<ResponseOpen> relevantResponses = new ArrayList<>();
 
         for (CourseEval eval : allEvals) {
-            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
-                eval.getLecturer().getLName().equals(lecturer.getLName()) &&
+            // Check if the course matches
+            if (eval.getCourse() != null && 
+                eval.getCourse().getClassCode() != null &&
                 eval.getCourse().getClassCode().getcourseCode().equals(courseCode)) {
+                
+                // If lecturer is specified, check if it matches
+                if (lecturer != null) {
+                    if (eval.getLecturer() == null || 
+                        !eval.getLecturer().getFName().equals(lecturer.getFName()) || 
+                        !eval.getLecturer().getLName().equals(lecturer.getLName())) {
+                        continue;
+                    }
+                }
                 
                 for (ResponseOpen response : responseOpenRepository.findAll()) {
                     if (response.getCourseEval().getId().equals(eval.getId())) {
@@ -308,29 +334,15 @@ public class GuestLecturerAnalysisController {
     }
 
     private Lecturer findLecturerByName(String firstName, String lastName) {
-        if (firstName == null || lastName == null || 
-            firstName.trim().isEmpty() || lastName.trim().isEmpty()) {
+        try {
+            return StreamSupport.stream(lecturerRepository.findAll().spliterator(), false)
+                    .filter(l -> l.getFName().equals(firstName) && l.getLName().equals(lastName))
+                    .findFirst()
+                    .orElse(null);
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
-        
-        firstName = firstName.trim();
-        lastName = lastName.trim();
-        
-        Iterable<Lecturer> lecturers = lecturerRepository.findAll();
-        if (lecturers == null) {
-            return null;
-        }
-        
-        for (Lecturer lecturer : lecturers) {
-            if (lecturer != null && 
-                lecturer.getFName() != null && 
-                lecturer.getLName() != null &&
-                lecturer.getFName().equalsIgnoreCase(firstName) && 
-                lecturer.getLName().equalsIgnoreCase(lastName)) {
-                return lecturer;
-            }
-        }
-        return null;
     }
 
     private void showAlert(String message) {

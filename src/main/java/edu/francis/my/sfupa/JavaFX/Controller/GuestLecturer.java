@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
+import java.util.stream.StreamSupport;
 
 @Component
 public class GuestLecturer {
@@ -143,6 +144,14 @@ public class GuestLecturer {
             String firstName = lecturerName[0];
             String lastName = lecturerName[1];
 
+            // Find the lecturer by name using the repository method
+            Lecturer selectedLecturer = lecturerRepository.findByFirstNameAndLastName(firstName, lastName);
+
+            if (selectedLecturer == null) {
+                showAlert("Lecturer not found in the database.");
+                return;
+            }
+
             SemesterName selectedSemester = SemesterName.fromString(semesterCombo.getValue());
             String courseCode = courseCombo.getValue().split(" - ")[0];
             Course selectedCourse = courseRepository.findByCourseCode(courseCode);
@@ -151,7 +160,8 @@ public class GuestLecturer {
             CourseEval courseEval = CSVInstructorEval.createManualCourseEval(
                     courseCode,
                     (long) selectedSemester.getId(),
-                    selectedYear.getIdSchoolYear()
+                    selectedYear.getIdSchoolYear(),
+                    selectedLecturer.getId()
             );
 
             if (courseEval == null) {

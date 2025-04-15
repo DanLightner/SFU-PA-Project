@@ -38,6 +38,9 @@ public class CSVInstructorEval {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private LecturerRepository lecturerRepository;
+
     // Hardcoded file path for testing - maintain existing path logic
     //private static final String DEFAULT_FILE_PATH = System.getProperty("user.home") + "/Downloads/Example of Instructor Eval.csv";
 
@@ -48,7 +51,6 @@ public class CSVInstructorEval {
      * @param schoolYearId School year ID
      * @return The created CourseEval object or null if failed
      */
-
     public CourseEval createManualCourseEval(String courseCode, Long semesterId, Long schoolYearId) {
         try {
             // Find course
@@ -67,6 +69,50 @@ public class CSVInstructorEval {
             // Create course evaluation
             CourseEval courseEval = new CourseEval();
             courseEval.setCourse(classEntity);
+            // Lecturer is optional, so we don't set it here
+
+            return courseEvalRepository.save(courseEval);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Creates a new CourseEval entry with manually entered data including lecturer
+     * @param courseCode Course code (must exist in the database)
+     * @param semesterId Semester ID
+     * @param schoolYearId School year ID
+     * @param lecturerId Lecturer ID (optional, can be null)
+     * @return The created CourseEval object or null if failed
+     */
+    public CourseEval createManualCourseEval(String courseCode, Long semesterId, Long schoolYearId, Long lecturerId) {
+        try {
+            // Find course
+            Optional<Course> courseOpt = courseRepository.findById(courseCode);
+            if (courseOpt.isEmpty()) {
+                System.out.println("Course not found: " + courseCode);
+                return null;
+            }
+
+            // Find or create class
+            Classes classEntity = findOrCreateClass(courseOpt.get(), semesterId, schoolYearId);
+            if (classEntity == null) {
+                return null;
+            }
+
+            // Create course evaluation
+            CourseEval courseEval = new CourseEval();
+            courseEval.setCourse(classEntity);
+            
+            // Set lecturer if provided
+            if (lecturerId != null) {
+                Optional<Lecturer> lecturerOpt = lecturerRepository.findById(lecturerId.intValue());
+                if (lecturerOpt.isPresent()) {
+                    courseEval.setLecturer(lecturerOpt.get());
+                }
+            }
 
             return courseEvalRepository.save(courseEval);
 
