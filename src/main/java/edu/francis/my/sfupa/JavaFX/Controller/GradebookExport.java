@@ -6,7 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -127,11 +126,8 @@ public class GradebookExport {
                 writer.printf("Course: %s, Year: %s, Semester: %s%n%n", courseCode, yearName, semesterName);
                 writer.println("Student ID,Grade");
 
-                for (Grade grade : grades) {
-                    String studentId = grade.getStudent().getId_student().toString();
-                    String studentGrade = grade.getGrade();
-                    writer.printf("%s,%s,%s%n", studentId, studentGrade);
-                }
+                StudentInClassRep(grades,writer);
+                StudentsRetake(grades,writer);
 
                 showAlert("All grades exported successfully to:\n" + file.getAbsolutePath());
             }
@@ -141,6 +137,47 @@ public class GradebookExport {
             e.printStackTrace();
             showAlert("Error generating report: " + e.getMessage());
         }
+    }
+    private void StudentInClassRep(List<Grade> grades,PrintWriter writer)
+    {
+        for (Grade grade : grades) {
+            String studentId = grade.getStudent().getId_student().toString();
+            String studentGrade = grade.getGrade();
+            writer.printf("%s,%s,%s%n", studentId, studentGrade);
+        }
+    }
+    private void StudentsRetake(List<Grade> grades,PrintWriter writer)
+    {
+        for (Grade grade : grades) {
+            String studentId = grade.getStudent().getId_student().toString();
+            String studentGrade = grade.getGrade();
+            Boolean retake=grade.isRetake();
+            if(retake) {
+                writer.printf("%s,%s,%s%n", studentId, studentGrade);
+            }
+        }
+    }
+    private void SudentsLowGrade(List<Grade> grades,PrintWriter writer)
+    {
+        int ng=0; //all grades
+        int lg=0; //lowe grades
+        for (Grade grade : grades) {
+            ng++;
+            String studentId = grade.getStudent().getId_student().toString();
+            String studentGrade = grade.getGrade();
+            studentGrade=studentGrade.trim().toUpperCase();
+            if(studentGrade.startsWith("C") || studentGrade.equals("D+") || studentGrade.equals("D") ||
+                    studentGrade.equals("D-") || studentGrade.equals("F")) {
+                lg++;
+                writer.printf("%s,%s,%s%n", studentId, studentGrade);
+            }
+        }
+        double lowerGradePercentage = 0;
+        if (ng > 0) {
+            lowerGradePercentage = (double) lg / ng * 100;
+        }
+
+        writer.printf("Percentage of lower grades in class: %.2f%%%n", lowerGradePercentage);
     }
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
