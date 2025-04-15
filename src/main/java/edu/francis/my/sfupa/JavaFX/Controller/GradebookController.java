@@ -318,4 +318,9 @@ public class GradebookController {
         // Switch back to the Gradebook scene
         SceneUtils.switchScene(event, "Gradebook.fxml", springContext);
     }
+
+    @FXML
+    public void handleEditGradesCSV(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "GradebookEditCSV.fxml", springContext);
+    }
 }
