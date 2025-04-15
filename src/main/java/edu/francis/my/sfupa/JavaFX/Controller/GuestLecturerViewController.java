@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class GuestLecturerViewController {
@@ -24,16 +23,10 @@ public class GuestLecturerViewController {
     private ApplicationContext springContext;
 
     @Autowired
-    private LecturerRepository lecturerRepository;
-
-    @Autowired
     private CourseEvalRepository courseEvalRepository;
 
     @Autowired
     private CourseRepository courseRepository;
-
-    @FXML
-    private ComboBox<String> lecturerCombo;
 
     @FXML
     private TableView<GuestLecturerData> evaluationTable;
@@ -52,25 +45,8 @@ public class GuestLecturerViewController {
 
     @FXML
     public void initialize() {
-        setupLecturerComboBox();
         setupTableView();
-    }
-
-    private void setupLecturerComboBox() {
-        Iterable<Lecturer> lecturers = lecturerRepository.findAll();
-        List<String> lecturerNames = new ArrayList<>();
-
-        for (Lecturer lecturer : lecturers) {
-            lecturerNames.add(lecturer.getFName() + " " + lecturer.getLName());
-        }
-
-        lecturerCombo.setItems(FXCollections.observableArrayList(lecturerNames));
-        
-        lecturerCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                updateEvaluationTable(newVal);
-            }
-        });
+        loadAllEvaluations();
     }
 
     private void setupTableView() {
@@ -80,29 +56,10 @@ public class GuestLecturerViewController {
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
     }
 
-    private void updateEvaluationTable(String lecturerName) {
-        String[] nameParts = lecturerName.split(" ");
-        if (nameParts.length < 2) return;
-
-        String firstName = nameParts[0];
-        String lastName = nameParts[1];
-
-        // Find the lecturer
-        Lecturer lecturer = findLecturerByName(firstName, lastName);
-        if (lecturer == null) return;
-
-        // Get all course evaluations for this lecturer
-        Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
-        List<CourseEval> courseEvals = new ArrayList<>();
-        for (CourseEval eval : allEvals) {
-            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
-                eval.getLecturer().getLName().equals(lecturer.getLName())) {
-                courseEvals.add(eval);
-            }
-        }
-        
+    private void loadAllEvaluations() {
         ObservableList<GuestLecturerData> data = FXCollections.observableArrayList();
         
+        Iterable<CourseEval> courseEvals = courseEvalRepository.findAll();
         for (CourseEval eval : courseEvals) {
             Classes classEntity = eval.getCourse();
             Course course = classEntity.getClassCode();
@@ -112,7 +69,7 @@ public class GuestLecturerViewController {
             data.add(new GuestLecturerData(
                 course.getcourseCode(),
                 course.getName(),
-                semester.getName(),
+                semester.getName().toString(),
                 year.getName()
             ));
         }
@@ -120,20 +77,10 @@ public class GuestLecturerViewController {
         evaluationTable.setItems(data);
     }
 
-    private Lecturer findLecturerByName(String firstName, String lastName) {
-        Iterable<Lecturer> lecturers = lecturerRepository.findAll();
-        for (Lecturer lecturer : lecturers) {
-            if (lecturer.getFName().equals(firstName) && lecturer.getLName().equals(lastName)) {
-                return lecturer;
-            }
-        }
-        return null;
-    }
-
     // Navigation methods
     @FXML
     public void handleBack(ActionEvent event) throws IOException {
-        SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
+        SceneUtils.switchScene(event, "GuestLecturer.fxml", springContext);
     }
 
     @FXML

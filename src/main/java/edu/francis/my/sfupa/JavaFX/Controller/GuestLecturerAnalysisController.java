@@ -94,29 +94,49 @@ public class GuestLecturerAnalysisController {
     }
 
     private void updateCourseComboBox(String lecturerName) {
-        String[] nameParts = lecturerName.split(" ");
-        if (nameParts.length < 2) return;
+        if (lecturerName == null || lecturerName.trim().isEmpty()) {
+            courseCombo.getItems().clear();
+            return;
+        }
 
-        String firstName = nameParts[0];
-        String lastName = nameParts[1];
+        String[] nameParts = lecturerName.split(" ", 2);
+        if (nameParts.length < 2) {
+            courseCombo.getItems().clear();
+            return;
+        }
+
+        String firstName = nameParts[0].trim();
+        String lastName = nameParts[1].trim();
 
         // Find the lecturer
         Lecturer lecturer = findLecturerByName(firstName, lastName);
-        if (lecturer == null) return;
+        if (lecturer == null) {
+            courseCombo.getItems().clear();
+            return;
+        }
 
         // Get all course evaluations for this lecturer
         Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
         Set<String> uniqueCourses = new HashSet<>();
         
         for (CourseEval eval : allEvals) {
-            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
-                eval.getLecturer().getLName().equals(lecturer.getLName())) {
-                uniqueCourses.add(eval.getCourse().getClassCode().getcourseCode() + " - " + 
-                                eval.getCourse().getClassCode().getName());
+            if (eval.getLecturer() != null && 
+                eval.getLecturer().getFName().equals(lecturer.getFName()) && 
+                eval.getLecturer().getLName().equals(lecturer.getLName()) &&
+                eval.getCourse() != null &&
+                eval.getCourse().getClassCode() != null) {
+                    
+                String courseCode = eval.getCourse().getClassCode().getcourseCode();
+                String courseName = eval.getCourse().getClassCode().getName();
+                if (courseCode != null && courseName != null) {
+                    uniqueCourses.add(courseCode + " - " + courseName);
+                }
             }
         }
 
-        courseCombo.setItems(FXCollections.observableArrayList(uniqueCourses));
+        List<String> sortedCourses = new ArrayList<>(uniqueCourses);
+        Collections.sort(sortedCourses);
+        courseCombo.setItems(FXCollections.observableArrayList(sortedCourses));
     }
 
     private void setupYearComboBox() {
@@ -288,9 +308,25 @@ public class GuestLecturerAnalysisController {
     }
 
     private Lecturer findLecturerByName(String firstName, String lastName) {
+        if (firstName == null || lastName == null || 
+            firstName.trim().isEmpty() || lastName.trim().isEmpty()) {
+            return null;
+        }
+        
+        firstName = firstName.trim();
+        lastName = lastName.trim();
+        
         Iterable<Lecturer> lecturers = lecturerRepository.findAll();
+        if (lecturers == null) {
+            return null;
+        }
+        
         for (Lecturer lecturer : lecturers) {
-            if (lecturer.getFName().equals(firstName) && lecturer.getLName().equals(lastName)) {
+            if (lecturer != null && 
+                lecturer.getFName() != null && 
+                lecturer.getLName() != null &&
+                lecturer.getFName().equalsIgnoreCase(firstName) && 
+                lecturer.getLName().equalsIgnoreCase(lastName)) {
                 return lecturer;
             }
         }

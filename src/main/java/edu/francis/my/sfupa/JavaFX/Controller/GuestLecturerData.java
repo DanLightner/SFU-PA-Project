@@ -1,17 +1,15 @@
 package edu.francis.my.sfupa.JavaFX.Controller;
 
-import edu.francis.my.sfupa.SQLite.Models.SemesterName;
-
 public class GuestLecturerData {
     private String courseId;
     private String courseName;
     private String semester;
     private String year;
 
-    public GuestLecturerData(String courseId, String courseName, SemesterName semester, String year) {
+    public GuestLecturerData(String courseId, String courseName, String semester, String year) {
         this.courseId = courseId;
         this.courseName = courseName;
-        this.semester = semester.toString();
+        this.semester = semester;
         this.year = year;
     }
 
