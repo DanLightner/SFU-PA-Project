@@ -80,7 +80,7 @@ public class GuestLecturerViewController {
     // Navigation methods
     @FXML
     public void handleBack(ActionEvent event) throws IOException {
-        SceneUtils.switchScene(event, "GuestLecturer.fxml", springContext);
+        SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
     }
 
     @FXML
