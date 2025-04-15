@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -12,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer">
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.AddGuestLecturerManuallyController">
 
     <!-- Menu Bar (Top) -->
     <top>
@@ -34,9 +33,9 @@
 
     <!-- Sidebar Navigation (Left) -->
     <left>
-        <VBox prefWidth="170.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
             <Button onAction="#handleBackMain" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Dashboard" />
-            <Button disable="true" onAction="#handleGuestLecturer" style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: white;" text="Guest Lecturer" />
+            <Button onAction="#handleGuestLecturer" style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: white;" text="Guest Lecturer" />
             <Button onAction="#handleGradebook" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Gradebook" />
             <Button onAction="#handleInstructorEval" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Instructor Eval" />
         </VBox>
@@ -44,39 +43,23 @@
 
     <center>
         <VBox spacing="15" alignment="CENTER" style="-fx-padding: 20;">
-            <Label text="Upload Guest Lecturer" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <Label text="Add Guest Lecturer Manually" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Guest Lecturer:" minWidth="150"/>
-                <ComboBox fx:id="lecturerCombo" prefWidth="200" promptText="Select Guest Lecturer"/>
+                <Label text="First Name:" minWidth="150"/>
+                <TextField fx:id="firstNameField" prefWidth="200"/>
             </HBox>
 
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Select Semester:" minWidth="150"/>
-                <ComboBox fx:id="semesterCombo" prefWidth="200" promptText="Select Semester"/>
-            </HBox>
-
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Select Course:" minWidth="150"/>
-                <ComboBox fx:id="courseCombo" prefWidth="200" promptText="Select Course"/>
-            </HBox>
-
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Select Year:" minWidth="150"/>
-                <ComboBox fx:id="yearCombo" prefWidth="200" promptText="Select Year"/>
-            </HBox>
-
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Select CSV File:" minWidth="150"/>
-                <Button text="Choose File" onAction="#handleChooseFile" style="-fx-background-color: #2ECC71; -fx-text-fill: white;"/>
-                <Label fx:id="selectedFileLabel" text="No file chosen" />
+                <Label text="Last Name:" minWidth="150"/>
+                <TextField fx:id="lastNameField" prefWidth="200"/>
             </HBox>
 
             <HBox spacing="10" alignment="CENTER">
-                <Button text="Upload CSV" onAction="#handleInstructorUploadEval" style="-fx-background-color: #3498DB; -fx-text-fill: white;"/>
+                <Button text="Add Guest Lecturer" onAction="#handleAddGuestLecturer" style="-fx-background-color: #3498DB; -fx-text-fill: white;"/>
                 <Button text="Back" onAction="#handleBack"/>
             </HBox>
         </VBox>
     </center>
 
-</BorderPane>
+</BorderPane> 

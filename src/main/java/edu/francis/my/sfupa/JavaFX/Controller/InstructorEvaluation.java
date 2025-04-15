@@ -7,7 +7,6 @@ import edu.francis.my.sfupa.SQLite.Services.CSVInstructorEval;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import edu.francis.my.sfupa.SQLite.Services.CSVInstructorEval;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.stage.FileChooser;
@@ -41,9 +40,6 @@ public class InstructorEvaluation {
     @Autowired
     private CSVInstructorEval CSVInstructorEval;
 
-    @Autowired
-    private LecturerRepository lecturerRepository;
-
     @FXML
     private ComboBox<String> semesterCombo;  // For selecting the semester
 
@@ -57,9 +53,6 @@ public class InstructorEvaluation {
     private ComboBox<String> yearCombo;      // For selecting the year
 
     @FXML
-    private ComboBox<String> lecturerCombo;
-
-    @FXML
     public void initialize() {
         if (semesterCombo != null) {
             semesterCombo.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
@@ -67,54 +60,26 @@ public class InstructorEvaluation {
 
         if (courseCombo != null) {
             courseCombo.setItems(FXCollections.observableArrayList(
-                    "PA 400",
-                    "PA 401",
-                    "PA 402",
-                    "PA 403",
-                    "PA 404",
-                    "PA 405",
-                    "PA 406",
-                    "PA 420",
-                    "PA 421",
-                    "PA 422",
-                    "PA 423",
-                    "PA 424",
-                    "PA 425",
-                    "PA 426",
-                    "PA 427",
-                    "PA 428",
-                    "PA 429",
-                    "PA 430",
-                    "PA 431",
-                    "PA 432",
-                    "PA 451",
-                    "PA 452",
-                    "PA 453"
+                    "PA 400", "PA 401", "PA 402", "PA 403", "PA 404", "PA 405", "PA 406",
+                    "PA 420", "PA 421", "PA 422", "PA 423", "PA 424", "PA 425", "PA 426",
+                    "PA 427", "PA 428", "PA 429", "PA 430", "PA 431", "PA 432", "PA 451",
+                    "PA 452", "PA 453"
             ));
         }
 
         if (courseComboo != null) {
             courseComboo.setItems(FXCollections.observableArrayList(
-                    "Evidence-Based Medicine",
-                    "Introduction to U.S. Health Care",
+                    "Evidence-Based Medicine", "Introduction to U.S. Health Care",
                     "History Taking and Patient Education Skills",
-                    "History Taking and Patient Education Skills Lab",
-                    "Public Health",
-                    "Clinical Skills",
-                    "Well Child",
-                    "Introduction to Medicine Module",
-                    "Hematology Medicine Module",
-                    "Endocrine Medicine Module",
-                    "Neurology Medicine Module",
-                    "Dermatology Medicine Module",
+                    "History Taking and Patient Education Skills Lab", "Public Health",
+                    "Clinical Skills", "Well Child", "Introduction to Medicine Module",
+                    "Hematology Medicine Module", "Endocrine Medicine Module",
+                    "Neurology Medicine Module", "Dermatology Medicine Module",
                     "Musculoskeletal Medicine Module",
                     "Eyes, Ears, Nose and Throat Medicine Module",
-                    "Behavioral Medicine Module",
-                    "Cardiovascular Medicine Module",
-                    "Pulmonary Medicine Module",
-                    "Gastrointestinal/Nutrition Medicine Module",
-                    "Genitourinary Medicine Module",
-                    "Reproductive Medicine Module",
+                    "Behavioral Medicine Module", "Cardiovascular Medicine Module",
+                    "Pulmonary Medicine Module", "Gastrointestinal/Nutrition Medicine Module",
+                    "Genitourinary Medicine Module", "Reproductive Medicine Module",
                     "Didactic Clinical Experiences and Medical Documentation I",
                     "Didactic Clinical Experiences and Medical Documentation II",
                     "Didactic Comprehensive Evaluation"
@@ -122,37 +87,17 @@ public class InstructorEvaluation {
         }
 
         if (yearCombo != null) {
-            // Fetch school years from the repository
             List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll();
-
-            // Convert school year names (like "2023-2024") into a list of strings
             List<String> schoolYearNames = schoolYears.stream()
-                    .map(SchoolYear::getName)  // Assuming you have getName() method for the "name" field
+                    .map(SchoolYear::getName)
                     .collect(Collectors.toList());
-
-            // Set the items for yearCombo
             yearCombo.setItems(FXCollections.observableArrayList(schoolYearNames));
-        }
-
-        if (lecturerCombo != null) {
-            // Fetch all lecturers
-            Iterable<Lecturer> lecturers = lecturerRepository.findAll();
-            List<String> lecturerNames = new ArrayList<>();
-
-            // Create formatted names (FirstName LastName)
-            for (Lecturer lecturer : lecturers) {
-                lecturerNames.add(lecturer.getFName() + " " + lecturer.getLName());
-            }
-
-            // Set the items for lecturerCombo
-            lecturerCombo.setItems(FXCollections.observableArrayList(lecturerNames));
         }
     }
 
-    private File selectedFile;  // Store the chosen file
-
+    private File selectedFile;
     @FXML
-    private Label selectedFileLabel;  // Reference to update label in UI
+    private Label selectedFileLabel;
 
     @FXML
     public void handleChooseFile() {
@@ -164,7 +109,7 @@ public class InstructorEvaluation {
 
         if (file != null) {
             selectedFile = file;
-            selectedFileLabel.setText(file.getName()); // Show file name in label
+            selectedFileLabel.setText(file.getName());
         } else {
             selectedFileLabel.setText("No file chosen");
         }
@@ -177,12 +122,10 @@ public class InstructorEvaluation {
             return;
         }
 
-        // Validate selections
         if (semesterCombo.getValue() == null ||
                 courseCombo.getValue() == null ||
-                yearCombo.getValue() == null ||
-                lecturerCombo.getValue() == null) {
-            showAlert("Please select Semester, Course, Year, and Lecturer before uploading.");
+                yearCombo.getValue() == null) {
+            showAlert("Please select Semester, Course, and Year before uploading.");
             return;
         }
 
@@ -191,21 +134,10 @@ public class InstructorEvaluation {
             Course selectedCourse = courseRepository.findByCourseCode(courseCombo.getValue());
             SchoolYear selectedYear = schoolYearRepository.findByName(yearCombo.getValue());
 
-            // Split the selected lecturer name into first and last name
-            String[] lecturerFullName = lecturerCombo.getValue().split(" ");
-            if (lecturerFullName.length < 2) {
-                showAlert("Invalid lecturer name format");
-                return;
-            }
-            String firstName = lecturerFullName[0];
-            String lastName = lecturerFullName[1];
-
             CourseEval courseEval = CSVInstructorEval.createManualCourseEval(
                     selectedCourse.getcourseCode(),
                     (long) selectedSemester.getId(),
-                    selectedYear.getIdSchoolYear(),
-                    firstName,
-                    lastName
+                    selectedYear.getIdSchoolYear()
             );
 
             if (courseEval == null) {
@@ -216,7 +148,6 @@ public class InstructorEvaluation {
             CSVInstructorEval.processCSVFile(selectedFile, courseEval.getId());
             showAlert("CSV uploaded and processed successfully!");
 
-            // Reset selected file after upload
             selectedFile = null;
             selectedFileLabel.setText("No file chosen");
 
@@ -234,17 +165,12 @@ public class InstructorEvaluation {
         alert.showAndWait();
     }
 
-
-    // EVERYTHING BELOW IS RELATIGN TO INSTRUCTOR ANALYSIS
-
-
-
-
-
+    // Navigation methods
     @FXML
     public void handleAnalyzeData(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "InstructorEvalAnalyze.fxml", springContext);
     }
+
     @FXML
     public void handleBack(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
@@ -265,7 +191,6 @@ public class InstructorEvaluation {
         SceneUtils.switchScene(event, "main-view.fxml", springContext);
     }
 
-    // --- Menu Bar Actions ---
     @FXML
     private void handleExit() {
         System.exit(0);
@@ -280,7 +205,6 @@ public class InstructorEvaluation {
         alert.showAndWait();
     }
 
-    // --- Sidebar Navigation ---
     @FXML
     public void handleGuestLecturer(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
@@ -300,5 +224,4 @@ public class InstructorEvaluation {
     public void handleViewSpecificInstructor(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "InstructorEvalView.fxml", springContext);
     }
-
 }
