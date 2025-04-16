@@ -116,6 +116,7 @@
 						--add-opens java.base/java.io=ALL-UNNAMED
 						--add-opens java.base/java.util=ALL-UNNAMED
 						--add-opens java.base/java.util.concurrent=ALL-UNNAMED
+						--add-opens javafx.graphics/com.sun.javafx.application.LauncherImpl=ALL-UNNAMED
 					</jvmArguments>
 				</configuration>
 				<executions>

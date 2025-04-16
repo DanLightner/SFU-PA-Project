@@ -73,8 +73,25 @@
 
             <TitledPane text="Open-Ended Responses Analysis" expanded="true" VBox.vgrow="ALWAYS">
                 <VBox spacing="10" VBox.vgrow="ALWAYS">
-                    <TextArea fx:id="openEndedAnalysisArea" editable="false" VBox.vgrow="ALWAYS" wrapText="true" 
-                             style="-fx-background-color: white; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px;" />
+                    <TabPane VBox.vgrow="ALWAYS">
+                        <Tab text="Thematic Analysis">
+                            <VBox spacing="10">
+                                <Label text="Key Themes and Insights:" style="-fx-font-weight: bold;"/>
+                                <TextArea fx:id="thematicAnalysisArea" editable="false" VBox.vgrow="ALWAYS" wrapText="true" 
+                                         style="-fx-background-color: white; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px;" />
+                            </VBox>
+                        </Tab>
+                        <Tab text="Raw Responses">
+                            <VBox spacing="10">
+                                <TableView fx:id="rawResponsesTable" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="questionColumn" text="Question" prefWidth="200"/>
+                                        <TableColumn fx:id="responseColumn" text="Response" prefWidth="400"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </Tab>
+                    </TabPane>
                 </VBox>
             </TitledPane>
 
