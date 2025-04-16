@@ -31,7 +31,7 @@
 
     <!-- Sidebar Navigation (Left) - Same as before -->
     <left>
-        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+        <VBox prefWidth="170.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
             <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
             <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
             <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
@@ -52,9 +52,6 @@
 
             <Label text="Select Year:" />
             <ComboBox fx:id="yearCombo" promptText="Select Year" />
-
-            <Label text="Select Lecturer:" />
-            <ComboBox fx:id="lecturerCombo" promptText="Select Lecturer" />
 
             <Button onAction="#handleChooseFile" style="-fx-background-color: #2ECC71; -fx-text-fill: white;" text="Choose File" />
             <Label fx:id="selectedFileLabel" text="No file chosen" />
