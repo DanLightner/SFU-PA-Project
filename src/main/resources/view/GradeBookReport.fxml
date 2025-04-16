@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GradebookReportController">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GradebookReportController">
     <top>
         <MenuBar>
             <Menu text="File">
@@ -37,12 +47,12 @@
     <center>
         <VBox spacing="15" VBox.vgrow="ALWAYS">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
             <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Gradebook Report" />
 
-            <HBox spacing="10" alignment="CENTER_LEFT">
+            <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Select Course:" />
                 <ComboBox fx:id="courseCmb" prefWidth="200" />
                 <Label text="Select Year:" />
@@ -51,8 +61,8 @@
                 <ComboBox fx:id="semesterCmb" prefWidth="150" />
             </HBox>
 
-            <TitledPane text="Grade Distribution" expanded="true" VBox.vgrow="ALWAYS">
-                <BarChart fx:id="gradeBarChart" title="Grade Distribution" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+            <TitledPane expanded="true" text="Grade Distribution" VBox.vgrow="ALWAYS">
+                <BarChart fx:id="gradeBarChart" style="-fx-background-color: white;" title="Grade Distribution" VBox.vgrow="ALWAYS">
                     <xAxis>
                         <CategoryAxis label="Grade" fx:id="xAxis" />
                     </xAxis>
@@ -62,7 +72,7 @@
                 </BarChart>
             </TitledPane>
 
-            <TitledPane text="Students Requiring Retake" expanded="true" VBox.vgrow="ALWAYS">
+            <TitledPane expanded="true" text="Students Requiring Retake" VBox.vgrow="ALWAYS">
                 <VBox spacing="10" VBox.vgrow="ALWAYS">
                     <TableView fx:id="retakeTable" VBox.vgrow="ALWAYS">
                         <columns>
@@ -73,7 +83,8 @@
                 </VBox>
             </TitledPane>
 
-            <HBox spacing="10" alignment="CENTER_RIGHT">
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+            <Button mnemonicParsing="false" prefHeight="34.0" prefWidth="95.0" style="-fx-background-color: red;" text="Export Report" textFill="WHITE" />
                 <Button onAction="#generateReport" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 15;" text="Generate Report" />
                 <Button onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 8 15;" text="Back" />
             </HBox>
