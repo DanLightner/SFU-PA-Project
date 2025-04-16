@@ -74,7 +74,6 @@
             </TitledPane>
 
             <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Button onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 8 15;" text="Export Report" /> //need to handle exporting a report
                 <Button onAction="#generateReport" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 15;" text="Generate Report" />
                 <Button onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 8 15;" text="Back" />
             </HBox>
