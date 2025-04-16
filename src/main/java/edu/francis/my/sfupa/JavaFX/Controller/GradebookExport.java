@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -128,6 +129,8 @@ public class GradebookExport {
 
                 StudentInClassRep(grades,writer);
                 StudentsRetake(grades,writer);
+                StudentsLowGrade(grades,writer);
+                GradeDistributionReport(grades,writer);
 
                 showAlert("All grades exported successfully to:\n" + file.getAbsolutePath());
             }
@@ -157,7 +160,7 @@ public class GradebookExport {
             }
         }
     }
-    private void SudentsLowGrade(List<Grade> grades,PrintWriter writer)
+    private void StudentsLowGrade(List<Grade> grades,PrintWriter writer)
     {
         int ng=0; //all grades
         int lg=0; //lowe grades
@@ -178,6 +181,18 @@ public class GradebookExport {
         }
 
         writer.printf("Percentage of lower grades in class: %.2f%%%n", lowerGradePercentage);
+    }
+    private void GradeDistributionReport(List<Grade> grades, PrintWriter writer) {
+        writer.println();
+        writer.println("Grade Distribution Report");
+        Map<String, Long> gradeCountMap = grades.stream()
+                .collect(Collectors.groupingBy(
+                        g -> g.getGrade().trim().toUpperCase(),
+                        Collectors.counting()
+                ));
+
+        writer.println("Grade,Count");
+        gradeCountMap.forEach((grade, count) -> writer.printf("%s,%d%n", grade, count));
     }
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
