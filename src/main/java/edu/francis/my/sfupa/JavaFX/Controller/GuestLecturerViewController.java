@@ -88,8 +88,13 @@ public class GuestLecturerViewController {
                 .collect(Collectors.toList());
         lecturerCombo.setItems(FXCollections.observableArrayList(lecturerNames));
 
-        // Setup semester filter
-        semesterFilterCombo.setItems(FXCollections.observableArrayList("All", "Spring", "Summer", "Fall", "Winter"));
+        // Setup semester filter with enum values
+        List<String> semesterOptions = new ArrayList<>();
+        semesterOptions.add("All");
+        for (SemesterName semester : SemesterName.values()) {
+            semesterOptions.add(semester.toString());
+        }
+        semesterFilterCombo.setItems(FXCollections.observableArrayList(semesterOptions));
         semesterFilterCombo.setValue("All");
 
         // Setup year filter with null checks
@@ -133,7 +138,7 @@ public class GuestLecturerViewController {
             return;
         }
 
-        // Get all valid course evaluations for this lecturer using the new method
+        // Get all valid course evaluations for this lecturer
         Iterable<CourseEval> lecturerEvals = courseEvalRepository.findValidEvaluationsByLecturerId(selectedLecturer.getId());
 
         // Apply filters
@@ -146,13 +151,17 @@ public class GuestLecturerViewController {
             try {
                 Classes classEntity = eval.getCourse();
                 Course course = classEntity.getClassCode();
-                String semester = classEntity.getSemester().getName().toString();
+                SemesterName semesterEnum = classEntity.getSemester().getName();
+                String semester = semesterEnum.toString();
                 String year = classEntity.getSchoolYear().getName();
 
-                // Apply filters
-                if ((selectedSemester.equals("All") || semester.equals(selectedSemester)) &&
-                    (selectedYear.equals("All") || year.equals(selectedYear))) {
-                    
+                // Apply filters with proper enum comparison
+                boolean semesterMatch = selectedSemester.equals("All") || 
+                                      selectedSemester.equalsIgnoreCase(semester);
+                boolean yearMatch = selectedYear.equals("All") || 
+                                  year.equals(selectedYear);
+
+                if (semesterMatch && yearMatch) {
                     filteredData.add(new GuestLecturerData(
                         course.getcourseCode(),
                         course.getName(),
