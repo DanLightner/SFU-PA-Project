@@ -49,7 +49,7 @@
     </left>
 
     <center>
-        <VBox alignment="CENTER" prefHeight="618.0" prefWidth="1110.0" spacing="15.0">
+        <VBox alignment="CENTER" prefHeight="618.0" prefWidth="1110.0" spacing="20.0">
             <children>
                 <Label alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="true" prefHeight="75.0" prefWidth="551.0" style="-fx-font-size: 28; -fx-font-weight: bold;" text="Welcome to SFU PA Application!" textAlignment="CENTER" />
                 <Button onAction="#handleCourseSurvey" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Guest Lecturer" textFill="WHITE" />
