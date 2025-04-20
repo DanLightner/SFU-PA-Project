@@ -17,10 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import com.opencsv.CSVWriter;
+import javafx.stage.FileChooser;
 
 @Controller
 public class GuestLecturerAnalysisController {
@@ -540,5 +545,76 @@ public class GuestLecturerAnalysisController {
         alert.setHeaderText("SFU PA Application");
         alert.setContentText("This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleExportCSV() {
+        if (lecturerCombo.getValue() == null || courseCombo.getValue() == null ||
+            yearCombo.getValue() == null || semesterCombo.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select Lecturer, Course, Year, and Semester before exporting");
+            alert.showAndWait();
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Guest Lecturer Evaluation Data");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("CSV Files", "*.csv")
+        );
+        fileChooser.setInitialFileName("guest_lecturer_evaluation_data.csv");
+
+        File file = fileChooser.showSaveDialog(rawResponsesTable.getScene().getWindow());
+        if (file != null) {
+            try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
+                // Write header
+                writer.writeNext(new String[]{"Question", "Response", "Response Type"});
+
+                String[] lecturerName = lecturerCombo.getValue().split(" ");
+                String firstName = lecturerName[0];
+                String lastName = lecturerName[1];
+                Lecturer lecturer = findLecturerByName(firstName, lastName);
+
+                if (lecturer != null) {
+                    // Write Likert responses
+                    for (ResponseLikert response : responseLikertRepository.findAll()) {
+                        CourseEval eval = response.getCourseEval();
+                        if (eval.getLecturer() != null && 
+                            eval.getLecturer().getId().equals(lecturer.getId()) &&
+                            eval.getCourse() != null &&
+                            eval.getCourse().getClassCode() != null &&
+                            eval.getCourse().getClassCode().getcourseCode().equals(courseCombo.getValue().split(" - ")[0])) {
+                            writer.writeNext(new String[]{
+                                response.getQuestion().getText(),
+                                response.getResponse(),
+                                "Likert"
+                            });
+                        }
+                    }
+
+                    // Write open-ended responses
+                    for (ResponseOpen response : responseOpenRepository.findAll()) {
+                        CourseEval eval = response.getCourseEval();
+                        if (eval.getLecturer() != null && 
+                            eval.getLecturer().getId().equals(lecturer.getId()) &&
+                            eval.getCourse() != null &&
+                            eval.getCourse().getClassCode() != null &&
+                            eval.getCourse().getClassCode().getcourseCode().equals(courseCombo.getValue().split(" - ")[0])) {
+                            writer.writeNext(new String[]{
+                                response.getQuestion().getText(),
+                                response.getResponse(),
+                                "Open-ended"
+                            });
+                        }
+                    }
+                }
+
+                showAlert("Data exported successfully to " + file.getAbsolutePath());
+            } catch (IOException e) {
+                showAlert("Failed to export data: " + e.getMessage());
+            }
+        }
     }
 } 

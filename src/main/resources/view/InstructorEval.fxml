@@ -43,10 +43,14 @@
     <center>
         <VBox alignment="CENTER" spacing="15">
             <Label alignment="CENTER" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Instructor Evaluation Management" />
-            <Button onAction="#handleAnalyzeData" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Analyze Instructor Eval Data" textFill="WHITE" />
-            <Button onAction="#handleEditEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Edit Instructor Evaluation" textFill="WHITE" />
+            <!-- Data Input/Upload -->
             <Button onAction="#handleUploadEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Upload Instructor Evaluation" textFill="WHITE" />
+            <!-- View/Check -->
             <Button onAction="#handleViewSpecificInstructor" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="View Specific Instructor Evaluations" textFill="WHITE" />
+            <!-- Edit/Modify -->
+            <Button onAction="#handleEditEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Edit Instructor Evaluation" textFill="WHITE" />
+            <!-- Analysis/Report -->
+            <Button onAction="#handleAnalyzeData" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Analyze Instructor Eval Data" textFill="WHITE" />
         </VBox>
     </center>
 

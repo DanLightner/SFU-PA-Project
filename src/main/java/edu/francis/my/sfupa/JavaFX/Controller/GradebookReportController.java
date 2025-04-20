@@ -15,10 +15,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import com.opencsv.CSVWriter;
+import javafx.stage.FileChooser;
 
 @Component
 public class GradebookReportController {
@@ -162,7 +165,7 @@ public class GradebookReportController {
 
         // Define the standard grade order
         List<String> standardGradeOrder = List.of(
-            "A+", "A", "A-",
+            "A", "A-",
             "B+", "B", "B-",
             "C+", "C", "C-",
             "D+", "D", "D-",
@@ -288,6 +291,78 @@ public class GradebookReportController {
         alert.setTitle("About SFU PA");
         alert.setHeaderText("SFU PA Application");
         alert.setContentText("This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void handleExportCSV() {
+        if (courseCmb.getValue() == null || yearCmb.getValue() == null || semesterCmb.getValue() == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Please select Course, Year, and Semester before exporting");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Gradebook Report");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("CSV Files", "*.csv")
+        );
+        fileChooser.setInitialFileName("gradebook_report.csv");
+
+        File file = fileChooser.showSaveDialog(retakeTable.getScene().getWindow());
+        if (file != null) {
+            try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
+                // Write header
+                writer.writeNext(new String[]{"Student ID", "Grade", "Retake Status"});
+
+                // Get selected values
+                String courseCode = courseCmb.getValue();
+                String yearName = yearCmb.getValue();
+                String semesterName = semesterCmb.getValue();
+
+                // Find the class
+                Course course = courseRepository.findByCourseCode(courseCode);
+                SchoolYear year = schoolYearRepository.findByName(yearName);
+                SemesterName semesterEnum = SemesterName.fromString(semesterName);
+                Semester semester = semesterRepository.findById(semesterEnum.getId()).orElse(null);
+
+                if (course == null || year == null || semester == null) {
+                    showAlert(Alert.AlertType.ERROR, "Error", "Could not find matching course, year, or semester");
+                    return;
+                }
+
+                Classes classEntity = classesRepository.findByClassCode_CourseCodeAndSemester_IdAndSchoolYear_IdSchoolYear(
+                    courseCode, semesterEnum.getId(), year.getIdSchoolYear().intValue())
+                    .orElse(null);
+
+                if (classEntity == null) {
+                    showAlert(Alert.AlertType.ERROR, "Error", "No grades found for the selected criteria");
+                    return;
+                }
+
+                // Get all grades for this class
+                List<Grade> grades = gradeRepository.findByStudentClass(classEntity);
+
+                // Write data
+                for (Grade grade : grades) {
+                    writer.writeNext(new String[]{
+                        grade.getStudent().getId_student().toString(),
+                        grade.getGrade(),
+                        grade.isRetake() ? "Yes" : "No"
+                    });
+                }
+
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Report exported successfully to " + file.getAbsolutePath());
+            } catch (IOException e) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to export report: " + e.getMessage());
+            }
+        }
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
         alert.showAndWait();
     }
 }
