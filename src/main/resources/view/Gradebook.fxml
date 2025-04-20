@@ -41,7 +41,7 @@
 
     <!-- Main Content Area -->
     <center>
-        <VBox alignment="CENTER" spacing="15">
+        <VBox alignment="CENTER" spacing="20.0">
             <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Gradebook Management" />
             <!-- Data Input/Upload -->
             <Button onAction="#handleUploadCSV" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Upload Gradebook CSV" textFill="WHITE" />
