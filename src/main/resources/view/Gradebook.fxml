@@ -47,6 +47,8 @@
             <Button onAction="#handleUploadCSV" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Upload Gradebook CSV" textFill="WHITE" />
             <!-- View/Check -->
             <Button onAction="#handleCheckStudentGrades" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Check Student Grades" textFill="WHITE" />
+            <!-- Edit/Modify -->
+            <Button onAction="#handleEditGradebook" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Edit Gradebook" textFill="WHITE" />
             <!-- Analysis/Report -->
             <Button fx:id="runReportButton" onAction="#handleRunReport" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Run Report" textFill="WHITE" />
         </VBox>

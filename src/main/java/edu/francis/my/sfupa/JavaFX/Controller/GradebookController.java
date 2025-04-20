@@ -318,6 +318,11 @@ public class GradebookController {
     }
 
     @FXML
+    public void handleEditGradebook(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "GradebookEditCSV.fxml", springContext);
+    }
+
+    @FXML
     public void handleEditGradesCSV(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "GradebookEditCSV.fxml", springContext);
     }
