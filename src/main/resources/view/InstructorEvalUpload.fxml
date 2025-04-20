@@ -7,6 +7,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvaluation">
@@ -42,22 +43,43 @@
     <!-- Main Content Area -->
     <center>
         <VBox alignment="CENTER" spacing="10">
-            <Label style="-fx-font-size: 18px;" text="Upload Instructor Evaluations" />
-
-            <Label text="Select Semester:" />
-            <ComboBox fx:id="semesterCombo" promptText="Select Semester" />
-
-            <Label text="Select Course ID:" />
-            <ComboBox fx:id="courseCombo" promptText="Select Course" />
-
-            <Label text="Select Year:" />
-            <ComboBox fx:id="yearCombo" promptText="Select Year" />
-
-            <Button onAction="#handleChooseFile" style="-fx-background-color: #2ECC71; -fx-text-fill: white;" text="Choose File" />
-            <Label fx:id="selectedFileLabel" text="No file chosen" />
-            <Button onAction="#handleInstructorUploadEval" style="-fx-background-color: #3498DB; -fx-text-fill: white;" text="Upload CSV" />
-
-            <Button onAction="#handleBack" style="-fx-background-color: #808080;" text="Back" textFill="WHITE" />
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Upload Instructor Evaluations" />
+         <HBox alignment="CENTER" prefHeight="0.0" prefWidth="1110.0" spacing="10.0" style="-fx-padding: 10;">
+            <children>
+      
+                  <Label minWidth="150.0" style="-fx-font-size: 14;" text="Select Semester:" />
+                  <ComboBox fx:id="semesterCombo" prefWidth="200.0" promptText="Select Semester" />
+            </children>
+         </HBox>
+         <HBox alignment="CENTER" spacing="10.0" style="-fx-padding: 10;">
+            <children>
+      
+                  <Label minWidth="150.0" style="-fx-font-size: 14;" text="Select Course ID:" />
+                  <ComboBox fx:id="courseCombo" prefWidth="200.0" promptText="Select Course" />
+            </children>
+         </HBox>
+         <HBox alignment="CENTER" spacing="10.0" style="-fx-padding: 10;">
+            <children>
+      
+                  <Label minWidth="150.0" style="-fx-font-size: 14;" text="Select Year:" />
+                  <ComboBox fx:id="yearCombo" prefWidth="200.0" promptText="Select Year" />
+            </children>
+         </HBox>
+         <HBox alignment="CENTER" prefHeight="0.0" prefWidth="1110.0" spacing="10.0" style="-fx-padding: 20;">
+            <children>
+               <Label minWidth="150.0" text="Select CSV File:" />
+      
+                              <Button onAction="#handleChooseFile" style="-fx-background-color: #2ECC71; -fx-text-fill: white;" text="Choose File" />
+                  <Label fx:id="selectedFileLabel" text="No file chosen" />
+            </children>
+         </HBox>
+         <HBox alignment="CENTER" prefHeight="0.0" prefWidth="1110.0" spacing="10.0">
+            <children>
+                  <Button onAction="#handleInstructorUploadEval" style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14; -fx-padding: 10 20;" text="Upload CSV" />
+      
+                  <Button onAction="#handleBack" style="-fx-background-color: #808080; -fx-font-size: 14; -fx-padding: 10 20;" text="Back" textFill="WHITE" />
+            </children>
+         </HBox>
         </VBox>
     </center>
 
