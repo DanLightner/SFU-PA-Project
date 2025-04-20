@@ -1,6 +1,5 @@
 package edu.francis.my.sfupa.SQLite.Models;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
