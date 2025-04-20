@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import com.opencsv.CSVWriter;
 import javafx.stage.FileChooser;
+import javafx.beans.property.SimpleStringProperty;
 
 @Component
 public class GradebookReportController {
@@ -91,6 +92,7 @@ public class GradebookReportController {
         }
     }
 
+    @FXML
     private void setupTableView() {
         studentIdColumn.setCellValueFactory(new PropertyValueFactory<>("studentId"));
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
@@ -365,21 +367,4 @@ public class GradebookReportController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-}
-
-// Data class for retake table
-class RetakeStudent {
-    private String studentId;
-    private String grade;
-
-    public RetakeStudent(String studentId, String grade) {
-        this.studentId = studentId;
-        this.grade = grade;
-    }
-
-    public String getStudentId() { return studentId; }
-    public void setStudentId(String studentId) { this.studentId = studentId; }
-    
-    public String getGrade() { return grade; }
-    public void setGrade(String grade) { this.grade = grade; }
 } 

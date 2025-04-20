@@ -42,7 +42,7 @@
 
     <center>
         <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
-            <Label prefHeight="98.0" prefWidth="246.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Add Guest Lecturer Manually" />
+            <Label prefHeight="98.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Add Guest Lecturer Manually" />
 
             <HBox alignment="CENTER" spacing="10">
                 <Label minWidth="150" text="First Name:" />
