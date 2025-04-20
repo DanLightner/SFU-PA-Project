@@ -5,11 +5,10 @@
 
     /* SFU Color Variables */
     -sfu-red: #C8102E;
-    -sfu-black: #000000;
+    -sfu-black: #2C3E50;
     -sfu-white: #FFFFFF;
-    -sfu-light-gray: #F5F5F5;
-    -sfu-gray: #CCCCCC;
-    -sfu-dark-gray: #555555;
+    -sfu-gray: #95A5A6;
+    -sfu-light-gray: #ECEFF1;
 }
 
 /* Header Styles */
@@ -89,7 +88,7 @@
 }
 
 .button:hover {
-    -fx-background-color: derive(-sfu-red, -10%);
+    -fx-opacity: 0.9;
 }
 
 .button:pressed {
@@ -113,13 +112,6 @@
 
 .button.outline:hover {
     -fx-background-color: derive(-sfu-red, 90%);
-}
-
-/* Status Bar Styles */
-.status-bar {
-    -fx-background-color: -sfu-light-gray;
-    -fx-border-color: -sfu-gray;
-    -fx-border-width: 1 0 0 0;
 }
 
 /* Table Styles */
@@ -197,28 +189,29 @@
 
 /* Chart Styles */
 .chart {
-    -fx-padding: 10;
-    -fx-background-color: transparent;
-}
-
-.chart-title {
-    -fx-font-size: 16;
-    -fx-font-weight: bold;
-    -fx-text-fill: -sfu-red;
+    -fx-padding: 10px;
 }
 
 .chart-plot-background {
     -fx-background-color: -sfu-white;
 }
 
-.chart-series-line {
-    -fx-stroke: -sfu-red;
-    -fx-stroke-width: 2px;
+.chart-vertical-grid-lines {
+    -fx-stroke: -sfu-light-gray;
 }
 
-.default-color0.chart-bar { -fx-bar-fill: -sfu-red; }
-.default-color1.chart-bar { -fx-bar-fill: -sfu-black; }
-.default-color2.chart-bar { -fx-bar-fill: -sfu-dark-gray; }
+.chart-horizontal-grid-lines {
+    -fx-stroke: -sfu-light-gray;
+}
+
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.axis-label {
+    -fx-font-size: 12px;
+}
 
 /* Alerts and Dialog Styles */
 .dialog-pane {
