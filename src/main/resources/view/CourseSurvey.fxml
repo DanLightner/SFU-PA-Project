@@ -7,9 +7,8 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.geometry.Insets?>
 
-<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer">
 
     <!-- Menu Bar (Top) -->
     <top>
@@ -42,17 +41,31 @@
     <!-- Main Content Area -->
     <center>
         <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;">
-            <Label text="Guest Lecturer" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+<<<<<<< Updated upstream
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Guest Lecturer" />
             
-            <Button onAction="#handleUploadGuestLecturer" style="-fx-background-color: #DC1E35; -fx-text-fill: white; -fx-min-width: 250;" text="Upload Guest Lecturer CSV" />
+            <Button onAction="#handleUploadGuestLecturer" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Upload Guest Lecturer CSV" textFill="WHITE" />
             
-            <Button onAction="#handleAddGuestLecturer" style="-fx-background-color: #DC1E35; -fx-text-fill: white; -fx-min-width: 250;" text="Add Guest Lecturer Manually" />
+            <Button onAction="#handleAddGuestLecturer" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Add Guest Lecturer Manually" textFill="WHITE" />
             
-            <Button onAction="#handleViewGuestLecturers" style="-fx-background-color: #DC1E35; -fx-text-fill: white; -fx-min-width: 250;" text="View Guest Lecturers" />
+            <Button onAction="#handleViewGuestLecturers" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="View Guest Lecturers" textFill="WHITE" />
             
-            <Button onAction="#handleEditGuestLecturerSurveys" style="-fx-background-color: #DC1E35; -fx-text-fill: white; -fx-min-width: 250;" text="Edit Guest Lecturer Surveys" />
+            <Button onAction="#handleEditGuestLecturerSurveys" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Edit Guest Lecturer Surveys" textFill="WHITE" />
             
-            <Button onAction="#handleAnalyzeGuestLecturerSurveys" style="-fx-background-color: #DC1E35; -fx-text-fill: white; -fx-min-width: 250;" text="Analyze Guest Lecturer Surveys" />
+            <Button onAction="#handleAnalyzeGuestLecturerSurveys" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Analyze Guest Lecturer Surveys" textFill="WHITE" />
+=======
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Guest Lecturer" />
+            
+            <Button onAction="#handleUploadGuestLecturer" text="Upload Guest Lecturer CSV" />
+            
+            <Button onAction="#handleAddGuestLecturer" text="Add Guest Lecturer Manually" />
+            
+            <Button onAction="#handleViewGuestLecturers" text="View Guest Lecturers" />
+            
+            <Button onAction="#handleEditGuestLecturerSurveys" text="Edit Guest Lecturer Surveys" />
+            
+            <Button onAction="#handleAnalyzeGuestLecturerSurveys" text="Analyze Guest Lecturer Surveys" />
+>>>>>>> Stashed changes
         </VBox>
     </center>
 

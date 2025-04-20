@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvaluation">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvaluation">
 
     <!-- Menu Bar (Top) -->
     <top>
@@ -42,11 +42,11 @@
     <!-- Main Content Area -->
     <center>
         <VBox alignment="CENTER" spacing="15">
-            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Instructor Evaluation Management" />
-            <Button onAction="#handleAnalyzeData" text="Analyze Instructor Eval Data" />
-            <Button onAction="#handleEditEval" text="Edit Instructor Evaluation" />
-            <Button onAction="#handleUploadEval" text="Upload Instructor Evaluation" />
-            <Button onAction="#handleViewSpecificInstructor" text="View Specific Instructor Evaluations" />
+            <Label alignment="CENTER" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Instructor Evaluation Management" />
+            <Button onAction="#handleAnalyzeData" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Analyze Instructor Eval Data" textFill="WHITE" />
+            <Button onAction="#handleEditEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Edit Instructor Evaluation" textFill="WHITE" />
+            <Button onAction="#handleUploadEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Upload Instructor Evaluation" textFill="WHITE" />
+            <Button onAction="#handleViewSpecificInstructor" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="View Specific Instructor Evaluations" textFill="WHITE" />
         </VBox>
     </center>
 

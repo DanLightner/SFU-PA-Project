@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalEditController">
+<BorderPane prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvalEditController">
     <top>
         <MenuBar>
             <Menu text="File">
@@ -34,12 +48,12 @@
     <center>
         <VBox spacing="15" VBox.vgrow="ALWAYS">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
             <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Edit Instructor Evaluations" />
 
-            <HBox spacing="10" alignment="CENTER_LEFT">
+            <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Select Course:" />
                 <ComboBox fx:id="courseCombo" prefWidth="200" />
                 <Label text="Select Year:" />
@@ -49,10 +63,10 @@
                 <Button onAction="#handleSearch" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 15;" text="Search" />
             </HBox>
 
-            <SplitPane VBox.vgrow="ALWAYS" orientation="VERTICAL" dividerPositions="0.4">
+            <SplitPane dividerPositions="0.4" orientation="VERTICAL" VBox.vgrow="ALWAYS">
                 <VBox>
-                    <TitledPane text="Evaluation Results" expanded="true" VBox.vgrow="ALWAYS">
-                        <TableView fx:id="evalTable" VBox.vgrow="ALWAYS" onMouseClicked="#handleEvalSelection">
+                    <TitledPane expanded="true" text="Evaluation Results" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="evalTable" onMouseClicked="#handleEvalSelection" VBox.vgrow="ALWAYS">
                             <columns>
                                 <TableColumn fx:id="courseColumn" text="Course" />
                                 <TableColumn fx:id="instructorColumn" text="Instructor" />
@@ -64,7 +78,7 @@
                 </VBox>
 
                 <VBox spacing="10">
-                    <TitledPane text="Edit Evaluation Details" expanded="true">
+                    <TitledPane expanded="true" text="Edit Evaluation Details">
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">
                                 <Label text="Instructor:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
@@ -78,20 +92,30 @@
                                 
                                 <Label text="Year:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
                                 <ComboBox fx:id="editYearCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <columnConstraints>
+                           <ColumnConstraints />
+                           <ColumnConstraints />
+                        </columnConstraints>
+                        <rowConstraints>
+                           <RowConstraints />
+                           <RowConstraints />
+                           <RowConstraints />
+                           <RowConstraints />
+                        </rowConstraints>
                             </GridPane>
 
-                            <HBox spacing="10" alignment="CENTER_RIGHT">
+                            <HBox alignment="CENTER_RIGHT" spacing="10">
                                 <Button onAction="#handleSaveChanges" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Save Changes" />
                             </HBox>
                         </VBox>
                     </TitledPane>
 
-                    <TitledPane text="Evaluation Responses" expanded="true" VBox.vgrow="ALWAYS">
-                        <TableView fx:id="responsesTable" VBox.vgrow="ALWAYS" editable="true">
+                    <TitledPane expanded="true" text="Evaluation Responses" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="responsesTable" editable="true" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="questionColumn" text="Question" prefWidth="400" />
-                                <TableColumn fx:id="responseColumn" text="Response" prefWidth="200" />
-                                <TableColumn fx:id="responseTypeColumn" text="Type" prefWidth="100" />
+                                <TableColumn fx:id="questionColumn" prefWidth="400" text="Question" />
+                                <TableColumn fx:id="responseColumn" prefWidth="200" text="Response" />
+                                <TableColumn fx:id="responseTypeColumn" prefWidth="100" text="Type" />
                             </columns>
                             <placeholder>
                                 <Label text="Select an evaluation to view responses" />
@@ -101,8 +125,8 @@
                 </VBox>
             </SplitPane>
 
-            <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Button onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 8 15;" text="Back" />
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <Button onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 8 15; -fx-background-color: #808080;" text="Back" textFill="WHITE" />
             </HBox>
         </VBox>
     </center>
