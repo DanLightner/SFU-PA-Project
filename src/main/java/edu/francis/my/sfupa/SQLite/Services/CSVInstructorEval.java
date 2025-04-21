@@ -69,6 +69,7 @@ public class CSVInstructorEval {
             // Create course evaluation
             CourseEval courseEval = new CourseEval();
             courseEval.setCourse(classEntity);
+            courseEval.setEvalType(CourseEval.EvalType.INSTRUCTOR);
             // Lecturer is optional, so we don't set it here
 
             return courseEvalRepository.save(courseEval);
@@ -105,6 +106,7 @@ public class CSVInstructorEval {
             // Create course evaluation
             CourseEval courseEval = new CourseEval();
             courseEval.setCourse(classEntity);
+            courseEval.setEvalType(CourseEval.EvalType.GUEST_LECTURER);
             
             // Set lecturer if provided
             if (lecturerId != null) {

@@ -223,17 +223,22 @@ public class DataInitializer {
         List<CourseEval> courseEvals = new ArrayList<>();
 
         for (Classes classItem : classes) {
-            // Create 1-3 evaluations per class with different lecturers
-            int numEvals = random.nextInt(3) + 1;
-            for (int i = 0; i < numEvals; i++) {
-                // Select a random lecturer
-                Lecturer lecturer = lecturers.get(random.nextInt(lecturers.size()));
+            // Create exactly one evaluation per class
+            // Select a random lecturer
+            Lecturer lecturer = lecturers.get(random.nextInt(lecturers.size()));
 
-                CourseEval courseEval = new CourseEval();
-                courseEval.setCourse(classItem);
-                courseEval.setLecturer(lecturer);
-                courseEvals.add(courseEval);
+            CourseEval courseEval = new CourseEval();
+            courseEval.setCourse(classItem);
+            courseEval.setLecturer(lecturer);
+            
+            // Randomly assign evaluation type (70% chance of INSTRUCTOR, 30% chance of GUEST_LECTURER)
+            if (random.nextDouble() < 0.7) {
+                courseEval.setEvalType(CourseEval.EvalType.INSTRUCTOR);
+            } else {
+                courseEval.setEvalType(CourseEval.EvalType.GUEST_LECTURER);
             }
+            
+            courseEvals.add(courseEval);
         }
 
         courseEvalRepository.saveAll(courseEvals);
@@ -242,40 +247,75 @@ public class DataInitializer {
     }
 
     private List<Questions> initQuestions(List<CourseEval> courseEvals) {
-        // Define some standard questions
-        String[] likertQuestions = {
+        // Define instructor-specific Likert questions
+        String[] instructorLikertQuestions = {
                 "The instructor presented material clearly",
-                "The course was well organized",
                 "The instructor was responsive to student questions",
-                "The assignments were relevant to the course material",
-                "The exams fairly represented the course material",
                 "The instructor was available during office hours",
                 "The instructor provided timely feedback",
-                "The course workload was appropriate"
+                "The instructor was well-prepared for class",
+                "The instructor demonstrated knowledge of the subject",
+                "The instructor effectively used class time",
+                "The instructor created an environment conducive to learning"
         };
 
-        String[] openQuestions = {
+        // Define course-specific Likert questions
+        String[] courseLikertQuestions = {
+                "The course was well organized",
+                "The assignments were relevant to the course material",
+                "The exams fairly represented the course material",
+                "The course workload was appropriate",
+                "The course materials were helpful",
+                "The course objectives were clear",
+                "The course content was valuable",
+                "The course pace was appropriate"
+        };
+
+        // Define instructor-specific open questions
+        String[] instructorOpenQuestions = {
+                "What did you find most effective about the instructor's teaching style?",
+                "How could the instructor improve their teaching methods?",
+                "What suggestions do you have for the instructor?",
+                "Additional comments about the instructor"
+        };
+
+        // Define course-specific open questions
+        String[] courseOpenQuestions = {
                 "What aspects of this course were most beneficial to you?",
                 "How could this course be improved?",
-                "What suggestions do you have for the instructor?",
+                "What aspects of the course content need more clarity?",
                 "Additional comments about the course"
         };
 
         List<Questions> questions = new ArrayList<>();
 
         for (CourseEval eval : courseEvals) {
-            // Add Likert scale questions (type = true)
-            for (String questionText : likertQuestions) {
-                Questions question = new Questions(questionText, true);
-                question.setEval(eval);
-                questions.add(question);
-            }
+            if (eval.getEvalType() == CourseEval.EvalType.INSTRUCTOR) {
+                // For instructor evaluations, only use course-related questions
+                for (String questionText : courseLikertQuestions) {
+                    Questions question = new Questions(questionText, true);
+                    question.setEval(eval);
+                    questions.add(question);
+                }
 
-            // Add open-ended questions (type = false)
-            for (String questionText : openQuestions) {
-                Questions question = new Questions(questionText, false);
-                question.setEval(eval);
-                questions.add(question);
+                for (String questionText : courseOpenQuestions) {
+                    Questions question = new Questions(questionText, false);
+                    question.setEval(eval);
+                    questions.add(question);
+                }
+            } else {
+                // For guest lecturers, only use instructor-related questions
+                for (String questionText : instructorLikertQuestions) {
+                    Questions question = new Questions(questionText, true);
+                    question.setEval(eval);
+                    questions.add(question);
+                }
+
+                for (String questionText : instructorOpenQuestions) {
+                    Questions question = new Questions(questionText, false);
+                    question.setEval(eval);
+                    questions.add(question);
+                }
             }
         }
 

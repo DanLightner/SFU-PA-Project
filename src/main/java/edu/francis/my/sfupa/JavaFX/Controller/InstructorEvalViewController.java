@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Controller
 public class InstructorEvalViewController {
@@ -59,19 +61,25 @@ public class InstructorEvalViewController {
     private void loadAllEvaluations() {
         ObservableList<InstructorEvalData> data = FXCollections.observableArrayList();
         
-        Iterable<CourseEval> courseEvals = courseEvalRepository.findAll();
-        for (CourseEval eval : courseEvals) {
-            Classes classEntity = eval.getCourse();
-            Course course = classEntity.getClassCode();
-            Semester semester = classEntity.getSemester();
-            SchoolYear year = classEntity.getSchoolYear();
+        // Filter for instructor evaluations only
+        List<CourseEval> courseEvals = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+            .filter(eval -> eval.getEvalType() == CourseEval.EvalType.INSTRUCTOR)
+            .collect(Collectors.toList());
 
-            data.add(new InstructorEvalData(
-                course.getcourseCode(),
-                course.getName(),
-                semester.getName(),
-                year.getName()
-            ));
+        for (CourseEval eval : courseEvals) {
+            if (eval.getCourse() != null) {
+                Classes classEntity = eval.getCourse();
+                Course course = classEntity.getClassCode();
+                Semester semester = classEntity.getSemester();
+                SchoolYear year = classEntity.getSchoolYear();
+
+                data.add(new InstructorEvalData(
+                    course.getcourseCode(),
+                    course.getName(),
+                    semester.getName(),
+                    year.getName()
+                ));
+            }
         }
 
         evaluationTable.setItems(data);

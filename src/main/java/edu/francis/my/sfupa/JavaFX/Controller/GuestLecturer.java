@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import javafx.collections.FXCollections;
 import edu.francis.my.sfupa.SQLite.Services.CSVInstructorEval;
+import edu.francis.my.sfupa.SQLite.Repository.CourseEvalRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.stream.StreamSupport;
+import java.util.Set;
 
 @Component
 public class GuestLecturer {
@@ -38,17 +40,20 @@ public class GuestLecturer {
     @Autowired
     private LecturerRepository lecturerRepository;
 
-    @FXML
-    private ComboBox<String> semesterCombo;
-
     @Autowired
     private SchoolYearRepository schoolYearRepository;
 
-    @FXML
-    private ComboBox<String> courseCombo;
-
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private CourseEvalRepository courseEvalRepository;
+
+    @FXML
+    private ComboBox<String> semesterCombo;
+
+    @FXML
+    private ComboBox<String> courseCombo;
 
     @FXML
     private ComboBox<String> yearCombo;
@@ -77,12 +82,23 @@ public class GuestLecturer {
 
     private void setupCourseComboBox() {
         if (courseCombo != null) {
-            Iterable<Course> courses = courseRepository.findAll();
-            List<String> courseOptions = new ArrayList<>();
-            for (Course course : courses) {
-                courseOptions.add(course.getcourseCode() + " - " + course.getName());
+            // Get all courses that have guest lecturer evaluations
+            Set<String> coursesWithGuestLecturers = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+                .filter(eval -> eval.getEvalType() == CourseEval.EvalType.GUEST_LECTURER)
+                .map(eval -> eval.getCourse().getClassCode().getcourseCode() + " - " + eval.getCourse().getClassCode().getName())
+                .collect(Collectors.toSet());
+
+            // If no courses with guest lecturers yet, show all available courses
+            if (coursesWithGuestLecturers.isEmpty()) {
+                Iterable<Course> courses = courseRepository.findAll();
+                List<String> courseOptions = new ArrayList<>();
+                for (Course course : courses) {
+                    courseOptions.add(course.getcourseCode() + " - " + course.getName());
+                }
+                courseCombo.setItems(FXCollections.observableArrayList(courseOptions));
+            } else {
+                courseCombo.setItems(FXCollections.observableArrayList(new ArrayList<>(coursesWithGuestLecturers)));
             }
-            courseCombo.setItems(FXCollections.observableArrayList(courseOptions));
         }
     }
 
@@ -169,16 +185,21 @@ public class GuestLecturer {
                 return;
             }
 
+            // Set the evaluation type to GUEST_LECTURER
+            courseEval.setEvalType(CourseEval.EvalType.GUEST_LECTURER);
             CSVInstructorEval.processCSVFile(selectedFile, courseEval.getId());
-            showAlert("Guest Lecturer CSV uploaded and processed successfully!");
-
-            // Reset selected file after upload
+            showAlert("Evaluation uploaded successfully!");
+            
+            // Reset form
             selectedFile = null;
             selectedFileLabel.setText("No file chosen");
-
+            lecturerCombo.setValue(null);
+            semesterCombo.setValue(null);
+            courseCombo.setValue(null);
+            yearCombo.setValue(null);
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error processing CSV: " + e.getMessage());
+            showAlert("Error uploading evaluation: " + e.getMessage());
         }
     }
 

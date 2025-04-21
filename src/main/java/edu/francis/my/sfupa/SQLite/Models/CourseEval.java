@@ -24,10 +24,23 @@ public class CourseEval {
     @JoinColumn(name="lecturer_id", nullable = true)
     private Lecturer lecturer;
 
-    public CourseEval() {}
-    public CourseEval(Integer id, Classes course, Lecturer lecturer) {
+    @Enumerated(EnumType.STRING)
+    @Column(name = "eval_type", nullable = false)
+    private EvalType evalType;
+
+    public enum EvalType {
+        INSTRUCTOR,
+        GUEST_LECTURER
+    }
+
+    public CourseEval() {
+        this.evalType = EvalType.INSTRUCTOR; // Default to instructor evaluation
+    }
+
+    public CourseEval(Integer id, Classes course, Lecturer lecturer, EvalType evalType) {
         this.course = course;
         this.lecturer = lecturer;
+        this.evalType = evalType;
     }
 
     public static void saveAll(List<CourseEval> courseEvals) {
@@ -54,5 +67,11 @@ public class CourseEval {
 
     public void setLecturer(Lecturer lecturer) {this.lecturer = lecturer; }
 
+    public EvalType getEvalType() {
+        return evalType;
+    }
 
+    public void setEvalType(EvalType evalType) {
+        this.evalType = evalType;
+    }
 }
