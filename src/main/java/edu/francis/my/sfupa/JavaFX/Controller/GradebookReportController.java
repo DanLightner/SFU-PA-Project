@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import com.opencsv.CSVWriter;
 import javafx.stage.FileChooser;
 import javafx.beans.property.SimpleStringProperty;
+import java.util.stream.StreamSupport;
 
 @Component
 public class GradebookReportController {
@@ -58,10 +59,22 @@ public class GradebookReportController {
     @FXML
     public void initialize() {
         setupCourseComboBox();
-        setupYearComboBox();
-        setupSemesterComboBox();
         setupTableView();
         setupChartStyle();
+
+        // Add listener for course combo box updates
+        courseCmb.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                updateYearOptions(newVal);
+            }
+        });
+
+        // Add listener for year combo box updates
+        yearCmb.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && courseCmb.getValue() != null) {
+                updateSemesterOptions(courseCmb.getValue(), newVal);
+            }
+        });
     }
 
     private void setupCourseComboBox() {
@@ -75,21 +88,43 @@ public class GradebookReportController {
         }
     }
 
-    private void setupYearComboBox() {
-        if (yearCmb != null) {
-            List<SchoolYear> schoolYears = new ArrayList<>();
-            schoolYearRepository.findAll().forEach(schoolYears::add);
-            List<String> yearNames = schoolYears.stream()
-                    .map(SchoolYear::getName)
-                    .collect(Collectors.toList());
-            yearCmb.setItems(FXCollections.observableArrayList(yearNames));
-        }
+    private void updateYearOptions(String selectedCourse) {
+        // Get all classes for this course
+        List<Classes> classes = StreamSupport.stream(classesRepository.findAll().spliterator(), false)
+                .filter(cls -> cls.getClassCode() != null && 
+                        cls.getClassCode().getcourseCode().equals(selectedCourse))
+                .collect(Collectors.toList());
+
+        // Get years when this course was offered
+        List<String> years = classes.stream()
+                .map(cls -> cls.getSchoolYear().getName())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        yearCmb.setItems(FXCollections.observableArrayList(years));
+        yearCmb.getSelectionModel().clearSelection();
+        semesterCmb.getSelectionModel().clearSelection();
+        semesterCmb.setItems(FXCollections.observableArrayList()); // Clear semester options until year is selected
     }
 
-    private void setupSemesterComboBox() {
-        if (semesterCmb != null) {
-            semesterCmb.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
-        }
+    private void updateSemesterOptions(String selectedCourse, String selectedYear) {
+        // Get all classes for this course and year
+        List<Classes> filteredClasses = StreamSupport.stream(classesRepository.findAll().spliterator(), false)
+                .filter(cls -> cls.getClassCode() != null && 
+                        cls.getClassCode().getcourseCode().equals(selectedCourse) &&
+                        cls.getSchoolYear().getName().equals(selectedYear))
+                .collect(Collectors.toList());
+
+        // Get semesters when this course was offered in the selected year
+        List<String> semesters = filteredClasses.stream()
+                .map(cls -> cls.getSemester().getName().name())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        semesterCmb.setItems(FXCollections.observableArrayList(semesters));
+        semesterCmb.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -244,8 +279,8 @@ public class GradebookReportController {
 
     private boolean isGradeCOrBelow(String grade) {
         grade = grade.trim().toUpperCase();
-        return grade.startsWith("C") || grade.equals("D+") || grade.equals("D") || 
-               grade.equals("D-") || grade.equals("F");
+        return grade.equals("C") || grade.equals("C-") || grade.equals("D+") || 
+               grade.equals("D") || grade.equals("D-") || grade.equals("F");
     }
 
     private void showAlert(String message) {
@@ -346,10 +381,11 @@ public class GradebookReportController {
 
                 // Write data
                 for (Grade grade : grades) {
+                    boolean needsRetake = isGradeCOrBelow(grade.getGrade());
                     writer.writeNext(new String[]{
                         grade.getStudent().getId_student().toString(),
                         grade.getGrade(),
-                        grade.isRetake() ? "Yes" : "No"
+                        needsRetake ? "Yes" : "No"
                     });
                 }
 
