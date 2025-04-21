@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GradebookStudentGradesController">
 
@@ -36,13 +48,13 @@
 
     <!-- Main Content Area -->
     <center>
-        <VBox spacing="20" alignment="TOP_CENTER" style="-fx-padding: 20;">
+        <VBox alignment="TOP_CENTER" spacing="20" style="-fx-padding: 20;">
             <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Student Grades Lookup" />
 
             <!-- Search Section -->
-            <HBox spacing="10" alignment="CENTER">
+            <HBox alignment="CENTER" spacing="10">
                 <Label style="-fx-font-size: 16px;" text="Enter Student ID:" />
-                <TextField fx:id="studentIdField" promptText="Student ID" prefWidth="200" />
+                <TextField fx:id="studentIdField" prefWidth="200" promptText="Student ID" />
                 <Button onAction="#handleSearch" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Search" />
             </HBox>
 
@@ -50,12 +62,21 @@
             <VBox spacing="10" style="-fx-padding: 10; -fx-background-color: #f5f5f5; -fx-background-radius: 5;">
                 <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Student Information" />
                 <GridPane hgap="10" vgap="5">
-                    <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                    <Label fx:id="studentNameLabel" text="-" GridPane.rowIndex="0" GridPane.columnIndex="1" />
-                    <Label text="ID:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                    <Label fx:id="studentIdLabel" text="-" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-                    <Label text="Program:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-                    <Label fx:id="studentProgramLabel" text="-" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                    <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <Label fx:id="studentNameLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label text="ID:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <Label fx:id="studentIdLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label text="Program:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <Label fx:id="studentProgramLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
                 </GridPane>
             </VBox>
 
@@ -64,44 +85,52 @@
                 <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Course Grades" />
                 <TableView fx:id="gradesTable" prefHeight="300">
                     <columns>
-                        <TableColumn fx:id="courseCodeColumn" text="Course Code" prefWidth="150" />
-                        <TableColumn fx:id="courseNameColumn" text="Course Name" prefWidth="250" />
-                        <TableColumn fx:id="semesterColumn" text="Semester" prefWidth="100" />
-                        <TableColumn fx:id="gradeColumn" text="Grade" prefWidth="100" />
-                        <TableColumn fx:id="creditsColumn" text="Credits" prefWidth="100" />
+                        <TableColumn fx:id="courseCodeColumn" prefWidth="150" text="Course Code" />
+                        <TableColumn fx:id="courseNameColumn" prefWidth="250" text="Course Name" />
+                        <TableColumn fx:id="semesterColumn" prefWidth="100" text="Semester" />
+                        <TableColumn fx:id="gradeColumn" prefWidth="100" text="Grade" />
+                        <TableColumn fx:id="creditsColumn" prefWidth="100" text="Credits" />
                     </columns>
                 </TableView>
             </VBox>
 
             <!-- Summary Section -->
-            <TitledPane text="Academic Summary" expanded="true">
+            <TitledPane expanded="true" text="Academic Summary">
                 <VBox spacing="10" style="-fx-padding: 10; -fx-background-color: #f5f5f5; -fx-background-radius: 5;">
                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Academic Summary" />
                     <GridPane hgap="10" vgap="5">
-                        <Label text="GPA:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                        <Label fx:id="gpaLabel" text="-" GridPane.rowIndex="0" GridPane.columnIndex="1" />
-                        <Label text="Total Credits:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                        <Label fx:id="totalCreditsLabel" text="-" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                        <Label text="GPA:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label fx:id="gpaLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <Label text="Total Credits:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label fx:id="totalCreditsLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <columnConstraints>
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                  </columnConstraints>
+                  <rowConstraints>
+                     <RowConstraints />
+                     <RowConstraints />
+                  </rowConstraints>
                     </GridPane>
                 </VBox>
             </TitledPane>
 
             <!-- Low Grades Section -->
-            <TitledPane text="Grades C or Below" expanded="true">
+            <TitledPane expanded="true" text="Grades C or Below">
                 <VBox spacing="10">
                     <TableView fx:id="lowGradesTable" prefHeight="200">
                         <columns>
-                            <TableColumn fx:id="lowGradeCourseCodeColumn" text="Course Code" prefWidth="150" />
-                            <TableColumn fx:id="lowGradeCourseNameColumn" text="Course Name" prefWidth="250" />
-                            <TableColumn fx:id="lowGradeSemesterColumn" text="Semester" prefWidth="150" />
-                            <TableColumn fx:id="lowGradeColumn" text="Grade" prefWidth="100" />
+                            <TableColumn fx:id="lowGradeCourseCodeColumn" prefWidth="150" text="Course Code" />
+                            <TableColumn fx:id="lowGradeCourseNameColumn" prefWidth="250" text="Course Name" />
+                            <TableColumn fx:id="lowGradeSemesterColumn" prefWidth="150" text="Semester" />
+                            <TableColumn fx:id="lowGradeColumn" prefWidth="100" text="Grade" />
                         </columns>
                     </TableView>
                 </VBox>
             </TitledPane>
 
-            <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Button onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 8 15;" text="Back" />
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <Button onAction="#handleBack" style="-fx-font-size: 14px; -fx-padding: 8 15; -fx-background-color: #808080;" text="Back" textFill="WHITE" />
             </HBox>
         </VBox>
     </center>

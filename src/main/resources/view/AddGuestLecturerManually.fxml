@@ -42,21 +42,21 @@
 
     <center>
         <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
-            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Add Guest Lecturer Manually" />
+            <Label prefHeight="98.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Add Guest Lecturer Manually" />
 
-            <HBox alignment="CENTER_LEFT" spacing="10">
+            <HBox alignment="CENTER" spacing="10">
                 <Label minWidth="150" text="First Name:" />
                 <TextField fx:id="firstNameField" prefWidth="200" />
             </HBox>
 
-            <HBox alignment="CENTER_LEFT" spacing="10">
+            <HBox alignment="CENTER" spacing="10">
                 <Label minWidth="150" text="Last Name:" />
                 <TextField fx:id="lastNameField" prefWidth="200" />
             </HBox>
 
-            <HBox alignment="CENTER" spacing="10">
+            <HBox alignment="CENTER" prefHeight="98.0" prefWidth="1070.0" spacing="10.0">
                 <Button onAction="#handleAddGuestLecturer" style="-fx-background-color: #3498DB; -fx-text-fill: white;" text="Add Guest Lecturer" />
-                <Button onAction="#handleBack" text="Back" />
+                <Button onAction="#handleBack" style="-fx-background-color: #808080;" text="Back" textFill="WHITE" />
             </HBox>
         </VBox>
     </center>

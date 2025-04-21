@@ -15,10 +15,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import com.opencsv.CSVWriter;
+import javafx.stage.FileChooser;
+import javafx.beans.property.SimpleStringProperty;
+import java.util.stream.StreamSupport;
 
 @Component
 public class GradebookReportController {
@@ -54,10 +59,22 @@ public class GradebookReportController {
     @FXML
     public void initialize() {
         setupCourseComboBox();
-        setupYearComboBox();
-        setupSemesterComboBox();
         setupTableView();
         setupChartStyle();
+
+        // Add listener for course combo box updates
+        courseCmb.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                updateYearOptions(newVal);
+            }
+        });
+
+        // Add listener for year combo box updates
+        yearCmb.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && courseCmb.getValue() != null) {
+                updateSemesterOptions(courseCmb.getValue(), newVal);
+            }
+        });
     }
 
     private void setupCourseComboBox() {
@@ -71,23 +88,46 @@ public class GradebookReportController {
         }
     }
 
-    private void setupYearComboBox() {
-        if (yearCmb != null) {
-            List<SchoolYear> schoolYears = new ArrayList<>();
-            schoolYearRepository.findAll().forEach(schoolYears::add);
-            List<String> yearNames = schoolYears.stream()
-                    .map(SchoolYear::getName)
-                    .collect(Collectors.toList());
-            yearCmb.setItems(FXCollections.observableArrayList(yearNames));
-        }
+    private void updateYearOptions(String selectedCourse) {
+        // Get all classes for this course
+        List<Classes> classes = StreamSupport.stream(classesRepository.findAll().spliterator(), false)
+                .filter(cls -> cls.getClassCode() != null && 
+                        cls.getClassCode().getcourseCode().equals(selectedCourse))
+                .collect(Collectors.toList());
+
+        // Get years when this course was offered
+        List<String> years = classes.stream()
+                .map(cls -> cls.getSchoolYear().getName())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        yearCmb.setItems(FXCollections.observableArrayList(years));
+        yearCmb.getSelectionModel().clearSelection();
+        semesterCmb.getSelectionModel().clearSelection();
+        semesterCmb.setItems(FXCollections.observableArrayList()); // Clear semester options until year is selected
     }
 
-    private void setupSemesterComboBox() {
-        if (semesterCmb != null) {
-            semesterCmb.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
-        }
+    private void updateSemesterOptions(String selectedCourse, String selectedYear) {
+        // Get all classes for this course and year
+        List<Classes> filteredClasses = StreamSupport.stream(classesRepository.findAll().spliterator(), false)
+                .filter(cls -> cls.getClassCode() != null && 
+                        cls.getClassCode().getcourseCode().equals(selectedCourse) &&
+                        cls.getSchoolYear().getName().equals(selectedYear))
+                .collect(Collectors.toList());
+
+        // Get semesters when this course was offered in the selected year
+        List<String> semesters = filteredClasses.stream()
+                .map(cls -> cls.getSemester().getName().name())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        semesterCmb.setItems(FXCollections.observableArrayList(semesters));
+        semesterCmb.getSelectionModel().clearSelection();
     }
 
+    @FXML
     private void setupTableView() {
         studentIdColumn.setCellValueFactory(new PropertyValueFactory<>("studentId"));
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
@@ -162,7 +202,7 @@ public class GradebookReportController {
 
         // Define the standard grade order
         List<String> standardGradeOrder = List.of(
-            "A+", "A", "A-",
+            "A", "A-",
             "B+", "B", "B-",
             "C+", "C", "C-",
             "D+", "D", "D-",
@@ -239,8 +279,8 @@ public class GradebookReportController {
 
     private boolean isGradeCOrBelow(String grade) {
         grade = grade.trim().toUpperCase();
-        return grade.startsWith("C") || grade.equals("D+") || grade.equals("D") || 
-               grade.equals("D-") || grade.equals("F");
+        return grade.equals("C") || grade.equals("C-") || grade.equals("D+") || 
+               grade.equals("D") || grade.equals("D-") || grade.equals("F");
     }
 
     private void showAlert(String message) {
@@ -290,21 +330,77 @@ public class GradebookReportController {
         alert.setContentText("This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
         alert.showAndWait();
     }
-}
 
-// Data class for retake table
-class RetakeStudent {
-    private String studentId;
-    private String grade;
+    @FXML
+    private void handleExportCSV() {
+        if (courseCmb.getValue() == null || yearCmb.getValue() == null || semesterCmb.getValue() == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Please select Course, Year, and Semester before exporting");
+            return;
+        }
 
-    public RetakeStudent(String studentId, String grade) {
-        this.studentId = studentId;
-        this.grade = grade;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Gradebook Report");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("CSV Files", "*.csv")
+        );
+        fileChooser.setInitialFileName("gradebook_report.csv");
+
+        File file = fileChooser.showSaveDialog(retakeTable.getScene().getWindow());
+        if (file != null) {
+            try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
+                // Write header
+                writer.writeNext(new String[]{"Student ID", "Grade", "Retake Status"});
+
+                // Get selected values
+                String courseCode = courseCmb.getValue();
+                String yearName = yearCmb.getValue();
+                String semesterName = semesterCmb.getValue();
+
+                // Find the class
+                Course course = courseRepository.findByCourseCode(courseCode);
+                SchoolYear year = schoolYearRepository.findByName(yearName);
+                SemesterName semesterEnum = SemesterName.fromString(semesterName);
+                Semester semester = semesterRepository.findById(semesterEnum.getId()).orElse(null);
+
+                if (course == null || year == null || semester == null) {
+                    showAlert(Alert.AlertType.ERROR, "Error", "Could not find matching course, year, or semester");
+                    return;
+                }
+
+                Classes classEntity = classesRepository.findByClassCode_CourseCodeAndSemester_IdAndSchoolYear_IdSchoolYear(
+                    courseCode, semesterEnum.getId(), year.getIdSchoolYear().intValue())
+                    .orElse(null);
+
+                if (classEntity == null) {
+                    showAlert(Alert.AlertType.ERROR, "Error", "No grades found for the selected criteria");
+                    return;
+                }
+
+                // Get all grades for this class
+                List<Grade> grades = gradeRepository.findByStudentClass(classEntity);
+
+                // Write data
+                for (Grade grade : grades) {
+                    boolean needsRetake = isGradeCOrBelow(grade.getGrade());
+                    writer.writeNext(new String[]{
+                        grade.getStudent().getId_student().toString(),
+                        grade.getGrade(),
+                        needsRetake ? "Yes" : "No"
+                    });
+                }
+
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Report exported successfully to " + file.getAbsolutePath());
+            } catch (IOException e) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to export report: " + e.getMessage());
+            }
+        }
     }
 
-    public String getStudentId() { return studentId; }
-    public void setStudentId(String studentId) { this.studentId = studentId; }
-    
-    public String getGrade() { return grade; }
-    public void setGrade(String grade) { this.grade = grade; }
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 } 

@@ -163,7 +163,8 @@ public class CSVGrade {
 
     private boolean isGradeCOrBelow(String grade) {
         grade = grade.trim().toUpperCase();
-        return grade.startsWith("C") || grade.equals("D+") || grade.equals("D") || 
+        return grade.equals("C") || grade.equals("C-") || 
+               grade.equals("D+") || grade.equals("D") || 
                grade.equals("D-") || grade.equals("F");
     }
 

@@ -7,7 +7,6 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.geometry.Insets?>
 
 <BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer">
 
@@ -42,17 +41,16 @@
     <!-- Main Content Area -->
     <center>
         <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;">
-            <Label text="Guest Lecturer" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-            
-            <Button onAction="#handleUploadGuestLecturer" style="-fx-background-color: #DC1E35; -fx-text-fill: white; -fx-min-width: 250;" text="Upload Guest Lecturer CSV" />
-            
-            <Button onAction="#handleAddGuestLecturer" style="-fx-background-color: #DC1E35; -fx-text-fill: white; -fx-min-width: 250;" text="Add Guest Lecturer Manually" />
-            
-            <Button onAction="#handleViewGuestLecturers" style="-fx-background-color: #DC1E35; -fx-text-fill: white; -fx-min-width: 250;" text="View Guest Lecturers" />
-            
-            <Button onAction="#handleEditGuestLecturerSurveys" style="-fx-background-color: #DC1E35; -fx-text-fill: white; -fx-min-width: 250;" text="Edit Guest Lecturer Surveys" />
-            
-            <Button onAction="#handleAnalyzeGuestLecturerSurveys" style="-fx-background-color: #DC1E35; -fx-text-fill: white; -fx-min-width: 250;" text="Analyze Guest Lecturer Surveys" />
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Guest Lecturer" />
+            <!-- Data Input/Upload -->
+            <Button onAction="#handleUploadGuestLecturer" style="-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-min-width: 250;" text="Upload Guest Lecturer CSV" textFill="WHITE" />
+            <Button onAction="#handleAddGuestLecturer" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Add Guest Lecturer Manually" textFill="WHITE" />
+            <!-- View/Check -->
+            <Button onAction="#handleViewGuestLecturers" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="View Guest Lecturers" textFill="WHITE" />
+            <!-- Edit/Modify -->
+            <Button onAction="#handleEditGuestLecturerSurveys" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Edit Guest Lecturer Surveys" textFill="WHITE" />
+            <!-- Analysis/Report -->
+            <Button onAction="#handleAnalyzeGuestLecturerSurveys" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Analyze Guest Lecturer Surveys" textFill="WHITE" />
         </VBox>
     </center>
 

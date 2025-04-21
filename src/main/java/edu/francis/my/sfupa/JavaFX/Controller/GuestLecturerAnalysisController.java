@@ -17,10 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import com.opencsv.CSVWriter;
+import javafx.stage.FileChooser;
 
 @Controller
 public class GuestLecturerAnalysisController {
@@ -89,16 +94,24 @@ public class GuestLecturerAnalysisController {
         setupSemesterComboBox();
         setupChartStyle();
 
-        // Add listeners for automatic updates
+        // Add listener for lecturer combo box updates
         lecturerCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 updateCourseComboBox(newVal);
             }
         });
 
+        // Add listener for course combo box updates
         courseCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && lecturerCombo.getValue() != null) {
-                analyzeData();
+                updateYearAndSemesterOptions(lecturerCombo.getValue(), newVal);
+            }
+        });
+
+        // Add listener for year combo box updates
+        yearCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && courseCombo.getValue() != null && lecturerCombo.getValue() != null) {
+                updateSemesterOptions(lecturerCombo.getValue(), courseCombo.getValue(), newVal);
             }
         });
     }
@@ -136,11 +149,16 @@ public class GuestLecturerAnalysisController {
         }
 
         // Get all course evaluations for this lecturer
-        List<String> courses = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+        List<CourseEval> lecturerEvals = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+                .filter(eval -> eval.getEvalType() == CourseEval.EvalType.GUEST_LECTURER) // Only get guest lecturer evaluations
                 .filter(eval -> eval.getLecturer() != null &&
                         eval.getLecturer().getId().equals(lecturer.getId()) &&
                         eval.getCourse() != null &&
                         eval.getCourse().getClassCode() != null)
+                .collect(Collectors.toList());
+
+        // Update courses dropdown
+        List<String> courses = lecturerEvals.stream()
                 .map(eval -> {
                     Course course = eval.getCourse().getClassCode();
                     return course.getcourseCode() + " - " + course.getName();
@@ -151,6 +169,29 @@ public class GuestLecturerAnalysisController {
 
         courseCombo.setItems(FXCollections.observableArrayList(courses));
         
+        // Update years dropdown based on lecturer's teaching history
+        List<String> years = lecturerEvals.stream()
+                .map(eval -> eval.getCourse().getSchoolYear().getName())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+        
+        yearCombo.setItems(FXCollections.observableArrayList(years));
+
+        // Update semesters dropdown based on lecturer's teaching history
+        List<String> semesters = lecturerEvals.stream()
+                .map(eval -> eval.getCourse().getSemester().getName().name())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        semesterCombo.setItems(FXCollections.observableArrayList(semesters));
+        
+        // Clear previous selections
+        courseCombo.getSelectionModel().clearSelection();
+        yearCombo.getSelectionModel().clearSelection();
+        semesterCombo.getSelectionModel().clearSelection();
+
         if (!courses.isEmpty()) {
             courseCombo.getSelectionModel().selectFirst();
         }
@@ -190,9 +231,24 @@ public class GuestLecturerAnalysisController {
 
     @FXML
     public void analyzeData() {
+        // Clear previous data
+        likertBarChart.getData().clear();
+        thematicAnalysisArea.clear();
+        if (rawResponsesTable != null) {
+            rawResponsesTable.getItems().clear();
+        }
+
+        // Validate all required fields
         if (lecturerCombo.getValue() == null || courseCombo.getValue() == null ||
                 yearCombo.getValue() == null || semesterCombo.getValue() == null) {
-            showAlert("Please select all fields before analyzing data.");
+            
+            StringBuilder missingFields = new StringBuilder("Please select the following fields:\n");
+            if (lecturerCombo.getValue() == null) missingFields.append("- Guest Lecturer\n");
+            if (courseCombo.getValue() == null) missingFields.append("- Course\n");
+            if (yearCombo.getValue() == null) missingFields.append("- Year\n");
+            if (semesterCombo.getValue() == null) missingFields.append("- Semester\n");
+            
+            showAlert(missingFields.toString());
             return;
         }
 
@@ -206,10 +262,12 @@ public class GuestLecturerAnalysisController {
         if (lecturerName.length >= 2) {
             lecturer = findLecturerByName(lecturerName[0], lecturerName[1]);
             if (lecturer == null) {
-                showAlert("Lecturer not found. Analyzing data for all lecturers for this course.");
+                showAlert("Lecturer not found in the database.");
+                return;
             }
         }
 
+        // Analyze the data
         analyzeLikertResponses(lecturer, courseCode);
         analyzeOpenEndedResponses(lecturer, courseCode);
     }
@@ -218,13 +276,19 @@ public class GuestLecturerAnalysisController {
         likertBarChart.getData().clear();
         Map<Questions, List<ResponseLikert>> responsesGrouped = new HashMap<>();
 
+        String selectedYear = yearCombo.getValue();
+        String selectedSemester = semesterCombo.getValue();
+
         // Get course evaluations for the selected lecturer and course
         Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
         for (CourseEval eval : allEvals) {
-            // Check if the course matches
-            if (eval.getCourse() != null && 
+            // Check if it's a guest lecturer evaluation and matches the criteria
+            if (eval.getEvalType() == CourseEval.EvalType.GUEST_LECTURER &&
+                eval.getCourse() != null && 
                 eval.getCourse().getClassCode() != null &&
-                eval.getCourse().getClassCode().getcourseCode().equals(courseCode)) {
+                eval.getCourse().getClassCode().getcourseCode().equals(courseCode) &&
+                eval.getCourse().getSchoolYear().getName().equals(selectedYear) &&
+                eval.getCourse().getSemester().getName().name().equals(selectedSemester)) {
                 
                 // If lecturer is specified, check if it matches
                 if (lecturer != null) {
@@ -277,12 +341,19 @@ public class GuestLecturerAnalysisController {
 
     private List<ResponseOpen> getRelevantResponses(Lecturer lecturer, String courseCode) {
         List<ResponseOpen> relevantResponses = new ArrayList<>();
+        String selectedYear = yearCombo.getValue();
+        String selectedSemester = semesterCombo.getValue();
+        
         Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
         
         for (CourseEval eval : allEvals) {
-            if (eval.getCourse() != null && 
+            // Check if it's a guest lecturer evaluation and matches the criteria
+            if (eval.getEvalType() == CourseEval.EvalType.GUEST_LECTURER &&
+                eval.getCourse() != null && 
                 eval.getCourse().getClassCode() != null &&
-                eval.getCourse().getClassCode().getcourseCode().equals(courseCode)) {
+                eval.getCourse().getClassCode().getcourseCode().equals(courseCode) &&
+                eval.getCourse().getSchoolYear().getName().equals(selectedYear) &&
+                eval.getCourse().getSemester().getName().name().equals(selectedSemester)) {
                 
                 if (lecturer != null) {
                     if (eval.getLecturer() == null || 
@@ -540,5 +611,145 @@ public class GuestLecturerAnalysisController {
         alert.setHeaderText("SFU PA Application");
         alert.setContentText("This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleExportCSV() {
+        if (lecturerCombo.getValue() == null || courseCombo.getValue() == null ||
+            yearCombo.getValue() == null || semesterCombo.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select Lecturer, Course, Year, and Semester before exporting");
+            alert.showAndWait();
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Guest Lecturer Evaluation Data");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("CSV Files", "*.csv")
+        );
+        fileChooser.setInitialFileName("guest_lecturer_evaluation_data.csv");
+
+        File file = fileChooser.showSaveDialog(rawResponsesTable.getScene().getWindow());
+        if (file != null) {
+            try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
+                // Write header
+                writer.writeNext(new String[]{"Question", "Response", "Response Type"});
+
+                String[] lecturerName = lecturerCombo.getValue().split(" ");
+                String firstName = lecturerName[0];
+                String lastName = lecturerName[1];
+                Lecturer lecturer = findLecturerByName(firstName, lastName);
+
+                if (lecturer != null) {
+                    // Write Likert responses
+                    for (ResponseLikert response : responseLikertRepository.findAll()) {
+                        CourseEval eval = response.getCourseEval();
+                        if (eval.getLecturer() != null && 
+                            eval.getLecturer().getId().equals(lecturer.getId()) &&
+                            eval.getCourse() != null &&
+                            eval.getCourse().getClassCode() != null &&
+                            eval.getCourse().getClassCode().getcourseCode().equals(courseCombo.getValue().split(" - ")[0])) {
+                            writer.writeNext(new String[]{
+                                response.getQuestion().getText(),
+                                response.getResponse(),
+                                "Likert"
+                            });
+                        }
+                    }
+
+                    // Write open-ended responses
+                    for (ResponseOpen response : responseOpenRepository.findAll()) {
+                        CourseEval eval = response.getCourseEval();
+                        if (eval.getLecturer() != null && 
+                            eval.getLecturer().getId().equals(lecturer.getId()) &&
+                            eval.getCourse() != null &&
+                            eval.getCourse().getClassCode() != null &&
+                            eval.getCourse().getClassCode().getcourseCode().equals(courseCombo.getValue().split(" - ")[0])) {
+                            writer.writeNext(new String[]{
+                                response.getQuestion().getText(),
+                                response.getResponse(),
+                                "Open-ended"
+                            });
+                        }
+                    }
+                }
+
+                showAlert("Data exported successfully to " + file.getAbsolutePath());
+            } catch (IOException e) {
+                showAlert("Failed to export data: " + e.getMessage());
+            }
+        }
+    }
+
+    private void updateSemesterOptions(String lecturerName, String courseWithName, String selectedYear) {
+        String[] nameParts = lecturerName.split(" ", 2);
+        if (nameParts.length < 2) return;
+
+        String firstName = nameParts[0].trim();
+        String lastName = nameParts[1].trim();
+        String courseCode = courseWithName.split(" - ")[0];
+
+        // Find the lecturer
+        Lecturer lecturer = findLecturerByName(firstName, lastName);
+        if (lecturer == null) return;
+
+        // Get all course evaluations for this lecturer, course, and year
+        List<CourseEval> filteredEvals = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+                .filter(eval -> eval.getLecturer() != null &&
+                        eval.getLecturer().getId().equals(lecturer.getId()) &&
+                        eval.getCourse() != null &&
+                        eval.getCourse().getClassCode() != null &&
+                        eval.getCourse().getClassCode().getcourseCode().equals(courseCode) &&
+                        eval.getCourse().getSchoolYear().getName().equals(selectedYear))
+                .collect(Collectors.toList());
+
+        // Update semesters dropdown for this specific course and year
+        List<String> semesters = filteredEvals.stream()
+                .map(eval -> eval.getCourse().getSemester().getName().name())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        semesterCombo.setItems(FXCollections.observableArrayList(semesters));
+        semesterCombo.getSelectionModel().clearSelection();
+    }
+
+    private void updateYearAndSemesterOptions(String lecturerName, String courseWithName) {
+        String[] nameParts = lecturerName.split(" ", 2);
+        if (nameParts.length < 2) return;
+
+        String firstName = nameParts[0].trim();
+        String lastName = nameParts[1].trim();
+        String courseCode = courseWithName.split(" - ")[0];
+
+        // Find the lecturer
+        Lecturer lecturer = findLecturerByName(firstName, lastName);
+        if (lecturer == null) return;
+
+        // Get all course evaluations for this lecturer and course
+        List<CourseEval> lecturerCourseEvals = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+                .filter(eval -> eval.getLecturer() != null &&
+                        eval.getLecturer().getId().equals(lecturer.getId()) &&
+                        eval.getCourse() != null &&
+                        eval.getCourse().getClassCode() != null &&
+                        eval.getCourse().getClassCode().getcourseCode().equals(courseCode))
+                .collect(Collectors.toList());
+
+        // Update years dropdown for this specific course
+        List<String> years = lecturerCourseEvals.stream()
+                .map(eval -> eval.getCourse().getSchoolYear().getName())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+        
+        yearCombo.setItems(FXCollections.observableArrayList(years));
+
+        // Clear previous selections
+        yearCombo.getSelectionModel().clearSelection();
+        semesterCombo.getSelectionModel().clearSelection();
+        semesterCombo.setItems(FXCollections.observableArrayList()); // Clear semester options until year is selected
     }
 } 
