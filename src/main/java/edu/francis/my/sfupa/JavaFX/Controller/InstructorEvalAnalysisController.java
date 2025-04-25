@@ -3,6 +3,7 @@ package edu.francis.my.sfupa.JavaFX.Controller;
 import edu.francis.my.sfupa.SQLite.Models.*;
 import edu.francis.my.sfupa.SQLite.Repository.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
@@ -10,17 +11,21 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.context.ApplicationContext;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static edu.francis.my.sfupa.HelloFXApplication.springContext;
-
+import com.opencsv.CSVWriter;
+import javafx.stage.FileChooser;
 
 @Component
 public class InstructorEvalAnalysisController {
@@ -33,7 +38,10 @@ public class InstructorEvalAnalysisController {
     @FXML private BarChart<String, Number> likertBarChart;
     @FXML private CategoryAxis xAxis;
     @FXML private NumberAxis yAxis;
-    @FXML private ComboBox<String> lecturerCombo;
+    @FXML private TableView<ResponseData> rawResponsesTable;
+    @FXML private TableColumn<ResponseData, String> questionColumn;
+    @FXML private TableColumn<ResponseData, String> responseColumn;
+    @FXML private TextArea thematicAnalysisArea;
 
     @Autowired private CourseRepository courseRepository;
     @Autowired private SchoolYearRepository schoolYearRepository;
@@ -41,105 +49,84 @@ public class InstructorEvalAnalysisController {
     @Autowired private ResponseLikertRepository responseLikertRepository;
     @Autowired private ResponseOpenRepository responseOpenRepository;
     @Autowired private QuestionsRepository questionsRepository;
-    @Autowired private LecturerRepository lecturerRepository;
     @Autowired private CourseEvalRepository courseEvalRepository;
-
-
-    /*
-    @FXML
-    public void initialize() {
-        // Convert Iterable<Course> to List<Course> and then set it to the ComboBox
-        List<Course> courses = new ArrayList<>();
-        courseRepository.findAll().forEach(courses::add);
-        courseCmb.setItems(FXCollections.observableArrayList(courses));
-
-        // Set items for yearCmb (ComboBox for SchoolYear)
-        List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll(); // Properly cast Iterable to List
-        yearCmb.setItems(FXCollections.observableArrayList(schoolYears));
-
-        // Set items for semesterCmb (ComboBox for Semester)
-        List<Semester> semesters = (List<Semester>) semesterRepository.findAll(); // Properly cast Iterable to List
-        semesterCmb.setItems(FXCollections.observableArrayList(semesters));
-
-        // Set labels for chart axes
-        xAxis.setLabel("Question");
-        yAxis.setLabel("Average Response");
-    }
-
-
-
-     */
-
-    @FXML
-    private void handleExit() {
-        System.exit(0);
-    }
-
-    @FXML
-    public void handleAbout(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("About SFU PA");
-        alert.setHeaderText("SFU PA Application");
-        alert.setContentText("This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
-        alert.showAndWait();
-    }
+    @Autowired private ClassesRepository classesRepository;
 
     @FXML
     public void initialize() {
-        setupLecturerComboBox();
-        setupYearComboBox();
-        setupSemesterComboBox();
+        setupCourseComboBox();
         setupChartStyle();
-    }
 
-    private void setupLecturerComboBox() {
-        Iterable<Lecturer> lecturers = lecturerRepository.findAll();
-        List<String> lecturerNames = new ArrayList<>();
-        for (Lecturer lecturer : lecturers) {
-            lecturerNames.add(lecturer.getFName() + " " + lecturer.getLName());
-        }
-        lecturerCombo.setItems(FXCollections.observableArrayList(lecturerNames));
-        
-        lecturerCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+        // Add listener for course combo box updates
+        courseCmb.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                updateCourseComboBox(newVal);
+                updateYearOptions(newVal);
+            }
+        });
+
+        // Add listener for year combo box updates
+        yearCmb.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && courseCmb.getValue() != null) {
+                updateSemesterOptions(courseCmb.getValue(), newVal);
             }
         });
     }
 
-    private void updateCourseComboBox(String lecturerName) {
-        String[] nameParts = lecturerName.split(" ");
-        if (nameParts.length < 2) return;
-
-        String firstName = nameParts[0];
-        String lastName = nameParts[1];
-
-        // Find the lecturer
-        Lecturer lecturer = findLecturerByName(firstName, lastName);
-        if (lecturer == null) return;
-
-        // Get all course evaluations for this lecturer
-        Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
+    private void setupCourseComboBox() {
         Set<String> uniqueCourses = new HashSet<>();
-        
-        for (CourseEval eval : allEvals) {
-            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
-                eval.getLecturer().getLName().equals(lecturer.getLName())) {
+        for (CourseEval eval : courseEvalRepository.findAll()) {
+            if (eval.getEvalType() == CourseEval.EvalType.INSTRUCTOR && 
+                eval.getCourse() != null && 
+                eval.getCourse().getClassCode() != null) {
                 uniqueCourses.add(eval.getCourse().getClassCode().getcourseCode());
             }
         }
-
-        courseCmb.setItems(FXCollections.observableArrayList(uniqueCourses));
+        List<String> sortedCourses = new ArrayList<>(uniqueCourses);
+        Collections.sort(sortedCourses);
+        courseCmb.setItems(FXCollections.observableArrayList(sortedCourses));
     }
 
-    private Lecturer findLecturerByName(String firstName, String lastName) {
-        Iterable<Lecturer> lecturers = lecturerRepository.findAll();
-        for (Lecturer lecturer : lecturers) {
-            if (lecturer.getFName().equals(firstName) && lecturer.getLName().equals(lastName)) {
-                return lecturer;
-            }
-        }
-        return null;
+    private void updateYearOptions(String selectedCourse) {
+        // Get all evaluations for this course
+        List<CourseEval> courseEvals = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+                .filter(eval -> eval.getEvalType() == CourseEval.EvalType.INSTRUCTOR) // Only get instructor evaluations
+                .filter(eval -> eval.getCourse() != null &&
+                        eval.getCourse().getClassCode() != null &&
+                        eval.getCourse().getClassCode().getcourseCode().equals(selectedCourse))
+                .collect(Collectors.toList());
+
+        // Get years when this course was evaluated
+        List<String> years = courseEvals.stream()
+                .map(eval -> eval.getCourse().getSchoolYear().getName())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        yearCmb.setItems(FXCollections.observableArrayList(years));
+        yearCmb.getSelectionModel().clearSelection();
+        semesterCmb.getSelectionModel().clearSelection();
+        semesterCmb.setItems(FXCollections.observableArrayList()); // Clear semester options until year is selected
+    }
+
+    private void updateSemesterOptions(String selectedCourse, String selectedYear) {
+        // Get all evaluations for this course and year
+        List<CourseEval> filteredEvals = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+                .filter(eval -> eval.getEvalType() == CourseEval.EvalType.INSTRUCTOR) // Only get instructor evaluations
+                .filter(eval -> eval.getCourse() != null &&
+                        eval.getCourse().getClassCode() != null &&
+                        eval.getCourse().getClassCode().getcourseCode().equals(selectedCourse) &&
+                        eval.getCourse().getSchoolYear().getName().equals(selectedYear))
+                .collect(Collectors.toList());
+
+        // Get semesters when this course was evaluated in the selected year
+        List<String> semesters = filteredEvals.stream()
+                .map(eval -> eval.getCourse().getSemester().getName().name())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        semesterCmb.setItems(FXCollections.observableArrayList(semesters));
+        semesterCmb.getSelectionModel().clearSelection();
     }
 
     private void setupChartStyle() {
@@ -160,32 +147,61 @@ public class InstructorEvalAnalysisController {
 
     @FXML
     public void analyzeEvaluations() {
-        if (lecturerCombo.getValue() == null || courseCmb.getValue() == null ||
-                yearCmb.getValue() == null || semesterCmb.getValue() == null) {
-            showAlert("Please select Lecturer, Course, Year, and Semester");
+        if (courseCmb.getValue() == null ||
+                yearCmb.getValue() == null ||
+                semesterCmb.getValue() == null) {
+            
+            StringBuilder missingFields = new StringBuilder("Please select the following fields:\n");
+            if (courseCmb.getValue() == null) missingFields.append("- Course\n");
+            if (yearCmb.getValue() == null) missingFields.append("- Year\n");
+            if (semesterCmb.getValue() == null) missingFields.append("- Semester\n");
+            
+            showAlert(missingFields.toString());
             return;
         }
 
-        String[] nameParts = lecturerCombo.getValue().split(" ");
-        Lecturer lecturer = findLecturerByName(nameParts[0], nameParts[1]);
-        if (lecturer == null) return;
-
-        analyzeLikertResponses(lecturer);
-        analyzeOpenEndedResponses(lecturer);
+        analyzeLikertResponses();
+        analyzeOpenEndedResponses();
     }
 
-    private void analyzeLikertResponses(Lecturer lecturer) {
+    private void analyzeLikertResponses() {
         likertBarChart.getData().clear();
         Map<Questions, List<ResponseLikert>> responsesGrouped = new HashMap<>();
 
-        // Get course evaluations for the selected lecturer and course
+        // Get the selected course, year, and semester
+        String selectedCourseCode = courseCmb.getValue();
+        String selectedYearName = yearCmb.getValue();
+        String selectedSemesterName = semesterCmb.getValue();
+
+        // Find the corresponding entities
+        Course selectedCourse = courseRepository.findByCourseCode(selectedCourseCode);
+        SchoolYear selectedYear = schoolYearRepository.findByName(selectedYearName);
+        SemesterName semesterEnum = SemesterName.fromString(selectedSemesterName);
+        Semester selectedSemester = semesterRepository.findById(semesterEnum.getId()).orElse(null);
+
+        if (selectedCourse == null || selectedYear == null || selectedSemester == null) {
+            showAlert("Could not find matching course, year, or semester");
+            return;
+        }
+
+        // Find the specific class
+        Classes classEntity = classesRepository.findByClassCode_CourseCodeAndSemester_IdAndSchoolYear_IdSchoolYear(
+                selectedCourseCode, semesterEnum.getId(), selectedYear.getIdSchoolYear().intValue())
+                .orElse(null);
+
+        if (classEntity == null) {
+            showAlert("No class found for the selected criteria");
+            return;
+        }
+
+        // Get all evaluations for this specific class
         Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
         for (CourseEval eval : allEvals) {
-            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
-                eval.getLecturer().getLName().equals(lecturer.getLName()) &&
-                eval.getCourse().getClassCode().getcourseCode().equals(courseCmb.getValue())) {
+            // Check if it's an instructor evaluation and matches the criteria
+            if (eval.getEvalType() == CourseEval.EvalType.INSTRUCTOR &&
+                eval.getCourse() != null && 
+                eval.getCourse().getIdClass().equals(classEntity.getIdClass())) {
                 
-                // Get all Likert responses for this evaluation
                 for (ResponseLikert response : responseLikertRepository.findAll()) {
                     if (response.getCourseEval().getId().equals(eval.getId())) {
                         responsesGrouped
@@ -196,7 +212,6 @@ public class InstructorEvalAnalysisController {
             }
         }
 
-        // Create chart data
         for (Map.Entry<Questions, List<ResponseLikert>> entry : responsesGrouped.entrySet()) {
             double avgResponse = calculateAverageResponse(entry.getValue());
             XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -214,22 +229,48 @@ public class InstructorEvalAnalysisController {
         return sum / responses.size();
     }
 
-    private void analyzeOpenEndedResponses(Lecturer lecturer) {
-        StringBuilder analysis = new StringBuilder();
-        analysis.append("Open-Ended Response Analysis for ")
-                .append(lecturer.getFName())
-                .append(" ")
-                .append(lecturer.getLName())
-                .append("\n\n");
+    private void analyzeOpenEndedResponses() {
+        String selectedCourseCode = courseCmb.getValue();
+        String selectedYearName = yearCmb.getValue();
+        String selectedSemesterName = semesterCmb.getValue();
 
-        // Get course evaluations for the selected lecturer and course
+        if (selectedCourseCode == null || selectedYearName == null || selectedSemesterName == null) {
+            showAlert("Please select Course, Year, and Semester");
+            return;
+        }
+
+        // Find the corresponding entities
+        Course selectedCourse = courseRepository.findByCourseCode(selectedCourseCode);
+        SchoolYear selectedYear = schoolYearRepository.findByName(selectedYearName);
+        SemesterName semesterEnum = SemesterName.fromString(selectedSemesterName);
+        Semester selectedSemester = semesterRepository.findById(semesterEnum.getId()).orElse(null);
+
+        if (selectedCourse == null || selectedYear == null || selectedSemester == null) {
+            showAlert("Could not find matching course, year, or semester");
+            return;
+        }
+
+        // Find the specific class
+        Classes classEntity = classesRepository.findByClassCode_CourseCodeAndSemester_IdAndSchoolYear_IdSchoolYear(
+                selectedCourseCode, semesterEnum.getId(), selectedYear.getIdSchoolYear().intValue())
+                .orElse(null);
+
+        if (classEntity == null) {
+            showAlert("No class found for the selected criteria");
+            return;
+        }
+
+        // Get all evaluations for this specific class
         Iterable<CourseEval> allEvals = courseEvalRepository.findAll();
         List<ResponseOpen> relevantResponses = new ArrayList<>();
 
         for (CourseEval eval : allEvals) {
-            if (eval.getLecturer().getFName().equals(lecturer.getFName()) && 
-                eval.getLecturer().getLName().equals(lecturer.getLName()) &&
-                eval.getCourse().getClassCode().getcourseCode().equals(courseCmb.getValue())) {
+            // Check if it's an instructor evaluation and matches the criteria
+            if (eval.getEvalType() == CourseEval.EvalType.INSTRUCTOR &&
+                eval.getCourse() != null && 
+                eval.getCourse().getClassCode() != null &&
+                eval.getCourse().getClassCode().getcourseCode().equals(selectedCourseCode) &&
+                eval.getCourse().getIdClass().equals(classEntity.getIdClass())) {
                 
                 for (ResponseOpen response : responseOpenRepository.findAll()) {
                     if (response.getCourseEval().getId().equals(eval.getId())) {
@@ -239,16 +280,137 @@ public class InstructorEvalAnalysisController {
             }
         }
 
-        if (!relevantResponses.isEmpty()) {
-            String aggregatedResponses = relevantResponses.stream()
-                    .map(ResponseOpen::getResponse)
-                    .collect(Collectors.joining("\n\n"));
-            analysis.append(performBasicTextAnalysis(aggregatedResponses));
-        } else {
-            analysis.append("No open-ended responses found for the selected criteria.");
+        // Update raw data table
+        updateRawResponsesTable(relevantResponses);
+        
+        // Perform thematic analysis
+        performThematicAnalysis(relevantResponses);
+    }
+
+    private void updateRawResponsesTable(List<ResponseOpen> responses) {
+        ObservableList<ResponseData> tableData = FXCollections.observableArrayList();
+        
+        for (ResponseOpen response : responses) {
+            tableData.add(new ResponseData(
+                response.getQuestion().getText(),
+                response.getResponse()
+            ));
+        }
+        
+        questionColumn.setCellValueFactory(new PropertyValueFactory<>("question"));
+        responseColumn.setCellValueFactory(new PropertyValueFactory<>("response"));
+        rawResponsesTable.setItems(tableData);
+    }
+
+    private void performThematicAnalysis(List<ResponseOpen> responses) {
+        if (responses.isEmpty()) {
+            thematicAnalysisArea.setText("No open-ended responses found for the selected criteria.");
+            return;
         }
 
-        openEndedAnalysisArea.setText(analysis.toString());
+        StringBuilder analysis = new StringBuilder();
+        analysis.append("Thematic Analysis Summary\n");
+        analysis.append("========================\n\n");
+
+        // Group responses by question
+        Map<Questions, List<String>> responsesByQuestion = responses.stream()
+            .collect(Collectors.groupingBy(
+                ResponseOpen::getQuestion,
+                Collectors.mapping(ResponseOpen::getResponse, Collectors.toList())
+            ));
+
+        // Analyze each question's responses
+        for (Map.Entry<Questions, List<String>> entry : responsesByQuestion.entrySet()) {
+            String questionText = entry.getKey().getText();
+            List<String> questionResponses = entry.getValue();
+
+            analysis.append("Question: ").append(questionText).append("\n");
+            analysis.append("----------------------------------------\n");
+
+            // Extract key themes
+            List<String> themes = extractThemes(questionResponses);
+            analysis.append("Key Themes:\n");
+            for (String theme : themes) {
+                analysis.append("- ").append(theme).append("\n");
+            }
+            analysis.append("\n");
+
+            // Calculate sentiment
+            String sentiment = calculateSentiment(questionResponses);
+            analysis.append("Overall Sentiment: ").append(sentiment).append("\n\n");
+        }
+
+        thematicAnalysisArea.setText(analysis.toString());
+    }
+
+    private List<String> extractThemes(List<String> responses) {
+        // Common words to ignore
+        Set<String> stopWords = new HashSet<>(Arrays.asList(
+            "the", "and", "a", "an", "in", "on", "at", "to", "for", "of", "with", "by",
+            "this", "that", "these", "those", "is", "are", "was", "were", "be", "been", "being",
+            "have", "has", "had", "do", "does", "did", "will", "would", "should", "could",
+            "can", "may", "might", "must", "shall", "should", "ought", "need", "dare"
+        ));
+
+        // Extract words and count frequencies
+        Map<String, Integer> wordFrequencies = new HashMap<>();
+        for (String response : responses) {
+            String[] words = response.toLowerCase().split("\\s+");
+            for (String word : words) {
+                // Remove punctuation and check if it's a meaningful word
+                word = word.replaceAll("[^a-zA-Z]", "");
+                if (word.length() > 3 && !stopWords.contains(word)) {
+                    wordFrequencies.merge(word, 1, Integer::sum);
+                }
+            }
+        }
+
+        // Get top themes
+        return wordFrequencies.entrySet().stream()
+            .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+            .limit(5)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
+    }
+
+    private String calculateSentiment(List<String> responses) {
+        // Simple sentiment analysis based on positive/negative words
+        Set<String> positiveWords = new HashSet<>(Arrays.asList(
+            "good", "great", "excellent", "amazing", "wonderful", "helpful", "clear",
+            "understand", "learn", "enjoy", "love", "like", "appreciate", "thank"
+        ));
+        
+        Set<String> negativeWords = new HashSet<>(Arrays.asList(
+            "bad", "poor", "terrible", "confusing", "difficult", "hard", "problem",
+            "issue", "don't", "doesn't", "didn't", "wasn't", "weren't", "can't"
+        ));
+
+        int positiveCount = 0;
+        int negativeCount = 0;
+
+        for (String response : responses) {
+            String[] words = response.toLowerCase().split("\\s+");
+            for (String word : words) {
+                word = word.replaceAll("[^a-zA-Z]", "");
+                if (positiveWords.contains(word)) {
+                    positiveCount++;
+                } else if (negativeWords.contains(word)) {
+                    negativeCount++;
+                }
+            }
+        }
+
+        if (positiveCount > negativeCount * 2) {
+            return "Very Positive";
+        } else if (positiveCount > negativeCount) {
+            return "Positive";
+        } else if (negativeCount > positiveCount * 2) {
+            return "Very Negative";
+        } else if (negativeCount > positiveCount) {
+            return "Negative";
+        } else {
+            return "Neutral";
+        }
     }
 
     private double mapLikertToNumeric(String likertResponse) {
@@ -262,30 +424,6 @@ public class InstructorEvalAnalysisController {
         }
     }
 
-    private String performBasicTextAnalysis(String aggregatedResponses) {
-        String[] sentences = aggregatedResponses.split("[.!?]");
-        Map<String, Long> wordFrequency = Arrays.stream(sentences)
-                .flatMap(sentence -> Arrays.stream(sentence.toLowerCase().split("\\s+")))
-                .filter(word -> word.length() > 3)
-                .collect(Collectors.groupingBy(word -> word, Collectors.counting()));
-
-        List<Map.Entry<String, Long>> topWords = wordFrequency.entrySet().stream()
-                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
-                .limit(10)
-                .collect(Collectors.toList());
-
-        StringBuilder analysis = new StringBuilder("Open-Ended Response Analysis:\n\n");
-        analysis.append("Top Recurring Themes:\n");
-        topWords.forEach(entry ->
-                analysis.append(entry.getKey())
-                        .append(": ")
-                        .append(entry.getValue())
-                        .append(" occurrences\n")
-        );
-
-        return analysis.toString();
-    }
-
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Evaluation Analysis");
@@ -294,7 +432,20 @@ public class InstructorEvalAnalysisController {
         alert.showAndWait();
     }
 
-    // --- Sidebar Navigation ---
+    @FXML
+    private void handleExit() {
+        System.exit(0);
+    }
+
+    @FXML
+    public void handleAbout(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("About SFU PA");
+        alert.setHeaderText("SFU PA Application");
+        alert.setContentText("This application is designed to manage gradebooks, instructor evaluations, and guest lecturers.");
+        alert.showAndWait();
+    }
+
     @FXML
     public void handleGuestLecturer(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "CourseSurvey.fxml", springContext);
@@ -314,9 +465,100 @@ public class InstructorEvalAnalysisController {
     public void handleBackMain(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "main-view.fxml", springContext);
     }
+
     @FXML
     public void handleBack(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "InstructorEval.fxml", springContext);
+    }
+
+    @FXML
+    private void handleExportCSV() {
+        if (courseCmb.getValue() == null || yearCmb.getValue() == null || semesterCmb.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select Course, Year, and Semester before exporting");
+            alert.showAndWait();
+            return;
+        }
+
+        // Get the selected course, year, and semester
+        String selectedCourseCode = courseCmb.getValue();
+        String selectedYearName = yearCmb.getValue();
+        String selectedSemesterName = semesterCmb.getValue();
+
+        // Find the corresponding entities
+        Course selectedCourse = courseRepository.findByCourseCode(selectedCourseCode);
+        SchoolYear selectedYear = schoolYearRepository.findByName(selectedYearName);
+        SemesterName semesterEnum = SemesterName.fromString(selectedSemesterName);
+        Semester selectedSemester = semesterRepository.findById(semesterEnum.getId()).orElse(null);
+
+        if (selectedCourse == null || selectedYear == null || selectedSemester == null) {
+            showAlert("Could not find matching course, year, or semester");
+            return;
+        }
+
+        // Find the specific class
+        Classes classEntity = classesRepository.findByClassCode_CourseCodeAndSemester_IdAndSchoolYear_IdSchoolYear(
+                selectedCourseCode, semesterEnum.getId(), selectedYear.getIdSchoolYear().intValue())
+                .orElse(null);
+
+        if (classEntity == null) {
+            showAlert("No class found for the selected criteria");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Evaluation Data");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("CSV Files", "*.csv")
+        );
+        fileChooser.setInitialFileName("instructor_evaluation_data.csv");
+
+        File file = fileChooser.showSaveDialog(rawResponsesTable.getScene().getWindow());
+        if (file != null) {
+            try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
+                // Write header
+                writer.writeNext(new String[]{"Question", "Response", "Response Type"});
+
+                // Get all evaluations for this specific class
+                List<CourseEval> relevantEvals = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+                    .filter(eval -> eval.getEvalType() == CourseEval.EvalType.INSTRUCTOR) // Only get instructor evaluations
+                    .filter(eval -> eval.getCourse() != null && 
+                            eval.getCourse().getIdClass().equals(classEntity.getIdClass()))
+                    .collect(Collectors.toList());
+
+                // Write Likert responses
+                for (CourseEval eval : relevantEvals) {
+                    for (ResponseLikert response : responseLikertRepository.findAll()) {
+                        if (response.getCourseEval().getId().equals(eval.getId())) {
+                            writer.writeNext(new String[]{
+                                response.getQuestion().getText(),
+                                response.getResponse(),
+                                "Likert"
+                            });
+                        }
+                    }
+                }
+
+                // Write open-ended responses
+                for (CourseEval eval : relevantEvals) {
+                    for (ResponseOpen response : responseOpenRepository.findAll()) {
+                        if (response.getCourseEval().getId().equals(eval.getId())) {
+                            writer.writeNext(new String[]{
+                                response.getQuestion().getText(),
+                                response.getResponse(),
+                                "Open-ended"
+                            });
+                        }
+                    }
+                }
+
+                showAlert("Data exported successfully to " + file.getAbsolutePath());
+            } catch (IOException e) {
+                showAlert("Failed to export data: " + e.getMessage());
+            }
+        }
     }
 
     private void setupYearComboBox() {
@@ -332,6 +574,25 @@ public class InstructorEvalAnalysisController {
     private void setupSemesterComboBox() {
         if (semesterCmb != null) {
             semesterCmb.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
+        }
+    }
+    
+    // Helper class for table data
+    public static class ResponseData {
+        private final String question;
+        private final String response;
+
+        public ResponseData(String question, String response) {
+            this.question = question;
+            this.response = response;
+        }
+
+        public String getQuestion() {
+            return question;
+        }
+
+        public String getResponse() {
+            return response;
         }
     }
 }

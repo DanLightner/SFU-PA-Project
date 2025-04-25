@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Button;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,6 +60,11 @@ public class GradebookController {
 
     @FXML
     private ComboBox<String> yearCombo;      // For selecting the year
+
+    @FXML
+    private Button uploadButton;
+    @FXML
+    private Button runReportButton;
 
     @FXML
     public void initialize() {
@@ -122,20 +128,6 @@ public class GradebookController {
             ));
         }
 
-           /*
-        if (courseCombo != null) {
-            Iterable<Course> courses = courseRepository.findAll();
-            List<String> courseNames = new ArrayList<>();
-
-            for (Course course : courses) {
-                courseNames.add(course.getName());
-            }
-
-            courseCombo.setItems(FXCollections.observableArrayList(courseNames));
-        }
-        */
-
-
         if (yearCombo != null) {
             // Fetch school years from the repository
             List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll();
@@ -195,9 +187,7 @@ public class GradebookController {
             CourseEval courseEval = CSVInstructorEval.createManualCourseEval(
                     selectedCourse.getcourseCode(),
                     (long) selectedSemester.getId(),
-                    selectedYear.getIdSchoolYear(),
-                    "FirstName",
-                    "LastName"
+                    selectedYear.getIdSchoolYear()
             );
 
             if (courseEval == null) {
@@ -266,10 +256,8 @@ public class GradebookController {
         alert.showAndWait();
     }
 
-
     @FXML
-    public void handleRunReporting(ActionEvent event) throws IOException {
-        // Switch to the Gradebook Report scene
+    public void handleRunReport(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "GradeBookReport.fxml", springContext);
     }
 
@@ -327,5 +315,15 @@ public class GradebookController {
     private void handleGradebook(ActionEvent event) throws IOException {
         // Switch back to the Gradebook scene
         SceneUtils.switchScene(event, "Gradebook.fxml", springContext);
+    }
+
+    @FXML
+    public void handleEditGradebook(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "GradebookEditCSV.fxml", springContext);
+    }
+
+    @FXML
+    public void handleEditGradesCSV(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "GradebookEditCSV.fxml", springContext);
     }
 }

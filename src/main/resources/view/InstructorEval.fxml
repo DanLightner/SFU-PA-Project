@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvaluation">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.InstructorEvaluation">
 
     <!-- Menu Bar (Top) -->
     <top>
@@ -31,7 +31,7 @@
 
     <!-- Sidebar Navigation (Left) -->
     <left>
-        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+        <VBox prefWidth="170.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
             <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
             <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
             <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
@@ -41,20 +41,17 @@
 
     <!-- Main Content Area -->
     <center>
-        <VBox alignment="CENTER" spacing="15">
-            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Instructor Evaluation Management" />
-            <Button onAction="#handleAnalyzeData" text="Analyze Instructor Eval Data" />
-            <Button onAction="#handleEditEval" text="Edit Instructor Evaluation" />
-            <Button onAction="#handleUploadEval" text="Upload Instructor Evaluation" />
-            <Button onAction="#handleViewSpecificInstructor" text="View Specific Instructor Evaluations" />
+        <VBox alignment="CENTER" spacing="20.0">
+            <Label alignment="CENTER" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Instructor Evaluation Management" />
+            <!-- Data Input/Upload -->
+            <Button onAction="#handleUploadEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Upload Instructor Evaluation" textFill="WHITE" />
+            <!-- View/Check -->
+            <Button onAction="#handleViewSpecificInstructor" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="View Specific Instructor Evaluations" textFill="WHITE" />
+            <!-- Edit/Modify -->
+            <Button onAction="#handleEditEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Edit Instructor Evaluation" textFill="WHITE" />
+            <!-- Analysis/Report -->
+            <Button onAction="#handleAnalyzeData" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Analyze Instructor Eval Data" textFill="WHITE" />
         </VBox>
     </center>
-
-    <!-- Status Bar (Bottom) -->
-    <bottom>
-        <HBox alignment="CENTER" spacing="10" style="-fx-background-color: #F4F4F4; -fx-padding: 5px;">
-            <Label text="Status: Ready" />
-        </HBox>
-    </bottom>
 
 </BorderPane>

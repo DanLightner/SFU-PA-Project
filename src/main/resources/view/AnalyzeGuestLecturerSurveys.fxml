@@ -1,50 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer">
+<BorderPane prefHeight="900.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturerAnalysisController">
 
-<!-- Menu Bar (Top) -->
-<top>
-    <MenuBar>
-        <Menu text="File">
-            <MenuItem text="Open" />
-            <MenuItem text="Save" />
-            <MenuItem onAction="#handleExit" text="Exit" />
-        </Menu>
-        <Menu text="Edit">
-            <MenuItem text="Undo" />
-            <MenuItem text="Redo" />
-        </Menu>
-        <Menu text="Help">
-            <MenuItem onAction="#handleAbout" text="About" />
-        </Menu>
-    </MenuBar>
-</top>
+    <!-- Menu Bar (Top) -->
+    <top>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Open" />
+                <MenuItem text="Save" />
+                <MenuItem onAction="#handleExit" text="Exit" />
+            </Menu>
+            <Menu text="Edit">
+                <MenuItem text="Undo" />
+                <MenuItem text="Redo" />
+            </Menu>
+            <Menu text="Help">
+                <MenuItem onAction="#handleAbout" text="About" />
+            </Menu>
+        </MenuBar>
+    </top>
 
-<!-- Sidebar Navigation (Left) -->
-<left>
-    <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
-        <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
-        <Button disable="true" onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
-        <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
-        <Button onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" />
-    </VBox>
-</left>
+    <!-- Sidebar Navigation (Left) -->
+    <left>
+        <VBox prefWidth="170.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+            <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
+            <Button disable="true" onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
+            <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
+            <Button onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" />
+        </VBox>
+    </left>
 
-<!-- Main Content Area -->
+    <!-- Main Content Area -->
     <center>
-        <VBox alignment="CENTER" spacing="10">
-            <Label style="-fx-font-size: 18px;" text="Run Analyze Guest Lecturer Report" />
-            <Button onAction="#handleBack" text="Back to Guest Lecturer" />
+        <VBox spacing="15" VBox.vgrow="ALWAYS">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Guest Lecturer Analysis" />
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Select Guest Lecturer:" />
+                <ComboBox fx:id="lecturerCombo" prefWidth="200" />
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Select Course:" />
+                <ComboBox fx:id="courseCombo" prefWidth="200" />
+                <Label text="Select Year:" />
+                <ComboBox fx:id="yearCombo" prefWidth="150" />
+                <Label text="Select Semester:" />
+                <ComboBox fx:id="semesterCombo" prefWidth="150" />
+            </HBox>
+
+            <TitledPane expanded="true" text="Likert Scale Analysis" VBox.vgrow="ALWAYS">
+                <BarChart fx:id="likertBarChart" style="-fx-background-color: white;" title="Likert Scale Responses" VBox.vgrow="ALWAYS">
+                    <xAxis>
+                        <CategoryAxis label="Question" fx:id="xAxis" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis fx:id="yAxis" label="Average Response" lowerBound="0" tickUnit="1" upperBound="5" />
+                    </yAxis>
+                </BarChart>
+            </TitledPane>
+
+            <TitledPane expanded="true" text="Open-Ended Responses Analysis" VBox.vgrow="ALWAYS">
+                <VBox spacing="10" VBox.vgrow="ALWAYS">
+                    <TabPane VBox.vgrow="ALWAYS">
+                        <Tab text="Thematic Analysis">
+                            <VBox spacing="10">
+                                <Label style="-fx-font-weight: bold;" text="Key Themes and Insights:" />
+                                <TextArea fx:id="thematicAnalysisArea" editable="false" style="-fx-background-color: white; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px;" wrapText="true" VBox.vgrow="ALWAYS" />
+                            </VBox>
+                        </Tab>
+                        <Tab text="Raw Responses">
+                            <VBox spacing="10">
+                                <TableView fx:id="rawResponsesTable" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="questionColumn" prefWidth="200" text="Question" />
+                                        <TableColumn fx:id="responseColumn" prefWidth="400" text="Response" />
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </Tab>
+                    </TabPane>
+                </VBox>
+            </TitledPane>
+
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <Button onAction="#handleExportCSV" style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Export to CSV" />
+                <Button onAction="#analyzeData" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Analyze" />
+                <Button onAction="#handleBack" style="-fx-background-color: #808080;" text="Back" textFill="WHITE" />
+            </HBox>
         </VBox>
     </center>
-
 
 </BorderPane>

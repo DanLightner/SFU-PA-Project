@@ -24,13 +24,13 @@ import java.util.List;
 public class GradesCsvImporter {
 
     private static final Logger log = LoggerFactory.getLogger(GradesCsvImporter.class);
+    private static final int EXPECTED_FIELDS = 5;
 
     private GradeRepository gradeRepository;
     private ClassesRepository classesRepository;
     private StudentRepository studentRepository;
 
-    private static final int EXPECTED_FIELDS = 5;
-
+    // Constructor to initialize repositories
     public GradesCsvImporter(GradeRepository gradeRepository,
                              ClassesRepository classesRepository,
                              StudentRepository studentRepository) {
@@ -39,6 +39,7 @@ public class GradesCsvImporter {
         this.studentRepository = studentRepository;
     }
 
+    // Method to prompt the user for a CSV file and import it
     public void importCsv(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Grades CSV File");
@@ -52,6 +53,7 @@ public class GradesCsvImporter {
         }
     }
 
+    // Method to process the selected CSV file and import data into the database
     private void processCsvFile(File file) {
         List<Grade> gradeList = new ArrayList<>();
 
@@ -69,6 +71,11 @@ public class GradesCsvImporter {
 
             while ((line = reader.readNext()) != null) {
                 rowNumber++;
+
+                // Skip empty rows
+                if (line.length == 0 || (line.length == 1 && line[0].trim().isEmpty())) {
+                    continue;
+                }
 
                 // Always ensure we have exactly EXPECTED_FIELDS elements
                 if (line.length < EXPECTED_FIELDS) {

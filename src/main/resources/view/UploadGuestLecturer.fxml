@@ -6,11 +6,11 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.francis.my.sfupa.JavaFX.Controller.GuestLecturer">
 
     <!-- Menu Bar (Top) -->
     <top>
@@ -32,7 +32,7 @@
 
     <!-- Sidebar Navigation (Left) -->
     <left>
-        <VBox prefWidth="150.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
+        <VBox prefWidth="170.0" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 15px;">
             <Button onAction="#handleBackMain" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Dashboard" />
             <Button disable="true" onAction="#handleGuestLecturer" style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: white;" text="Guest Lecturer" />
             <Button onAction="#handleGradebook" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Gradebook" />
@@ -40,35 +40,40 @@
         </VBox>
     </left>
 
-
-
     <center>
-        <VBox spacing="10" alignment="CENTER">
-            <Label text="Upload Instructor Evaluations" style="-fx-font-size: 18px;"/>
+        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Upload Guest Lecturer" />
 
-            <Label text="Select Semester:" />
-            <ComboBox fx:id="semesterCombo" promptText="Select Semester"/>
+            <HBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
+                <Label minWidth="150" style="-fx-font-size: 14;" text="Guest Lecturer:" />
+                <ComboBox fx:id="lecturerCombo" prefWidth="200" promptText="Select Guest Lecturer" />
+            </HBox>
 
-            <Label text="Select Course ID:" />
-            <ComboBox fx:id="courseCombo" promptText="Select Course"/>
+            <HBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
+                <Label minWidth="150" style="-fx-font-size: 14;" text="Select Semester:" />
+                <ComboBox fx:id="semesterCombo" prefWidth="200" promptText="Select Semester" />
+            </HBox>
 
+            <HBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
+                <Label minWidth="150" style="-fx-font-size: 14;" text="Select Course:" />
+                <ComboBox fx:id="courseCombo" prefWidth="200" promptText="Select Course" />
+            </HBox>
 
+            <HBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
+                <Label minWidth="150" style="-fx-font-size: 14px;" text="Select Year:" />
+                <ComboBox fx:id="yearCombo" prefWidth="200" promptText="Select Year" />
+            </HBox>
 
-            <Label text="Select Year:" />
-            <ComboBox fx:id="yearCombo" promptText="Select Year"/>
+            <HBox alignment="CENTER" spacing="10" style="-fx-padding: 20;">
+                <Label minWidth="150" text="Select CSV File:" />
+                <Button onAction="#handleChooseFile" style="-fx-background-color: #2ECC71; -fx-text-fill: white;" text="Choose File" />
+                <Label fx:id="selectedFileLabel" text="No file chosen" />
+            </HBox>
 
-            <Label text="Guest Lecturer Name:" />
-            <TextField fx:id="guestLecturerField" promptText="Enter Guest Lecturer Name" />
-
-            <Label text="Guest Lecturer Last Name:" />
-            <TextField fx:id="guestLecturerFieldLast" promptText="Enter Guest Lecturer Last Name" />
-            
-
-            <Button text="Choose File" onAction="#handleChooseFile" style="-fx-background-color: #2ECC71; -fx-text-fill: white;"/>
-            <Label fx:id="selectedFileLabel" text="No file chosen" />
-            <Button text="Upload CSV" onAction="#handleInstructorUploadEval" style="-fx-background-color: #3498DB; -fx-text-fill: white;"/>
-
-            <Button text="Back" onAction="#handleBack"/>
+            <HBox alignment="CENTER" spacing="10">
+                <Button onAction="#handleInstructorUploadEval" style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14; -fx-padding: 10 20;" text="Upload CSV" />
+                <Button onAction="#handleBack" style="-fx-background-color: #808080; -fx-font-size: 14; -fx-padding: 10 20;" text="Back" textFill="WHITE" />
+            </HBox>
         </VBox>
     </center>
 
