@@ -67,12 +67,13 @@ public class Grade {
         this.grade = grade;
     }
 
-    public boolean isRetake() {
+    public boolean GetRetake() {
         return retake;
     }
 
     public void setRetake(boolean retake) {
         this.retake = retake;
     }
+
 }
 
