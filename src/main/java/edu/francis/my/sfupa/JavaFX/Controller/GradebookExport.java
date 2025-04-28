@@ -154,7 +154,7 @@ public class GradebookExport {
         for (Grade grade : grades) {
             String studentId = grade.getStudent().getId_student().toString();
             String studentGrade = grade.getGrade();
-            Boolean retake=grade.isRetake();
+            Boolean retake=grade.GetRetake();
             if(retake) {
                 writer.printf("%s,%s,%s%n", studentId, studentGrade);
             }
