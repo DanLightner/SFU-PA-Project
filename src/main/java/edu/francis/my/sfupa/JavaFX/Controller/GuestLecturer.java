@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.stream.StreamSupport;
 import java.util.Set;
+import java.util.Collections;
 
 @Component
 public class GuestLecturer {
@@ -89,16 +90,23 @@ public class GuestLecturer {
                 .collect(Collectors.toSet());
 
             // If no courses with guest lecturers yet, show all available courses
+            List<String> courseOptions;
             if (coursesWithGuestLecturers.isEmpty()) {
-                Iterable<Course> courses = courseRepository.findAll();
-                List<String> courseOptions = new ArrayList<>();
-                for (Course course : courses) {
-                    courseOptions.add(course.getcourseCode() + " - " + course.getName());
-                }
-                courseCombo.setItems(FXCollections.observableArrayList(courseOptions));
+                courseOptions = StreamSupport.stream(courseRepository.findAll().spliterator(), false)
+                    .map(course -> course.getcourseCode() + " - " + course.getName())
+                    .collect(Collectors.toList());
             } else {
-                courseCombo.setItems(FXCollections.observableArrayList(new ArrayList<>(coursesWithGuestLecturers)));
+                courseOptions = new ArrayList<>(coursesWithGuestLecturers);
             }
+
+            // Sort by PA number
+            Collections.sort(courseOptions, (a, b) -> {
+                String numA = a.replaceAll("\\D+", "");
+                String numB = b.replaceAll("\\D+", "");
+                return Integer.compare(Integer.parseInt(numA), Integer.parseInt(numB));
+            });
+
+            courseCombo.setItems(FXCollections.observableArrayList(courseOptions));
         }
     }
 
@@ -114,12 +122,10 @@ public class GuestLecturer {
 
     private void setupLecturerComboBox() {
         if (lecturerCombo != null) {
-            Iterable<Lecturer> lecturers = lecturerRepository.findAll();
-            List<String> lecturerNames = new ArrayList<>();
-            for (Lecturer lecturer : lecturers) {
-                lecturerNames.add(lecturer.getFName() + " " + lecturer.getLName());
-            }
-            lecturerCombo.setItems(FXCollections.observableArrayList(lecturerNames));
+            List<String> lecturers = StreamSupport.stream(lecturerRepository.findAll().spliterator(), false)
+                    .map(lecturer -> lecturer.getFName() + " " + lecturer.getLName())
+                    .collect(Collectors.toList());
+            lecturerCombo.setItems(FXCollections.observableArrayList(lecturers));
         }
     }
 

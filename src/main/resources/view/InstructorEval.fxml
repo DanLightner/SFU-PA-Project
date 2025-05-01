@@ -35,22 +35,22 @@
             <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
             <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
             <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
-            <Button disable="true" onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" />
+            <Button disable="true" onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Course Eval" />
         </VBox>
     </left>
 
     <!-- Main Content Area -->
     <center>
         <VBox alignment="CENTER" spacing="20.0">
-            <Label alignment="CENTER" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Instructor Evaluation Management" />
+            <Label alignment="CENTER" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Course Evaluation Management" />
             <!-- Data Input/Upload -->
-            <Button onAction="#handleUploadEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Upload Instructor Evaluation" textFill="WHITE" />
+            <Button onAction="#handleUploadEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Upload Course Evaluation" textFill="WHITE" />
             <!-- View/Check -->
-            <Button onAction="#handleViewSpecificInstructor" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="View Specific Instructor Evaluations" textFill="WHITE" />
+            <Button onAction="#handleViewSpecificInstructor" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="View Specific Course Evaluations" textFill="WHITE" />
             <!-- Edit/Modify -->
-            <Button onAction="#handleEditEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Edit Instructor Evaluation" textFill="WHITE" />
+            <Button onAction="#handleEditEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Edit Course Evaluation" textFill="WHITE" />
             <!-- Analysis/Report -->
-            <Button onAction="#handleAnalyzeData" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Analyze Instructor Eval Data" textFill="WHITE" />
+            <Button onAction="#handleAnalyzeData" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Analyze Course Eval Data" textFill="WHITE" />
         </VBox>
     </center>
 

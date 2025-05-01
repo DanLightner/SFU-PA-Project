@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,10 +57,19 @@ public class GradebookExport {
         if (courseCmb != null) {
             List<Course> courses = new ArrayList<>();
             courseRepository.findAll().forEach(courses::add);
-            List<String> courseCodes = courses.stream()
-                    .map(Course::getcourseCode)
+            
+            List<String> courseOptions = courses.stream()
+                    .map(course -> course.getcourseCode() + " - " + course.getName())
                     .collect(Collectors.toList());
-            courseCmb.setItems(FXCollections.observableArrayList(courseCodes));
+
+            // Sort by PA number
+            Collections.sort(courseOptions, (a, b) -> {
+                String numA = a.replaceAll("\\D+", "");
+                String numB = b.replaceAll("\\D+", "");
+                return Integer.compare(Integer.parseInt(numA), Integer.parseInt(numB));
+            });
+
+            courseCmb.setItems(FXCollections.observableArrayList(courseOptions));
         }
     }
 

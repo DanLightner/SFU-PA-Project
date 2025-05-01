@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import java.util.Collections;
 
 @Component
 public class GradebookEditCSVController {
@@ -52,18 +53,49 @@ public class GradebookEditCSVController {
 
     @FXML
     public void initialize() {
-        semesterCombo.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
-        yearCombo.setItems(FXCollections.observableArrayList(
-                StreamSupport.stream(schoolYearRepository.findAll().spliterator(), false)
-                        .map(SchoolYear::getName)
-                        .collect(Collectors.toList())
-        ));
-        courseCombo.setItems(FXCollections.observableArrayList(
-                StreamSupport.stream(courseRepository.findAll().spliterator(), false)
-                        .map(Course::getcourseCode)
-                        .collect(Collectors.toList())
-        ));
+        setupCourseComboBox();
+        setupSemesterComboBox();
+        setupYearComboBox();
+        setupTableColumns();
+    }
 
+    private void setupCourseComboBox() {
+        if (courseCombo != null) {
+            List<Course> courses = StreamSupport.stream(courseRepository.findAll().spliterator(), false)
+                    .collect(Collectors.toList());
+            
+            List<String> courseOptions = courses.stream()
+                    .map(course -> course.getcourseCode() + " - " + course.getName())
+                    .collect(Collectors.toList());
+
+            // Sort by PA number
+            Collections.sort(courseOptions, (a, b) -> {
+                String numA = a.replaceAll("\\D+", "");
+                String numB = b.replaceAll("\\D+", "");
+                return Integer.compare(Integer.parseInt(numA), Integer.parseInt(numB));
+            });
+
+            courseCombo.setItems(FXCollections.observableArrayList(courseOptions));
+        }
+    }
+
+    private void setupSemesterComboBox() {
+        if (semesterCombo != null) {
+            semesterCombo.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
+        }
+    }
+
+    private void setupYearComboBox() {
+        if (yearCombo != null) {
+            List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll();
+            List<String> schoolYearNames = schoolYears.stream()
+                    .map(SchoolYear::getName)
+                    .collect(Collectors.toList());
+            yearCombo.setItems(FXCollections.observableArrayList(schoolYearNames));
+        }
+    }
+
+    private void setupTableColumns() {
         studentIdColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStudentId()));
         gradeColumn.setCellValueFactory(data -> data.getValue().gradeProperty());
         gradeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(VALID_GRADES)));

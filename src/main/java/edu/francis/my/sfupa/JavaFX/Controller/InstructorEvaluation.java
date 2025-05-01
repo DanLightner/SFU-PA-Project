@@ -18,9 +18,11 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 @Controller
 public class InstructorEvaluation {
@@ -59,12 +61,21 @@ public class InstructorEvaluation {
         }
 
         if (courseCombo != null) {
-            courseCombo.setItems(FXCollections.observableArrayList(
-                    "PA 400", "PA 401", "PA 402", "PA 403", "PA 404", "PA 405", "PA 406",
-                    "PA 420", "PA 421", "PA 422", "PA 423", "PA 424", "PA 425", "PA 426",
-                    "PA 427", "PA 428", "PA 429", "PA 430", "PA 431", "PA 432", "PA 451",
-                    "PA 452", "PA 453"
-            ));
+            List<Course> courses = StreamSupport.stream(courseRepository.findAll().spliterator(), false)
+                    .collect(Collectors.toList());
+            
+            List<String> courseOptions = courses.stream()
+                    .map(course -> course.getcourseCode() + " - " + course.getName())
+                    .collect(Collectors.toList());
+
+            // Sort by PA number
+            Collections.sort(courseOptions, (a, b) -> {
+                String numA = a.replaceAll("\\D+", "");
+                String numB = b.replaceAll("\\D+", "");
+                return Integer.compare(Integer.parseInt(numA), Integer.parseInt(numB));
+            });
+
+            courseCombo.setItems(FXCollections.observableArrayList(courseOptions));
         }
 
         if (courseComboo != null) {
@@ -131,11 +142,12 @@ public class InstructorEvaluation {
 
         try {
             SemesterName selectedSemester = SemesterName.fromString(semesterCombo.getValue());
-            Course selectedCourse = courseRepository.findByCourseCode(courseCombo.getValue());
+            String courseCode = courseCombo.getValue().split(" - ")[0]; // Extract course code from the combined string
+            Course selectedCourse = courseRepository.findByCourseCode(courseCode);
             SchoolYear selectedYear = schoolYearRepository.findByName(yearCombo.getValue());
 
             CourseEval courseEval = CSVInstructorEval.createManualCourseEval(
-                    selectedCourse.getcourseCode(),
+                    courseCode,
                     (long) selectedSemester.getId(),
                     selectedYear.getIdSchoolYear()
             );

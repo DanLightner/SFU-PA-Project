@@ -43,7 +43,7 @@
             <Button onAction="#handleBackMain" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
             <Button onAction="#handleGuestLecturer" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
             <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
-            <Button disable="true" onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" />
+            <Button disable="true" onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Course Eval" />
         </VBox>
     </left>
 
@@ -53,7 +53,7 @@
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Instructor Evaluation Analysis" />
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Course Evaluation Analysis" />
 
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Select Course:" />

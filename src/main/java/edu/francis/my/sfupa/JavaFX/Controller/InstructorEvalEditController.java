@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -113,11 +114,22 @@ public class InstructorEvalEditController {
         System.out.println("SchoolYearRepository: " + (schoolYearRepository != null ? "injected" : "null"));
 
         // Initialize combo boxes
-        List<String> courses = StreamSupport.stream(courseRepository.findAll().spliterator(), false)
-            .map(Course::getcourseCode)
+        List<Course> courses = StreamSupport.stream(courseRepository.findAll().spliterator(), false)
             .collect(Collectors.toList());
-        System.out.println("Available courses: " + courses);
-        courseCombo.setItems(FXCollections.observableArrayList(courses));
+        
+        List<String> courseOptions = courses.stream()
+            .map(course -> course.getcourseCode() + " - " + course.getName())
+            .collect(Collectors.toList());
+
+        // Sort by PA number
+        Collections.sort(courseOptions, (a, b) -> {
+            String numA = a.replaceAll("\\D+", "");
+            String numB = b.replaceAll("\\D+", "");
+            return Integer.compare(Integer.parseInt(numA), Integer.parseInt(numB));
+        });
+
+        System.out.println("Available courses: " + courseOptions);
+        courseCombo.setItems(FXCollections.observableArrayList(courseOptions));
 
         // Update semester values to match database format (UPPERCASE)
         List<String> semesterNames = Arrays.stream(SemesterName.values())

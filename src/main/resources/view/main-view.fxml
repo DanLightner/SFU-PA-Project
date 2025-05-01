@@ -38,7 +38,7 @@
             <Button disable="true" onAction="#handleBack" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
             <Button onAction="#handleCourseSurvey" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Guest Lecturer" />
             <Button onAction="#handleGradebook" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Gradebook" />
-            <Button onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Instructor Eval" />
+            <Button onAction="#handleInstructorEval" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" text="Course Eval" />
         </VBox>
     </left>
 
@@ -48,7 +48,7 @@
                 <Label alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="true" prefHeight="75.0" prefWidth="551.0" style="-fx-font-size: 28; -fx-font-weight: bold;" text="Welcome to SFU PA Application!" textAlignment="CENTER" />
                 <Button onAction="#handleCourseSurvey" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Guest Lecturer" textFill="WHITE" />
                 <Button onAction="#handleGradebook" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Gradebook" textFill="WHITE" />
-                <Button onAction="#handleInstructorEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Instructor Eval" textFill="WHITE" />
+                <Button onAction="#handleInstructorEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Course Eval" textFill="WHITE" />
             </children>
         </VBox>
     </center>

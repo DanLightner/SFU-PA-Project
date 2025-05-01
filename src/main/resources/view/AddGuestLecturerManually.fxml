@@ -36,7 +36,7 @@
             <Button onAction="#handleBackMain" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Dashboard" />
             <Button disable="true" onAction="#handleGuestLecturer" style="-fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: white;" text="Guest Lecturer" />
             <Button onAction="#handleGradebook" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Gradebook" />
-            <Button onAction="#handleInstructorEval" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Instructor Eval" />
+            <Button onAction="#handleInstructorEval" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-background-color: transparent;" text="Course Eval" />
         </VBox>
     </left>
 

@@ -81,18 +81,30 @@ public class GradebookReportController {
         if (courseCmb != null) {
             List<Course> courses = new ArrayList<>();
             courseRepository.findAll().forEach(courses::add);
-            List<String> courseCodes = courses.stream()
-                    .map(Course::getcourseCode)
+            
+            List<String> courseOptions = courses.stream()
+                    .map(course -> course.getcourseCode() + " - " + course.getName())
                     .collect(Collectors.toList());
-            courseCmb.setItems(FXCollections.observableArrayList(courseCodes));
+
+            // Sort by PA number
+            Collections.sort(courseOptions, (a, b) -> {
+                String numA = a.replaceAll("\\D+", "");
+                String numB = b.replaceAll("\\D+", "");
+                return Integer.compare(Integer.parseInt(numA), Integer.parseInt(numB));
+            });
+
+            courseCmb.setItems(FXCollections.observableArrayList(courseOptions));
         }
     }
 
     private void updateYearOptions(String selectedCourse) {
+        // Extract course code from the selected item (format: "PA XXX - Course Name")
+        String courseCode = selectedCourse.split(" - ")[0];
+        
         // Get all classes for this course
         List<Classes> classes = StreamSupport.stream(classesRepository.findAll().spliterator(), false)
                 .filter(cls -> cls.getClassCode() != null && 
-                        cls.getClassCode().getcourseCode().equals(selectedCourse))
+                        cls.getClassCode().getcourseCode().equals(courseCode))
                 .collect(Collectors.toList());
 
         // Get years when this course was offered
@@ -109,10 +121,13 @@ public class GradebookReportController {
     }
 
     private void updateSemesterOptions(String selectedCourse, String selectedYear) {
+        // Extract course code from the selected item (format: "PA XXX - Course Name")
+        String courseCode = selectedCourse.split(" - ")[0];
+        
         // Get all classes for this course and year
         List<Classes> filteredClasses = StreamSupport.stream(classesRepository.findAll().spliterator(), false)
                 .filter(cls -> cls.getClassCode() != null && 
-                        cls.getClassCode().getcourseCode().equals(selectedCourse) &&
+                        cls.getClassCode().getcourseCode().equals(courseCode) &&
                         cls.getSchoolYear().getName().equals(selectedYear))
                 .collect(Collectors.toList());
 
@@ -158,7 +173,7 @@ public class GradebookReportController {
 
         try {
             // Get selected values
-            String courseCode = courseCmb.getValue();
+            String courseCode = courseCmb.getValue().split(" - ")[0]; // Extract course code from the combined string
             String yearName = yearCmb.getValue();
             String semesterName = semesterCmb.getValue();
 
@@ -352,7 +367,7 @@ public class GradebookReportController {
                 writer.writeNext(new String[]{"Student ID", "Grade", "Retake Status"});
 
                 // Get selected values
-                String courseCode = courseCmb.getValue();
+                String courseCode = courseCmb.getValue().split(" - ")[0]; // Extract course code from the combined string
                 String yearName = yearCmb.getValue();
                 String semesterName = semesterCmb.getValue();
 
