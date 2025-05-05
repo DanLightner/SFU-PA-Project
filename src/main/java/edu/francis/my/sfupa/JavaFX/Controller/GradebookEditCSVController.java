@@ -57,6 +57,18 @@ public class GradebookEditCSVController {
         setupSemesterComboBox();
         setupYearComboBox();
         setupTableColumns();
+        // Add listener for dynamic year filtering
+        courseCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                updateYearOptions(newVal);
+            }
+        });
+        // Add listener for dynamic semester filtering
+        yearCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && courseCombo.getValue() != null) {
+                updateSemesterOptions(courseCombo.getValue(), newVal);
+            }
+        });
     }
 
     private void setupCourseComboBox() {
@@ -116,11 +128,13 @@ public class GradebookEditCSVController {
     public void handleSearch(ActionEvent event) {
         String semester = semesterCombo.getValue();
         String year = yearCombo.getValue();
-        String courseCode = courseCombo.getValue();
-        if (semester == null || year == null || courseCode == null) {
-            showAlert("Missing Selection", "Please select semester, year, and course.");
+        String courseComboValue = courseCombo.getValue();
+        if (courseComboValue == null || year == null || semester == null) {
+            showAlert("Missing Selection", "Please select course, year, and semester.");
             return;
         }
+        // Extract course code from the combined string (format: 'PA400 - Course Name')
+        String courseCode = courseComboValue.split(" - ")[0];
         // Find the Classes entity for the selected semester, year, and course
         List<Classes> classesList = StreamSupport.stream(classesRepository.findAll().spliterator(), false)
                 .filter(c -> c.getClassCode().getcourseCode().equals(courseCode)
@@ -201,6 +215,39 @@ public class GradebookEditCSVController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private void updateYearOptions(String selectedCourse) {
+        String courseCode = selectedCourse.split(" - ")[0];
+        List<Classes> classes = StreamSupport.stream(classesRepository.findAll().spliterator(), false)
+                .filter(cls -> cls.getClassCode() != null &&
+                        cls.getClassCode().getcourseCode().equals(courseCode))
+                .collect(Collectors.toList());
+        List<String> years = classes.stream()
+                .map(cls -> cls.getSchoolYear().getName())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+        yearCombo.setItems(FXCollections.observableArrayList(years));
+        yearCombo.getSelectionModel().clearSelection();
+        semesterCombo.getSelectionModel().clearSelection();
+        semesterCombo.setItems(FXCollections.observableArrayList());
+    }
+
+    private void updateSemesterOptions(String selectedCourse, String selectedYear) {
+        String courseCode = selectedCourse.split(" - ")[0];
+        List<Classes> filteredClasses = StreamSupport.stream(classesRepository.findAll().spliterator(), false)
+                .filter(cls -> cls.getClassCode() != null &&
+                        cls.getClassCode().getcourseCode().equals(courseCode) &&
+                        cls.getSchoolYear().getName().equals(selectedYear))
+                .collect(Collectors.toList());
+        List<String> semesters = filteredClasses.stream()
+                .map(cls -> cls.getSemester().getName().name())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+        semesterCombo.setItems(FXCollections.observableArrayList(semesters));
+        semesterCombo.getSelectionModel().clearSelection();
     }
 
     public static class GradeRow {

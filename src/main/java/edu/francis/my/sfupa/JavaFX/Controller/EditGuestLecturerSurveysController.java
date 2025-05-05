@@ -103,22 +103,57 @@ public class EditGuestLecturerSurveysController {
 
     @FXML
     public void initialize() {
-        // Make table editable
         responsesTable.setEditable(true);
-        
-        // Setup combo boxes
         setupLecturerComboBox();
-        setupCourseComboBox();
-        setupSemesterComboBox();
-        setupYearComboBox();
+        setupTableColumns();
+
+        // Add listeners for cascading filtering
+        lecturerCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                updateCourseOptionsForLecturer(newVal);
+                courseCombo.getSelectionModel().clearSelection();
+                yearCombo.getSelectionModel().clearSelection();
+                semesterCombo.getSelectionModel().clearSelection();
+                courseCombo.setDisable(false);
+                yearCombo.setDisable(true);
+                semesterCombo.setDisable(true);
+            }
+        });
+        courseCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && lecturerCombo.getValue() != null) {
+                updateYearOptionsForLecturerAndCourse(lecturerCombo.getValue(), newVal);
+                yearCombo.getSelectionModel().clearSelection();
+                semesterCombo.getSelectionModel().clearSelection();
+                yearCombo.setDisable(false);
+                semesterCombo.setDisable(true);
+            }
+        });
+        yearCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && lecturerCombo.getValue() != null && courseCombo.getValue() != null) {
+                updateSemesterOptionsForLecturerCourseYear(lecturerCombo.getValue(), courseCombo.getValue(), newVal);
+                semesterCombo.getSelectionModel().clearSelection();
+                semesterCombo.setDisable(false);
+            }
+        });
+        semesterCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && lecturerCombo.getValue() != null && courseCombo.getValue() != null && yearCombo.getValue() != null) {
+                handleSearch(null);
+            }
+        });
+
+        // Initially disable all but lecturer
+        courseCombo.setDisable(true);
+        yearCombo.setDisable(true);
+        semesterCombo.setDisable(true);
 
         // Initialize edit combo boxes with the same data
         editLecturerCombo.setItems(lecturerCombo.getItems());
         editCourseCombo.setItems(courseCombo.getItems());
         editSemesterCombo.setItems(semesterCombo.getItems());
         editYearCombo.setItems(yearCombo.getItems());
+    }
 
-        // Setup table columns
+    private void setupTableColumns() {
         courseColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(cellData.getValue().getCourse().getClassCode().getcourseCode());
@@ -166,25 +201,69 @@ public class EditGuestLecturerSurveysController {
         lecturerCombo.setItems(FXCollections.observableArrayList(lecturers));
     }
 
-    private void setupCourseComboBox() {
-        List<String> courses = StreamSupport.stream(courseRepository.findAll().spliterator(), false)
-            .map(c -> c.getcourseCode() + " - " + c.getName())
+    private void updateCourseOptionsForLecturer(String lecturerName) {
+        String[] nameParts = lecturerName.split(" ");
+        if (nameParts.length < 2) return;
+        String firstName = nameParts[0];
+        String lastName = nameParts[1];
+        Lecturer lecturer = StreamSupport.stream(lecturerRepository.findAll().spliterator(), false)
+            .filter(l -> l.getFName().equals(firstName) && l.getLName().equals(lastName))
+            .findFirst().orElse(null);
+        if (lecturer == null) {
+            courseCombo.setItems(FXCollections.observableArrayList());
+            return;
+        }
+        List<String> courses = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+            .filter(eval -> eval.getLecturer() != null && eval.getLecturer().getId().equals(lecturer.getId()))
+            .map(eval -> eval.getCourse().getClassCode().getcourseCode() + " - " + eval.getCourse().getClassCode().getName())
+            .distinct()
             .collect(Collectors.toList());
         courseCombo.setItems(FXCollections.observableArrayList(courses));
     }
 
-    private void setupSemesterComboBox() {
-        List<String> semesters = StreamSupport.stream(semesterRepository.findAll().spliterator(), false)
-            .map(s -> s.getName().name())
-            .collect(Collectors.toList());
-        semesterCombo.setItems(FXCollections.observableArrayList(semesters));
-    }
-
-    private void setupYearComboBox() {
-        List<String> years = StreamSupport.stream(schoolYearRepository.findAll().spliterator(), false)
-            .map(SchoolYear::getName)
+    private void updateYearOptionsForLecturerAndCourse(String lecturerName, String courseWithName) {
+        String[] nameParts = lecturerName.split(" ");
+        if (nameParts.length < 2) return;
+        String firstName = nameParts[0];
+        String lastName = nameParts[1];
+        String courseCode = courseWithName.split(" - ")[0];
+        Lecturer lecturer = StreamSupport.stream(lecturerRepository.findAll().spliterator(), false)
+            .filter(l -> l.getFName().equals(firstName) && l.getLName().equals(lastName))
+            .findFirst().orElse(null);
+        if (lecturer == null) {
+            yearCombo.setItems(FXCollections.observableArrayList());
+            return;
+        }
+        List<String> years = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+            .filter(eval -> eval.getLecturer() != null && eval.getLecturer().getId().equals(lecturer.getId()))
+            .filter(eval -> eval.getCourse() != null && eval.getCourse().getClassCode() != null && eval.getCourse().getClassCode().getcourseCode().equals(courseCode))
+            .map(eval -> eval.getCourse().getSchoolYear().getName())
+            .distinct()
             .collect(Collectors.toList());
         yearCombo.setItems(FXCollections.observableArrayList(years));
+    }
+
+    private void updateSemesterOptionsForLecturerCourseYear(String lecturerName, String courseWithName, String year) {
+        String[] nameParts = lecturerName.split(" ");
+        if (nameParts.length < 2) return;
+        String firstName = nameParts[0];
+        String lastName = nameParts[1];
+        String courseCode = courseWithName.split(" - ")[0];
+        Lecturer lecturer = StreamSupport.stream(lecturerRepository.findAll().spliterator(), false)
+            .filter(l -> l.getFName().equals(firstName) && l.getLName().equals(lastName))
+            .findFirst().orElse(null);
+        if (lecturer == null) {
+            semesterCombo.setItems(FXCollections.observableArrayList());
+            return;
+        }
+        List<String> semesters = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
+            .filter(eval -> eval.getLecturer() != null && eval.getLecturer().getId().equals(lecturer.getId()))
+            .filter(eval -> eval.getCourse() != null && eval.getCourse().getClassCode() != null && eval.getCourse().getClassCode().getcourseCode().equals(courseCode))
+            .filter(eval -> eval.getCourse().getSchoolYear() != null && eval.getCourse().getSchoolYear().getName().equals(year))
+            .map(eval -> eval.getCourse().getSemester().getName().name())
+            .distinct()
+            .collect(Collectors.toList());
+        semesterCombo.setItems(FXCollections.observableArrayList(semesters));
     }
 
     @FXML
@@ -201,6 +280,11 @@ public class EditGuestLecturerSurveysController {
 
         try {
             String[] nameParts = lecturerName.split(" ");
+            if (nameParts.length < 2) {
+                showAlert("Invalid lecturer name format");
+                return;
+            }
+
             String firstName = nameParts[0];
             String lastName = nameParts[1];
 
@@ -236,11 +320,15 @@ public class EditGuestLecturerSurveysController {
 
             if (evaluations.isEmpty()) {
                 showAlert("No evaluations found matching the selected criteria");
+                evalTable.setItems(FXCollections.observableArrayList());
+                responsesTable.setItems(FXCollections.observableArrayList());
+                return;
             }
 
             evalTable.setItems(FXCollections.observableArrayList(evaluations));
         } catch (Exception e) {
             showAlert("Error during search: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

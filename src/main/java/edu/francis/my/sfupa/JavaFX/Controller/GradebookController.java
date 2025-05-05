@@ -220,13 +220,15 @@ public class GradebookController {
             String courseCode = courseCombo.getValue().split(" - ")[0]; // Extract course code from the combined string
             Course selectedCourse = courseRepository.findByCourseCode(courseCode);
             SchoolYear selectedYear = schoolYearRepository.findByName(yearCombo.getValue());
+            boolean isRetake = retakeCheckBox.isSelected();
 
             // Process the CSV file and count grades C and below
             int gradesBelow = csvGrade.processGradeCSV(
                 selectedFile, 
                 courseCode,
                 selectedSemester.getId(),
-                selectedYear.getIdSchoolYear().intValue()
+                selectedYear.getIdSchoolYear().intValue(),
+                isRetake
             );
             
             String message = String.format("Grades uploaded successfully!\nNumber of grades C or below: %d", gradesBelow);

@@ -454,7 +454,7 @@ public class InstructorEvalAnalysisController {
         }
 
         // Get the selected course, year, and semester
-        String selectedCourseCode = courseCmb.getValue();
+        String selectedCourseCode = courseCmb.getValue().split(" - ")[0];
         String selectedYearName = yearCmb.getValue();
         String selectedSemesterName = semesterCmb.getValue();
 
@@ -489,42 +489,68 @@ public class InstructorEvalAnalysisController {
         File file = fileChooser.showSaveDialog(rawResponsesTable.getScene().getWindow());
         if (file != null) {
             try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
-                // Write header
-                writer.writeNext(new String[]{"Question", "Response", "Response Type"});
-
+                // Write summary statistics
+                writer.writeNext(new String[]{"SUMMARY STATISTICS"});
+                writer.writeNext(new String[]{"Course", courseCmb.getValue(), "Year", selectedYearName, "Semester", selectedSemesterName});
                 // Get all evaluations for this specific class
                 List<CourseEval> relevantEvals = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
-                    .filter(eval -> eval.getEvalType() == CourseEval.EvalType.INSTRUCTOR) // Only get instructor evaluations
+                    .filter(eval -> eval.getEvalType() == CourseEval.EvalType.INSTRUCTOR)
                     .filter(eval -> eval.getCourse() != null && 
                             eval.getCourse().getIdClass().equals(classEntity.getIdClass()))
                     .collect(Collectors.toList());
-
-                // Write Likert responses
+                // Likert averages
+                List<ResponseLikert> likertResponses = new ArrayList<>();
                 for (CourseEval eval : relevantEvals) {
                     for (ResponseLikert response : responseLikertRepository.findAll()) {
                         if (response.getCourseEval().getId().equals(eval.getId())) {
-                            writer.writeNext(new String[]{
-                                response.getQuestion().getText(),
-                                response.getResponse(),
-                                "Likert"
-                            });
+                            likertResponses.add(response);
                         }
                     }
                 }
-
-                // Write open-ended responses
+                Map<String, List<ResponseLikert>> likertByQuestion = likertResponses.stream()
+                    .collect(Collectors.groupingBy(r -> r.getQuestion().getText()));
+                writer.writeNext(new String[]{"Likert Scale Averages:"});
+                for (Map.Entry<String, List<ResponseLikert>> entry : likertByQuestion.entrySet()) {
+                    double avg = entry.getValue().stream().mapToDouble(r -> mapLikertToNumeric(r.getResponse())).average().orElse(0.0);
+                    writer.writeNext(new String[]{entry.getKey(), String.format("%.2f", avg)});
+                }
+                // Thematic analysis and sentiment
+                List<ResponseOpen> openResponses = new ArrayList<>();
                 for (CourseEval eval : relevantEvals) {
                     for (ResponseOpen response : responseOpenRepository.findAll()) {
                         if (response.getCourseEval().getId().equals(eval.getId())) {
-                            writer.writeNext(new String[]{
-                                response.getQuestion().getText(),
-                                response.getResponse(),
-                                "Open-ended"
-                            });
+                            openResponses.add(response);
                         }
                     }
                 }
-
+                writer.writeNext(new String[]{""});
+                writer.writeNext(new String[]{"Open-Ended Thematic Analysis:"});
+                List<String> allOpenText = openResponses.stream().map(ResponseOpen::getResponse).collect(Collectors.toList());
+                List<String> themes = extractThemes(allOpenText);
+                writer.writeNext(new String[]{"Key Themes:"});
+                for (String theme : themes) {
+                    writer.writeNext(new String[]{theme});
+                }
+                writer.writeNext(new String[]{"Overall Sentiment:", calculateSentiment(allOpenText)});
+                writer.writeNext(new String[]{""});
+                // Raw data header
+                writer.writeNext(new String[]{"Question", "Response", "Response Type"});
+                // Write Likert responses
+                for (ResponseLikert response : likertResponses) {
+                    writer.writeNext(new String[]{
+                        response.getQuestion().getText(),
+                        response.getResponse(),
+                        "Likert"
+                    });
+                }
+                // Write open-ended responses
+                for (ResponseOpen response : openResponses) {
+                    writer.writeNext(new String[]{
+                        response.getQuestion().getText(),
+                        response.getResponse(),
+                        "Open-ended"
+                    });
+                }
                 showAlert("Data exported successfully to " + file.getAbsolutePath());
             } catch (IOException e) {
                 showAlert("Failed to export data: " + e.getMessage());

@@ -100,7 +100,7 @@ public class GradebookExport {
 
         try {
             // Get selected values
-            String courseCode = courseCmb.getValue();
+            String courseCode = courseCmb.getValue().split(" - ")[0];
             String yearName = yearCmb.getValue();
             String semesterName = semesterCmb.getValue();
 
@@ -132,16 +132,38 @@ public class GradebookExport {
                 return;
             }
 
+            // Calculate statistics
+            long retakeCount = grades.stream().filter(Grade::GetRetake).count();
+            int total = grades.size();
+            double retakePercent = total > 0 ? (100.0 * retakeCount / total) : 0;
+            Map<String, Long> gradeDist = grades.stream()
+                .collect(Collectors.groupingBy(g -> g.getGrade().trim().toUpperCase(), Collectors.counting()));
+            long lowerGrades = grades.stream().filter(g -> {
+                String gr = g.getGrade().trim().toUpperCase();
+                return gr.startsWith("C") || gr.equals("D+") || gr.equals("D") || gr.equals("D-") || gr.equals("F");
+            }).count();
+            double lowerGradePercent = total > 0 ? (100.0 * lowerGrades / total) : 0;
+
             try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
                 writer.println("All Grades Report");
-                writer.printf("Course: %s, Year: %s, Semester: %s%n%n", courseCode, yearName, semesterName);
-                writer.println("Student ID,Grade");
-
-                StudentInClassRep(grades,writer);
-                StudentsRetake(grades,writer);
-                StudentsLowGrade(grades,writer);
-                GradeDistributionReport(grades,writer);
-
+                writer.printf("Course: %s, Year: %s, Semester: %s%n", courseCode, yearName, semesterName);
+                writer.printf("Total Students: %d%n", total);
+                writer.printf("Retake Count: %d (%.2f%%)%n", retakeCount, retakePercent);
+                writer.printf("Lower Grades (C or below): %d (%.2f%%)%n", lowerGrades, lowerGradePercent);
+                writer.println();
+                writer.println("Grade Distribution:");
+                writer.println("Grade,Count");
+                for (Map.Entry<String, Long> entry : gradeDist.entrySet()) {
+                    writer.printf("%s,%d%n", entry.getKey(), entry.getValue());
+                }
+                writer.println();
+                writer.println("Student ID,Grade,Retake");
+                for (Grade grade : grades) {
+                    String studentId = grade.getStudent().getId_student().toString();
+                    String studentGrade = grade.getGrade();
+                    boolean retake = grade.GetRetake();
+                    writer.printf("%s,%s,%s%n", studentId, studentGrade, retake ? "Yes" : "No");
+                }
                 showAlert("All grades exported successfully to:\n" + file.getAbsolutePath());
             }
 

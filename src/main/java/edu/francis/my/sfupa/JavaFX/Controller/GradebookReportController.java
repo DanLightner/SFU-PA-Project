@@ -363,11 +363,8 @@ public class GradebookReportController {
         File file = fileChooser.showSaveDialog(retakeTable.getScene().getWindow());
         if (file != null) {
             try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
-                // Write header
-                writer.writeNext(new String[]{"Student ID", "Grade", "Retake Status"});
-
                 // Get selected values
-                String courseCode = courseCmb.getValue().split(" - ")[0]; // Extract course code from the combined string
+                String courseCode = courseCmb.getValue().split(" - ")[0];
                 String yearName = yearCmb.getValue();
                 String semesterName = semesterCmb.getValue();
 
@@ -394,7 +391,43 @@ public class GradebookReportController {
                 // Get all grades for this class
                 List<Grade> grades = gradeRepository.findByStudentClass(classEntity);
 
-                // Write data
+                // --- Write summary statistics ---
+                writer.writeNext(new String[]{"SUMMARY STATISTICS"});
+                writer.writeNext(new String[]{"Course", courseCmb.getValue(), "Year", yearName, "Semester", semesterName});
+                writer.writeNext(new String[]{"Total Students", String.valueOf(grades.size())});
+
+                // Grade distribution
+                Map<String, Long> gradeCounts = new LinkedHashMap<>();
+                List<String> standardGradeOrder = List.of(
+                    "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"
+                );
+                for (String g : standardGradeOrder) gradeCounts.put(g, 0L);
+                for (Grade grade : grades) {
+                    String g = grade.getGrade().trim().toUpperCase();
+                    if (gradeCounts.containsKey(g)) {
+                        gradeCounts.put(g, gradeCounts.get(g) + 1);
+                    }
+                }
+                writer.writeNext(new String[]{"Grade Distribution:"});
+                for (String g : standardGradeOrder) {
+                    writer.writeNext(new String[]{g, String.valueOf(gradeCounts.get(g))});
+                }
+
+                // C or below count and percentage
+                long cOrBelowCount = grades.stream().filter(g -> isGradeCOrBelow(g.getGrade())).count();
+                double cOrBelowPercent = grades.size() > 0 ? (100.0 * cOrBelowCount / grades.size()) : 0.0;
+                writer.writeNext(new String[]{"C or Below Count", String.valueOf(cOrBelowCount)});
+                writer.writeNext(new String[]{"C or Below Percentage", String.format("%.2f%%", cOrBelowPercent)});
+
+                // Average grade (if possible)
+                double avgGrade = calculateAverageGrade(grades);
+                if (avgGrade > 0) {
+                    writer.writeNext(new String[]{"Average Grade (numeric)", String.format("%.2f", avgGrade)});
+                }
+                writer.writeNext(new String[]{""}); // Blank line
+
+                // --- Write raw data ---
+                writer.writeNext(new String[]{"Student ID", "Grade", "Retake Status"});
                 for (Grade grade : grades) {
                     boolean needsRetake = isGradeCOrBelow(grade.getGrade());
                     writer.writeNext(new String[]{
@@ -409,6 +442,25 @@ public class GradebookReportController {
                 showAlert(Alert.AlertType.ERROR, "Error", "Failed to export report: " + e.getMessage());
             }
         }
+    }
+
+    // Helper for average grade calculation
+    private double calculateAverageGrade(List<Grade> grades) {
+        Map<String, Double> gradeToValue = new java.util.HashMap<>();
+        gradeToValue.put("A", 4.0); gradeToValue.put("A-", 3.7); gradeToValue.put("B+", 3.3);
+        gradeToValue.put("B", 3.0); gradeToValue.put("B-", 2.7); gradeToValue.put("C+", 2.3);
+        gradeToValue.put("C", 2.0); gradeToValue.put("C-", 1.7); gradeToValue.put("D+", 1.3);
+        gradeToValue.put("D", 1.0); gradeToValue.put("D-", 0.7); gradeToValue.put("F", 0.0);
+        double sum = 0;
+        int count = 0;
+        for (Grade g : grades) {
+            String grade = g.getGrade().trim().toUpperCase();
+            if (gradeToValue.containsKey(grade)) {
+                sum += gradeToValue.get(grade);
+                count++;
+            }
+        }
+        return count > 0 ? sum / count : 0.0;
     }
 
     private void showAlert(Alert.AlertType type, String title, String content) {

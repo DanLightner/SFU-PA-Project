@@ -41,7 +41,7 @@ public class CSVGrade {
     private SchoolYearRepository schoolYearRepository;
 
     @Transactional
-    public int processGradeCSV(File csvFile, String courseCode, int semesterId, Integer yearId) throws IOException, CsvValidationException {
+    public int processGradeCSV(File csvFile, String courseCode, int semesterId, Integer yearId, boolean isRetake) throws IOException, CsvValidationException {
         int gradesBelowCount = 0;
         List<String> errors = new ArrayList<>();
         Map<Integer, String> columnMap = new HashMap<>();
@@ -129,8 +129,8 @@ public class CSVGrade {
                         gradesBelowCount++;
                     }
 
-                    // Save the grade
-                    saveGrade(studentIdLong, grade, courseCode, semesterId, yearId);
+                    // Save the grade, pass isRetake
+                    saveGrade(studentIdLong, grade, courseCode, semesterId, yearId, isRetake);
 
                 } catch (NumberFormatException e) {
                     errors.add(String.format("Row %d: Invalid student ID format - %s", rowNumber, studentId));
@@ -169,7 +169,7 @@ public class CSVGrade {
     }
 
     @Transactional
-    private void saveGrade(Long studentId, String grade, String courseCode, int semesterId, Integer yearId) {
+    private void saveGrade(Long studentId, String grade, String courseCode, int semesterId, Integer yearId, boolean isRetake) {
         // Create or get student
         Student student = studentRepository.findById(studentId)
                 .orElseGet(() -> {
@@ -205,7 +205,7 @@ public class CSVGrade {
         gradeEntity.setStudent(student);
         gradeEntity.setStudentClass(studentClass);
         gradeEntity.setGrade(grade);
-        gradeEntity.setRetake(false); // Default to false for new grades
+        gradeEntity.setRetake(isRetake); // Set retake value from upload
         gradeRepository.save(gradeEntity);
     }
 

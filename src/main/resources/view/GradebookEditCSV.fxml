@@ -38,12 +38,12 @@
         <VBox spacing="15" alignment="TOP_CENTER" style="-fx-padding: 20;">
             <Label text="Edit Grades (CSV)" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-padding: 15 0 15 0;" />
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Semester:" />
-                <ComboBox fx:id="semesterCombo" prefWidth="120" />
-                <Label text="Year:" />
-                <ComboBox fx:id="yearCombo" prefWidth="120" />
                 <Label text="Course:" />
                 <ComboBox fx:id="courseCombo" prefWidth="180" />
+                <Label text="Year:" />
+                <ComboBox fx:id="yearCombo" prefWidth="120" />
+                <Label text="Semester:" />
+                <ComboBox fx:id="semesterCombo" prefWidth="120" />
                 <Button text="Search" onAction="#handleSearch" />
             </HBox>
             <TableView fx:id="gradeTable" editable="true" prefHeight="400" VBox.vgrow="ALWAYS">

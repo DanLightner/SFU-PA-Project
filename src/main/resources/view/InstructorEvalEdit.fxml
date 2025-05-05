@@ -51,7 +51,7 @@
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Edit Instructor Evaluations" />
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Edit Course Evaluations" />
 
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Select Course:" />
@@ -69,7 +69,6 @@
                         <TableView fx:id="evalTable" onMouseClicked="#handleEvalSelection" VBox.vgrow="ALWAYS">
                             <columns>
                                 <TableColumn fx:id="courseColumn" text="Course" />
-                                <TableColumn fx:id="instructorColumn" text="Instructor" />
                                 <TableColumn fx:id="semesterColumn" text="Semester" />
                                 <TableColumn fx:id="yearColumn" text="Year" />
                             </columns>
@@ -81,23 +80,19 @@
                     <TitledPane expanded="true" text="Edit Evaluation Details">
                         <VBox spacing="10">
                             <GridPane hgap="10" vgap="10">
-                                <Label text="Instructor:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                <ComboBox fx:id="instructorCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                <Label text="Course:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <ComboBox fx:id="editCourseCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                                 
-                                <Label text="Course:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                <ComboBox fx:id="editCourseCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <Label text="Semester:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                <ComboBox fx:id="editSemesterCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                 
-                                <Label text="Semester:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                                <ComboBox fx:id="editSemesterCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                
-                                <Label text="Year:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                                <ComboBox fx:id="editYearCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                <Label text="Year:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                <ComboBox fx:id="editYearCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <columnConstraints>
                            <ColumnConstraints />
                            <ColumnConstraints />
                         </columnConstraints>
                         <rowConstraints>
-                           <RowConstraints />
                            <RowConstraints />
                            <RowConstraints />
                            <RowConstraints />

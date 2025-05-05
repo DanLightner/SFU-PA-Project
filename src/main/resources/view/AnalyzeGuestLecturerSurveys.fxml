@@ -62,9 +62,6 @@
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Select Guest Lecturer:" />
                 <ComboBox fx:id="lecturerCombo" prefWidth="200" />
-            </HBox>
-
-            <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Select Course:" />
                 <ComboBox fx:id="courseCombo" prefWidth="200" />
                 <Label text="Select Year:" />

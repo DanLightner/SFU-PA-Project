@@ -42,6 +42,9 @@ public class InstructorEvaluation {
     @Autowired
     private CSVInstructorEval CSVInstructorEval;
 
+    @Autowired
+    private ClassesRepository classesRepository;
+
     @FXML
     private ComboBox<String> semesterCombo;  // For selecting the semester
 
@@ -56,26 +59,36 @@ public class InstructorEvaluation {
 
     @FXML
     public void initialize() {
-        if (semesterCombo != null) {
-            semesterCombo.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
-        }
-
         if (courseCombo != null) {
             List<Course> courses = StreamSupport.stream(courseRepository.findAll().spliterator(), false)
                     .collect(Collectors.toList());
-            
             List<String> courseOptions = courses.stream()
                     .map(course -> course.getcourseCode() + " - " + course.getName())
                     .collect(Collectors.toList());
-
             // Sort by PA number
             Collections.sort(courseOptions, (a, b) -> {
                 String numA = a.replaceAll("\\D+", "");
                 String numB = b.replaceAll("\\D+", "");
                 return Integer.compare(Integer.parseInt(numA), Integer.parseInt(numB));
             });
-
             courseCombo.setItems(FXCollections.observableArrayList(courseOptions));
+            // Add listener for dynamic year filtering
+            courseCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal != null) {
+                    updateYearOptions(newVal);
+                }
+            });
+        }
+        if (yearCombo != null) {
+            // Add listener for dynamic semester filtering
+            yearCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal != null && courseCombo.getValue() != null) {
+                    updateSemesterOptions(courseCombo.getValue(), newVal);
+                }
+            });
+        }
+        if (semesterCombo != null) {
+            semesterCombo.setItems(FXCollections.observableArrayList("Spring", "Summer", "Fall", "Winter"));
         }
 
         if (courseComboo != null) {
@@ -96,14 +109,39 @@ public class InstructorEvaluation {
                     "Didactic Comprehensive Evaluation"
             ));
         }
+    }
 
-        if (yearCombo != null) {
-            List<SchoolYear> schoolYears = (List<SchoolYear>) schoolYearRepository.findAll();
-            List<String> schoolYearNames = schoolYears.stream()
-                    .map(SchoolYear::getName)
-                    .collect(Collectors.toList());
-            yearCombo.setItems(FXCollections.observableArrayList(schoolYearNames));
-        }
+    private void updateYearOptions(String selectedCourse) {
+        String courseCode = selectedCourse.split(" - ")[0];
+        List<Classes> classes = StreamSupport.stream(classesRepository.findAll().spliterator(), false)
+                .filter(cls -> cls.getClassCode() != null &&
+                        cls.getClassCode().getcourseCode().equals(courseCode))
+                .collect(Collectors.toList());
+        List<String> years = classes.stream()
+                .map(cls -> cls.getSchoolYear().getName())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+        yearCombo.setItems(FXCollections.observableArrayList(years));
+        yearCombo.getSelectionModel().clearSelection();
+        semesterCombo.getSelectionModel().clearSelection();
+        semesterCombo.setItems(FXCollections.observableArrayList());
+    }
+
+    private void updateSemesterOptions(String selectedCourse, String selectedYear) {
+        String courseCode = selectedCourse.split(" - ")[0];
+        List<Classes> filteredClasses = StreamSupport.stream(classesRepository.findAll().spliterator(), false)
+                .filter(cls -> cls.getClassCode() != null &&
+                        cls.getClassCode().getcourseCode().equals(courseCode) &&
+                        cls.getSchoolYear().getName().equals(selectedYear))
+                .collect(Collectors.toList());
+        List<String> semesters = filteredClasses.stream()
+                .map(cls -> cls.getSemester().getName().name())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+        semesterCombo.setItems(FXCollections.observableArrayList(semesters));
+        semesterCombo.getSelectionModel().clearSelection();
     }
 
     private File selectedFile;
