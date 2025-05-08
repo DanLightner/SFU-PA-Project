@@ -49,6 +49,7 @@
                 <Button onAction="#handleCourseSurvey" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Guest Lecturer" textFill="WHITE" />
                 <Button onAction="#handleGradebook" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Gradebook" textFill="WHITE" />
                 <Button onAction="#handleInstructorEval" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Course Eval" textFill="WHITE" />
+                <Button onAction="#handleAddSchoolYear" style="-fx-background-color: #2C3E50; -fx-min-width: 250;" text="Add School Year" textFill="WHITE" />
             </children>
         </VBox>
     </center>

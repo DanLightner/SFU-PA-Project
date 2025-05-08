@@ -90,4 +90,9 @@ public class MainController {
     public void handleBack(ActionEvent event) throws IOException {
         SceneUtils.switchScene(event, "main-view.fxml", springContext);
     }
+
+    @FXML
+    public void handleAddSchoolYear(ActionEvent event) throws IOException {
+        SceneUtils.switchScene(event, "AddSchoolYear.fxml", springContext);
+    }
 }

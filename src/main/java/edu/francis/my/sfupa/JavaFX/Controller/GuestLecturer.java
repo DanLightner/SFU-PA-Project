@@ -83,30 +83,32 @@ public class GuestLecturer {
 
     private void setupCourseComboBox() {
         if (courseCombo != null) {
-            // Get all courses that have guest lecturer evaluations
-            Set<String> coursesWithGuestLecturers = StreamSupport.stream(courseEvalRepository.findAll().spliterator(), false)
-                .filter(eval -> eval.getEvalType() == CourseEval.EvalType.GUEST_LECTURER)
-                .map(eval -> eval.getCourse().getClassCode().getcourseCode() + " - " + eval.getCourse().getClassCode().getName())
-                .collect(Collectors.toSet());
-
-            // If no courses with guest lecturers yet, show all available courses
-            List<String> courseOptions;
-            if (coursesWithGuestLecturers.isEmpty()) {
-                courseOptions = StreamSupport.stream(courseRepository.findAll().spliterator(), false)
+            try {
+                // Get all available courses
+                List<String> courseOptions = StreamSupport.stream(courseRepository.findAll().spliterator(), false)
                     .map(course -> course.getcourseCode() + " - " + course.getName())
                     .collect(Collectors.toList());
-            } else {
-                courseOptions = new ArrayList<>(coursesWithGuestLecturers);
+
+                // Sort by PA number
+                Collections.sort(courseOptions, (a, b) -> {
+                    try {
+                        String numA = a.replaceAll("\\D+", "");
+                        String numB = b.replaceAll("\\D+", "");
+                        return Integer.compare(Integer.parseInt(numA), Integer.parseInt(numB));
+                    } catch (NumberFormatException e) {
+                        // Fallback to string comparison if number parsing fails
+                        return a.compareTo(b);
+                    }
+                });
+
+                courseCombo.setItems(FXCollections.observableArrayList(courseOptions));
+                
+                // Log the number of courses loaded
+                System.out.println("Loaded " + courseOptions.size() + " courses into dropdown");
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Error loading courses: " + e.getMessage());
             }
-
-            // Sort by PA number
-            Collections.sort(courseOptions, (a, b) -> {
-                String numA = a.replaceAll("\\D+", "");
-                String numB = b.replaceAll("\\D+", "");
-                return Integer.compare(Integer.parseInt(numA), Integer.parseInt(numB));
-            });
-
-            courseCombo.setItems(FXCollections.observableArrayList(courseOptions));
         }
     }
 
